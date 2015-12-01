@@ -1,5 +1,7 @@
 package com.mec.fx;
 
+import com.mec.resources.Msg;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -16,16 +18,16 @@ public class ImprovedHelloFXApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Label nameLbl = new Label("Name: ");
+		Label nameLbl = new Label(Msg.get(this, "nameLbl"));
 		TextField nameFld = new TextField();
-		nameFld.setPromptText("Enter you name here");
+		nameFld.setPromptText(Msg.get(this, "nameFld"));
 		
 		Label msg = new Label();
 		msg.setStyle("-fx-text-fill: blue;");
 		
 		//Create buttons
-		Button sayHelloBtn = new Button("Say Hello");
-		Button exitBtn = new Button("Exit");
+		Button sayHelloBtn = new Button(Msg.get(this, "sayHelloBtn"));
+		Button exitBtn = new Button(Msg.get(this, "exitBtn"));
 		
 		//Add the event handler for the Say Hello button
 		sayHelloBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -36,7 +38,8 @@ public class ImprovedHelloFXApp extends Application {
 				if(name.trim().isEmpty()){
 					name = "there";
 				}
-				msg.setText(String.format("Hello %s", name));
+				msg.setText(String.format(Msg.get(ImprovedHelloFXApp.this, "msg"), name));
+				nameFld.clear();
 			}
 		});
 		
@@ -56,7 +59,7 @@ public class ImprovedHelloFXApp extends Application {
 		
 		Scene scene = new Scene(root, 350, 150);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Improved Hello JavaFX Application");
+		primaryStage.setTitle(Msg.get(this, "title"));
 		primaryStage.show();
 	}
 

@@ -42,7 +42,7 @@ public class Msg {
 	
 	
 	/**
-	 * Note heavy load time this method would pay
+	 * Note heavy load time this method would impose on program execution
 	 * @param tag
 	 * @return
 	 */
