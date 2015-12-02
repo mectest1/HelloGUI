@@ -38,4 +38,9 @@ public class FXParamAppTest {
 		Application.launch(FXParamApp.class, new String[]{"Anna", "Lola", "--width=200", "--height=100"});
 	}
 	
+	@Ignore
+	@Test
+	public void testParseDouble() throws Exception{
+		Double.parseDouble("7,000,000.000");
+	}
 }

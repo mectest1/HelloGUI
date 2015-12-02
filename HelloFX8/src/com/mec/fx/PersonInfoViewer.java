@@ -1,6 +1,8 @@
 package com.mec.fx;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import com.mec.fx.beans.Person;
 import com.mec.fx.views.PersonEditDialogController;
@@ -12,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -39,6 +42,9 @@ public class PersonInfoViewer extends Application {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle(Msg.get(this, "title"));
 		
+		//Set the application icon
+//		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream(Msg.get(this, "icon"))));
+		primaryStage.getIcons().add(new Image(Msg.get(this, "icon.url")));
 		initRootLayout();
 		
 		showPersonOverview();
@@ -82,7 +88,7 @@ public class PersonInfoViewer extends Application {
 		return primaryStage;
 	}
 
-	public boolean showPersonEditDialog(Person person){
+	public boolean showPersonEditDialog(Person person, EditType editType){
 		try{
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/com/mec/fx/views/PersonEditDialog.fxml"));
@@ -92,7 +98,13 @@ public class PersonInfoViewer extends Application {
 			//Create the dialog stage
 			Stage dialogStage = new Stage();
 			dialogStage = new Stage();
-			dialogStage.setTitle(Msg.get(this, "editPerson.title"));
+			String title = "";
+			if(EditType.EDIT == editType){
+				title = Msg.get(this, "editPerson.title");
+			}else{	//EditType.ADD
+				title = Msg.get(this, "addPerson.title");
+			}
+			dialogStage.setTitle(title);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.initOwner(primaryStage);
 			
@@ -112,8 +124,44 @@ public class PersonInfoViewer extends Application {
 		}
 	}
 
+	
+	
+	public File getPersonFilePath(){
+		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		String filePath = prefs.get(Msg.get(this, "prefs.filePath"), null);
+		if(null != filePath){
+			return new File(filePath);
+		}else{
+			return null;
+		}
+	}
+	
+	public void setPersonFilePath(File file){
+		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		if(null != file){
+			prefs.put(Msg.get(this, "prefs.filePath"), file.getPath());
+			
+			//Update the stage title
+			primaryStage.setTitle(String.format(
+					Msg.get(this, "title.withSuffix.formatter"), 
+					Msg.get(this, "title"),
+					file.getName()
+					));
+		}else{
+			prefs.remove(Msg.get(this, "prefs.filePath"));
+			
+			//Update the stage title
+			primaryStage.setTitle(Msg.get(this, "title"));
+		}
+	}
 
+	public static enum EditType{
+		 ADD
+		,EDIT
+		;
+	}
 
+//	private Preferences prefs = Preferences.userNodeForPackage(getClass());
 	private ObservableList<Person> personData = FXCollections.observableArrayList();
 	private Stage primaryStage;
 	private BorderPane rootLayout;

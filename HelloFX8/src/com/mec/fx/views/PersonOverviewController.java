@@ -3,6 +3,7 @@ package com.mec.fx.views;
 import java.time.LocalDate;
 
 import com.mec.fx.PersonInfoViewer;
+import com.mec.fx.PersonInfoViewer.EditType;
 import com.mec.fx.beans.DateUtil;
 import com.mec.fx.beans.Person;
 import com.mec.resources.Msg;
@@ -116,7 +117,7 @@ public class PersonOverviewController {
 			alert.showAndWait();
 			return;
 		}
-		boolean isOK = this.personInfoViewer.showPersonEditDialog(person);
+		boolean isOK = this.personInfoViewer.showPersonEditDialog(person, EditType.EDIT);
 		if(isOK){
 			showPersonDetails(person);
 			personTable.getSelectionModel().select(person);
@@ -127,7 +128,7 @@ public class PersonOverviewController {
 	private void handleNewPerson(){
 		Person newPerson = new Person();
 //		newPerson.setBirthday(LocalDate.of(1900, 1, 1));
-		boolean isOK = this.personInfoViewer.showPersonEditDialog(newPerson);
+		boolean isOK = this.personInfoViewer.showPersonEditDialog(newPerson, EditType.ADD);
 		if(isOK){
 			personInfoViewer.getPersonData().add(newPerson);
 			personTable.getSelectionModel().select(newPerson);
