@@ -1,6 +1,9 @@
 package com.mec.fx;
 
+import java.io.IOException;
+
 import com.mec.fx.beans.Person;
+import com.mec.fx.views.PersonEditDialogController;
 import com.mec.fx.views.PersonOverviewController;
 import com.mec.resources.Msg;
 
@@ -11,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PersonInfoViewer extends Application {
@@ -43,7 +47,7 @@ public class PersonInfoViewer extends Application {
 	private void initRootLayout() throws Exception{
 		//Laod root layout from fxml file;
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/com/mec/fx/views/RootLayout.fxml"));
+		loader.setLocation(getClass().getResource("/com/mec/fx/views/RootLayout.fxml"));
 		rootLayout = (BorderPane) loader.load();
 		
 		//show the scene containing the root layout
@@ -55,7 +59,7 @@ public class PersonInfoViewer extends Application {
 	private void showPersonOverview() throws Exception{
 		//Load person overview
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(this.getClass().getResource("/com/mec/fx/views/PersonOverview.fxml"));
+		loader.setLocation(getClass().getResource("/com/mec/fx/views/PersonOverview.fxml"));
 //		PersonOverviewController c = new PersonOverviewController();
 //		loader.setController(c);
 		
@@ -74,7 +78,42 @@ public class PersonInfoViewer extends Application {
 		return personData;
 	}
 	
-	
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	public boolean showPersonEditDialog(Person person){
+		try{
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/com/mec/fx/views/PersonEditDialog.fxml"));
+			
+			AnchorPane page = (AnchorPane) loader.load();
+			
+			//Create the dialog stage
+			Stage dialogStage = new Stage();
+			dialogStage = new Stage();
+			dialogStage.setTitle(Msg.get(this, "editPerson.title"));
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
+			
+			Scene scene = new Scene(page);
+			dialogStage.setScene(scene);
+			
+			PersonEditDialogController controller = loader.getController();
+			controller.setDialogStage(dialogStage);
+			controller.setPerson(person);
+			
+			dialogStage.showAndWait();
+			
+			return controller.isOkClicked();
+		}catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+
+
 	private ObservableList<Person> personData = FXCollections.observableArrayList();
 	private Stage primaryStage;
 	private BorderPane rootLayout;

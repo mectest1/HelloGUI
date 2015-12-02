@@ -17,8 +17,11 @@ public class Person {
 	private final IntegerProperty postalCode;
 	private final StringProperty city;
 	private final ObjectProperty<LocalDate> birthday;
+	public Person(){
+		this("John", "Doe");
+	}
 	public Person(String firstName, String lastName){
-		this(firstName, lastName, "Unknown", -1, "Unknown", LocalDate.MIN);
+		this(firstName, lastName, "Unknown", -1, "Unknown", LocalDate.of(1900, 1, 1));
 	}
 	public Person(String firstName, String lastName, String street, int postalCode, String city, LocalDate birthday) {
 		super();
