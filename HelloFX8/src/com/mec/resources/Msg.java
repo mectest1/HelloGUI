@@ -2,6 +2,7 @@ package com.mec.resources;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -63,6 +64,43 @@ public class Msg {
 	
 	public static String get(Object obj, String tag){
 		return get(obj.getClass(), tag);
+	}
+	
+	/**
+	 * <p>
+	 * Instead of simply return the property value as a string (as specified in the message bundle),
+	 * this method will try to convert this string value to a designated type. In case of the converter 
+	 * is null, or exception happens in the converting process a null will be returned.
+	 * <p>
+	 * <strong>Note:</strong> If the tag value is not specified in the message bundle, a null value will 
+	 * be passed into converter. It's the converter's responsibility to treat this null value correctly.
+	 * </p>
+	 * </p>
+	 * <p>If what you want is simply string value, use {@link #get(Object, String)} instead.
+	 * </p>
+	 * @param obj class of this object will be used as prefix in message bundle.
+	 * @param tag tag name
+	 * @param converter a Function<STring, R> converter, with a single method: <R> R apply(String value)
+	 * @param defaultValue defualt return value, which will apply when the converter is null or error occurred during the convert process
+	 * @return
+	 */
+	public static <R> R get(Object obj, String tag, Function<String, R> converter, R defaultValue){
+		if(null == converter){
+			return defaultValue;
+		}
+		String strval = get(obj, tag);
+		R retval;
+		try {
+			retval = converter.apply(strval);
+		} catch (Exception e) {
+//			e.printStackTrace();
+			retval = null;
+		}
+		if(null != retval){
+			return retval;
+		}else{
+			return defaultValue;
+		}
 	}
 	
 	public static String getExpMsg(Object obj, String tag){
