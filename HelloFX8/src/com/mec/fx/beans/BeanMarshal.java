@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-public class BeanManager {
+public class BeanMarshal {
 
 	
 	
@@ -20,6 +20,7 @@ public class BeanManager {
 	
 	@SuppressWarnings("unchecked")
 	public static <T> T loadFromXML(Class<? extends T> clazz, File xmlFile) throws Exception{
+//	public static <T> T loadFromXML(File xmlFile) throws Exception{
 		JAXBContext context = JAXBContext.newInstance(clazz);
 		Unmarshaller um = context.createUnmarshaller();
 		

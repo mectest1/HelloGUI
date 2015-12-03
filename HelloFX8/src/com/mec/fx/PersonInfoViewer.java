@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+import com.mec.fx.beans.BeanMarshal;
 import com.mec.fx.beans.Person;
+import com.mec.fx.beans.PersonListWrapper;
 import com.mec.fx.views.PersonEditDialogController;
 import com.mec.fx.views.PersonOverviewController;
 import com.mec.resources.Msg;
@@ -14,6 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -152,6 +156,41 @@ public class PersonInfoViewer extends Application {
 			
 			//Update the stage title
 			primaryStage.setTitle(Msg.get(this, "title"));
+		}
+	}
+	
+	public void loadPersonDataFromFile(File file){
+		try {
+			PersonListWrapper wrapper = BeanMarshal.loadFromXML(PersonListWrapper.class, file);
+			personData.clear();
+			personData.addAll(wrapper.getPersons());
+			//Save the file path to the registry
+			setPersonFilePath(file);
+		} catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle(Msg.get(this, "loadPersonData.alert.title"));
+			alert.setHeaderText(Msg.get(this, "loadPersonData.alert.header"));
+			alert.setContentText(String.format(Msg.get(this, "loadPersonData.alert.content"), 
+					file.getPath(),e.getMessage()
+					));
+
+			alert.showAndWait();
+		}
+	}
+	
+	public void savePersonDataToFile(File file){
+		try{
+			PersonListWrapper wrapper = new PersonListWrapper();
+			wrapper.setPersons(personData);
+			
+			BeanMarshal.saveToXML(wrapper, file);
+		}catch(Exception e){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle(Msg.get(this, "savePersonData.alert.title"));
+			alert.setHeaderText(Msg.get(this, "savePersonData.alert.header"));
+			alert.setContentText(String.format(Msg.get(this, "savePersonData.alert.content"), 
+					file.getPath(), e.getMessage()
+					));
 		}
 	}
 
