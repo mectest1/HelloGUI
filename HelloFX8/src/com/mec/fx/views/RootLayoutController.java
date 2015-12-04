@@ -1,6 +1,7 @@
 package com.mec.fx.views;
 
 import java.io.File;
+import java.util.Optional;
 
 import com.mec.fx.PersonInfoViewer;
 import com.mec.resources.Msg;
@@ -9,7 +10,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 
 public class RootLayoutController {
 
@@ -50,16 +53,26 @@ public class RootLayoutController {
 		
 		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Msg.get(this, "extension.xml.description"), Msg.get(this, "extension.xml"));
 		fileChooser.getExtensionFilters().add(extensionFilter);
+		File currentDir = personInfoViewer.getPersonFileDirectory();
+		if(null != currentDir){
+			fileChooser.setInitialDirectory(currentDir);
+		}
 		File saveFile = fileChooser.showSaveDialog(personInfoViewer.getPrimaryStage());
 		if(null != saveFile){
 			if(!saveFile.getPath().endsWith(Msg.get(this, "extension.xml.suffix"))){
 				saveFile = new File(String.format(Msg.get(this, "extension.xml.fileNamePattern"), 
 						saveFile.getPath(), Msg.get(this, "extension.xml.suffix")));
 			}
+			personInfoViewer.savePersonDataToFile(saveFile);
+			personInfoViewer.setPersonFilePath(saveFile);
 		}
-		
-		personInfoViewer.savePersonDataToFile(saveFile);
-		
+	}
+	
+
+	
+	@FXML
+	private void handleShowBirthdayStatistics(){
+		personInfoViewer.showBirthdayStatistics();
 	}
 	
 	@FXML
@@ -73,8 +86,23 @@ public class RootLayoutController {
 	}
 	
 	@FXML
-	private void handleExit(){
+	public void handleExit(){
 //		System.exit(0);
+		if(!personInfoViewer.isPersonDataSaved()){
+			Alert alert = new Alert(AlertType.WARNING, Msg.get(this, "exit.unsaved.content"), ButtonType.OK, ButtonType.CANCEL, ButtonType.NO);
+			alert.setTitle(Msg.get(this, "exit.unsaved.title"));
+			alert.setHeaderText(Msg.get(this, "exit.unsaved.header"));
+//			alert.setContentText();
+			
+			alert.initOwner(this.personInfoViewer.getPrimaryStage());
+			alert.initModality(Modality.WINDOW_MODAL);
+			Optional<ButtonType> result = alert.showAndWait();
+			if(ButtonType.CANCEL == result.get()){
+				return;
+			}else if(ButtonType.OK == result.get()){
+				handleSave();
+			}//else if ButtonType.NO == result.get();
+		}
 		Platform.exit();
 	}
 	public void setPersonInfoViewer(PersonInfoViewer personInfoViewer) {

@@ -7,12 +7,15 @@ import java.util.prefs.Preferences;
 import com.mec.fx.beans.BeanMarshal;
 import com.mec.fx.beans.Person;
 import com.mec.fx.beans.PersonListWrapper;
+import com.mec.fx.views.BirthdayStatisticsController;
 import com.mec.fx.views.PersonEditDialogController;
 import com.mec.fx.views.PersonOverviewController;
+import com.mec.fx.views.RootLayoutController;
 import com.mec.resources.Msg;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,6 +33,22 @@ public class PersonInfoViewer extends Application {
 		populateData();
 	}
 	
+	
+	@Override
+	public void init() throws Exception {
+		initListeners();
+	}
+
+	private void initListeners(){
+		personDataListener = changed -> {
+			if(editStatus.isSaved()){
+				editStatus.setSaved(false);
+			}
+		};
+		
+		personData.addListener(personDataListener);
+	}
+
 	private void populateData(){
 		personData.add(new Person("Hans", "Muster"));
 		personData.add(new Person("Ruth", "Mueller"));
@@ -63,7 +82,21 @@ public class PersonInfoViewer extends Application {
 		//show the scene containing the root layout
 		Scene scene = new Scene(rootLayout);
 		primaryStage.setScene(scene);
+		
+		RootLayoutController controller = loader.getController();
+		controller.setPersonInfoViewer(this);
+		primaryStage.setOnCloseRequest(windowEvent -> {
+			windowEvent.consume();
+			controller.handleExit();
+		});
+		
 		primaryStage.show();
+		
+		//
+		File file = getPersonFilePath();
+		if(null != file){
+			this.loadPersonDataFromFile(file);
+		}
 	}
 	
 	private void showPersonOverview() throws Exception{
@@ -128,7 +161,29 @@ public class PersonInfoViewer extends Application {
 		}
 	}
 
-	
+	public void showBirthdayStatistics(){
+		try{
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/com/mec/fx/views/BirthdayStatistics.fxml"));
+			AnchorPane page = (AnchorPane) loader.load();
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle(Msg.get(this, "statisticsDialog.title"));
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
+			
+			Scene scene = new Scene(page);
+			dialogStage.setScene(scene);
+			
+			//
+			BirthdayStatisticsController controller = loader.getController();
+			controller.setPersonData(getPersonData());
+			
+			dialogStage.show();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	
 	public File getPersonFilePath(){
 		Preferences prefs = Preferences.userNodeForPackage(getClass());
@@ -138,6 +193,14 @@ public class PersonInfoViewer extends Application {
 		}else{
 			return null;
 		}
+	}
+	
+	public File getPersonFileDirectory(){
+		File file = getPersonFilePath();
+		if(null != file){
+			return file.getParentFile();
+		}
+		return null;
 	}
 	
 	public void setPersonFilePath(File file){
@@ -166,6 +229,7 @@ public class PersonInfoViewer extends Application {
 			personData.addAll(wrapper.getPersons());
 			//Save the file path to the registry
 			setPersonFilePath(file);
+			editStatus.setSaved(true);
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle(Msg.get(this, "loadPersonData.alert.title"));
@@ -184,6 +248,7 @@ public class PersonInfoViewer extends Application {
 			wrapper.setPersons(personData);
 			
 			BeanMarshal.saveToXML(wrapper, file);
+			editStatus.setSaved(true);
 		}catch(Exception e){
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle(Msg.get(this, "savePersonData.alert.title"));
@@ -193,6 +258,21 @@ public class PersonInfoViewer extends Application {
 					));
 		}
 	}
+	
+	public boolean isPersonDataSaved(){
+		return editStatus.isSaved();
+	}
+
+	
+	
+	
+	
+	@Override
+	public void stop() throws Exception {
+		personData.removeListener(personDataListener);
+	}
+
+
 
 	public static enum EditType{
 		 ADD
@@ -202,6 +282,20 @@ public class PersonInfoViewer extends Application {
 
 //	private Preferences prefs = Preferences.userNodeForPackage(getClass());
 	private ObservableList<Person> personData = FXCollections.observableArrayList();
+	private ListChangeListener<Person> personDataListener;
+	private EditStatus editStatus = new EditStatus();
+	private static class EditStatus{
+		private boolean saved;
+		public EditStatus() {
+			this.saved = true;
+		}
+		public boolean isSaved() {
+			return saved;
+		}
+		public void setSaved(boolean saved) {
+			this.saved = saved;
+		}
+	}
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 

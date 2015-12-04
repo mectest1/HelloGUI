@@ -2,6 +2,8 @@ package com.mec.fx.beans;
 
 import java.time.LocalDate;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -62,6 +64,7 @@ public class Person {
 	public void setCity(String city) {
 		this.city.set(city);
 	}
+	@XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
 	public LocalDate getBirthday() {
 		return birthday.get();
 	}
