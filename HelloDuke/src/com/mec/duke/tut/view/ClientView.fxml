@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.duke.tut.view.ClientController">
    <children>
-      <TextArea fx:id="messageHistory" layoutX="14.0" layoutY="14.0" prefHeight="340.0" prefWidth="569.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+      <TextArea fx:id="messageHistory" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="340.0" prefWidth="569.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
       <TextField fx:id="message" layoutX="14.0" layoutY="361.0" prefHeight="25.0" prefWidth="517.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="70.0" />
       <Button defaultButton="true" layoutX="539.0" layoutY="361.0" mnemonicParsing="false" onAction="#onSend" text="Send" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
    </children>

@@ -31,10 +31,11 @@ public class ServerThread extends Thread {
 				
 			} 
 		} catch (EOFException ie) {
-			out.println(ie);
+			out.printf("Connection closed. Received exception is %s\n", ie);
 		}catch(IOException ie){
 			out.println(ie);
 		}finally{
+			out.printf("Connection from %s closed.\n", socket);
 			server.removeConnection(socket);
 		}
 	}

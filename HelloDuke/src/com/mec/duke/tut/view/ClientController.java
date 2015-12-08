@@ -41,7 +41,14 @@ public class ClientController {
 //	}
 	
 	public void appendMessage(String msgText){
-		messageHistory.setText(String.format("%s\n%s", messageHistory.getText(), msgText));
+		String oldContent = messageHistory.getText();
+//		if(null == oldContent || oldContent.isEmpty()){
+//			return;
+//		}
+		String newContent = String.format("%s\n%s", oldContent, msgText);
+		messageHistory.setText(newContent);
+//		System.out.printf("Scroll Left = %s, Scroll Top = %s\n", messageHistory.getScrollLeft(), messageHistory.getScrollTop());
+		messageHistory.positionCaret(newContent.length());
 	}
 	
 	public void setClient(Client client){
