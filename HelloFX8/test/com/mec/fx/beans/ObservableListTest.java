@@ -95,8 +95,8 @@ public class ObservableListTest {
 		
 		
 		//Add a change listener to the list;
-		list1.addListener(ListChangeListeners::onElementChanged);
-		list2.addListener(ListChangeListeners::onElementChanged);
+		list1.addListener(ChangeListeners::onElementChanged);
+		list2.addListener(ChangeListeners::onElementChanged);
 		
 		
 		//
@@ -112,7 +112,7 @@ public class ObservableListTest {
 		ObservableList<Person> list = FXCollections.observableArrayList(cb);
 		
 		//
-		ListChangeListener<? super Person> listener = p -> ListChangeListeners.newInstance().onChanged(p); 
+		ListChangeListener<? super Person> listener = p -> ChangeListeners.newInstance().onChanged(p); 
 		list.addListener(listener);
 		
 		//

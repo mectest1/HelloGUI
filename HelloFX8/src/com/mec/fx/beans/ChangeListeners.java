@@ -4,15 +4,34 @@ import java.io.PrintStream;
 import java.util.List;
 
 import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
+import javafx.collections.SetChangeListener;
 
-public class ListChangeListeners {
+public class ChangeListeners {
 
-	private ListChangeListeners(){
+	private ChangeListeners(){
 		
 	}
 	
-	public static ListChangeListeners newInstance(){
-		return new ListChangeListeners();
+	public static ChangeListeners newInstance(){
+		return new ChangeListeners();
+	}
+	
+	public <Key, Value> void onChanged(MapChangeListener.Change<Key, Value> change){
+		if(change.wasRemoved()){
+			out.printf("Removed (%s, %s)\n", change.getKey(), change.getValueRemoved());
+		}
+		if(change.wasAdded()){
+			out.printf("Added (%s, %s)\n", change.getKey(), change.getValueAdded());
+		}
+	}
+	public <T> void onChanged(SetChangeListener.Change<? super T> change){
+		if(change.wasAdded()){
+			out.printf("Added: %s", change.getElementAdded());
+		}else if(change.wasRemoved()){
+			out.printf("Removed: %s", change.getElementRemoved());
+		}
+		out.printf(", Set after the change: %s\n", change.getSet());
 	}
 	
 	//Template
