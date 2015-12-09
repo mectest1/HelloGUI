@@ -3,10 +3,13 @@ package com.mec.fx.beans;
 import java.io.PrintStream;
 
 import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
 public class PropertyChangeTest {
@@ -15,6 +18,7 @@ public class PropertyChangeTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
+	@Ignore
 	@Test
 	public void testPropertyChange() {
 		IntegerProperty counter = new SimpleIntegerProperty(100);
@@ -43,14 +47,29 @@ public class PropertyChangeTest {
 		out.println("After changing the counter value-4");
 	}
 
+	@Test
+	public void testObjectPropertyChange(){
+		Person p = new Person("John", "Smith");
+		ObjectProperty<Person> objectProperty = new SimpleObjectProperty<>(p);
+		
+		objectProperty.addListener(PropertyChangeTest::propertyChanged);
+		
+//		p.setFirstName("Josh");	//-> Change event not fired;
+		
+//		p.firstNameProperty().set("Josh");	//-> Change event no fired;
+		
+		Person p2 = new Person("Josh", "Derpia");
+		objectProperty.set(p2);
+	}
 	
 //	public static void invlidated(Observable observable){
 //		out.println("Counter is invalidated.");
 //	}
 	
-	public static void propertyChanged(ObservableValue<? extends Number> prop, Number oldValue, Number newValue){
+	public static <T> void propertyChanged(ObservableValue<? extends T> prop, T oldValue, T newValue){
 		out.printf("Counter changed: Old = %s, now = %s\n", oldValue, newValue);
 	}
+	
 	
 	private static final PrintStream out = System.out;
 }

@@ -8,7 +8,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
-public class CirculeAreaTest {
+public class CircleAreaTest {
 
 	@Test
 	public void testCircleArea() {
