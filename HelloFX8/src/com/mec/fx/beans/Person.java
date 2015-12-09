@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Person {
+public class Person implements Comparable<Person>{
 
 	private final StringProperty firstName;
 	private final StringProperty lastName;
@@ -89,5 +89,20 @@ public class Person {
 	public ObjectProperty<LocalDate> objectProperty(){
 		return birthday;
 	}
+	@Override
+	public String toString() {
+//		return "Person [firstName=" + firstName.get() + ", lastName=" + lastName.get() + "]";
+		return String.format("Person(%s %s)", firstName.get(), lastName.get());
+	}
+	@Override
+	public int compareTo(Person o) {
+		//Assum that the first and last name are always not null
+		int diff = this.getFirstName().compareTo(o.getFirstName());
+		if(0 == diff){
+			diff = this.getLastName().compareTo(o.getLastName());
+		}
+		return diff;
+	}
+	
 }
 
