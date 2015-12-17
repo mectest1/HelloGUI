@@ -5,14 +5,13 @@ import com.mec.resources.Msg;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,7 +25,10 @@ public class NodeBoundsApp extends Application {
 		Rectangle rect = new Rectangle(0, 0, 50, 20);
 		rect.setFill(Color.AQUA);
 		
-		BorderPane root = new BorderPane(rect);
+		Parent rectGroup = new HBox(rect);	//<- The wrapped parent node will decide the exact position to put this child node.
+		BorderPane root = new BorderPane(rectGroup);	//<- Try this:	1, Add the rectangle directly;
+														//				2, Wrapped the rectangle in Group and add
+														//				3, Wrapped the rectangle in HBox and add 
 		DropShadow dropShadow = new DropShadow();
 		
 		//Label info:
@@ -38,6 +40,7 @@ public class NodeBoundsApp extends Application {
 			}else{
 				rect.setEffect(null);
 			}
+			label.setText(printLayout(rect));
 		});
 		VBox labelBar = new VBox(5);
 //		topBar.setBorder(new Border());
@@ -80,7 +83,8 @@ public class NodeBoundsApp extends Application {
 		root.setTop(new Group(controlBar));
 		
 		//
-		Scene scene = new Scene(root, 600, 600);
+//		Scene scene = new Scene(root, 600, 600);
+		Scene scene = new Scene(root, 400, 350);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle(Msg.get(this, "title"));
 		primaryStage.show();
