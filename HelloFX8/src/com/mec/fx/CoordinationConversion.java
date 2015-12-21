@@ -39,12 +39,17 @@ public class CoordinationConversion extends Application {
 		hb2.getChildren().addAll(new Label(Msg.get(this, "lastName")), lName);
 		hb3.getChildren().addAll(new Label(Msg.get(this, "salary")), salary);
 		
+		
+		Label info = new Label();
+		
 		VBox root = new VBox();
-		root.getChildren().addAll(hb1, hb2, hb3, marker);
+		root.getChildren().addAll(hb1, hb2, hb3, marker, info);
 		
 		Scene scene = new Scene(root);
 		scene.focusOwnerProperty().addListener((observable, oldVal, newVal) -> {
-			placeMarker(newVal);
+			String placedInfo = placeMarker(newVal);
+			info.setText(placedInfo);
+			primaryStage.sizeToScene();
 		}); 
 		primaryStage.setScene(scene);
 		primaryStage.setTitle(Msg.get(this, "title"));
@@ -52,9 +57,11 @@ public class CoordinationConversion extends Application {
 	}
 	
 	
-	private void placeMarker(Node newNode){	//<-------Need further test;
+	private String placeMarker(Node newNode){	//<-------Need further test;
 		double nodeMinX = newNode.getLayoutBounds().getMinX();
 		double nodeMinY = newNode.getLayoutBounds().getMinY();
+		double markerWidth = marker.getLayoutBounds().getWidth();
+		double markerHeight = marker.getLayoutBounds().getHeight();
 		
 		Point2D nodeInScene = newNode.localToScene(nodeMinX, nodeMinY);
 		Point2D nodeInMarkerLocal = marker.sceneToLocal(nodeInScene);
@@ -65,8 +72,17 @@ public class CoordinationConversion extends Application {
 		marker.relocate(
 //				nodeInMarkerParent.getX() + marker.getLayoutBounds().getMinX(), 
 //				nodeInMarkerParent.getY() + marker.getLayoutBounds().getMinY()
-				nodeInMarkerParent.getX(),
-				nodeInMarkerParent.getY()
+//				nodeInMarkerParent.getX(),
+//				nodeInMarkerParent.getY()
+				nodeInScene.getX() - markerWidth/2,
+				nodeInScene.getY() - markerHeight/2
+				);
+		
+		return String.format(Msg.get(this, "output"), 
+				nodeMinX, nodeMinY,
+				nodeInScene, 
+				nodeInMarkerLocal,
+				nodeInMarkerParent
 				);
 	}
 
