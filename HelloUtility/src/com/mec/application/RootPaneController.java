@@ -2,13 +2,17 @@ package com.mec.application;
 
 import com.mec.resources.DialogFactory;
 import com.mec.resources.Msg;
+import com.mec.resources.ViewFactory;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.SplitPane;
+import javafx.stage.Stage;
 
 public class RootPaneController {
 	
@@ -34,5 +38,20 @@ public class RootPaneController {
 		ButtonType okButton = new ButtonType(Msg.get(this, "about.ok"), ButtonData.OK_DONE);
 		about.getButtonTypes().add(okButton);
 		about.showAndWait();
+	}
+	
+	@FXML
+	private void onBase64Decoder(){
+		
+//		com.sun.org.apache.xml.internal.security.Init.init();
+		
+		String viewUrl = Msg.get(this, "menu.view.base64decoder.url");
+		SplitPane viewPane = ViewFactory.loadView(viewUrl);
+		
+//		Stage stage = new Stage();
+//		stage.setScene(new Scene(viewPane));
+		Stage stage = ViewFactory.newStage(viewPane, Msg.get(this, "menu.view.base64decoder.title"));
+		
+		stage.show();
 	}
 }

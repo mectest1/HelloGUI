@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<SplitPane dividerPositions="0.45, 0.55" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.BaseCodeDecoderController">
+   <items>
+      <TextArea fx:id="encodedText" prefHeight="600.0" prefWidth="500.0"/>
+      <VBox alignment="CENTER" spacing="10.0">
+         <children>
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#onDecodeBase64Gzip" text="Decode GZipped &gt;&gt;" />
+            <Button mnemonicParsing="false" onAction="#onDecodeBase64" text="Decode Base64 &gt;&gt;" />
+         </children>
+      </VBox>
+      <TextArea fx:id="decodedText" prefHeight="600.0" prefWidth="500.0" />
+   </items>
+</SplitPane>
