@@ -6,3 +6,8 @@
   </deploy>
   <signjar/>
 </anttasks:AntTask>
+<!---
+References:
+[1] http://code.makery.ch/library/javafx-8-tutorial/part7/
+[2] 
+-->
