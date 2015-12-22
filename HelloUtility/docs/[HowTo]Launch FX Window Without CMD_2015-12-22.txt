@@ -1,0 +1,25 @@
+#2015-12-21
+Q: How to launch FX Window Without CMD Window?
+A: As you can see, you can fill within batch files this command to launch FX Application directly:
+	[start /c] "C:\Program Files\Java\jdk1.8.0_65\bin\javaw" -jar app/HelloUtility.jar
+	But it will show a CMD window after all.
+	
+	 To get rid of this, you can use Inno Setup or Launch4j to patch
+	this java program into a native application. 
+	
+	However, there is also another quick hack in Windows to run you application without CMD window.
+	And here are the steps:
+	1, Create a shortcut in any folder, and open its properties window;
+	2, Set its "Target" as javaw.exe; you can append any parameters here; 
+	3, Set "Start In" as current directory;
+	4, Click "Change Icon" to set an icon for this shortcut;
+	
+	e.g.:
+	1, Target: "C:\Program Files\Java\jdk1.8.0_65\bin\javaw.exe" -jar app/HelloUtility.jar
+	2, Start In: "C:\Programs\Utility 3000 in One"
+	3, Icon: 
+	
+References:
+[1] http://stackoverflow.com/questions/5710839/start-a-java-program-without-the-console
+[2] http://www.digitalcitizen.life/how-change-icon-shortcut
+[3] 
