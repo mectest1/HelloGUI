@@ -7,7 +7,7 @@
 .error-text{
 	-fx-background-color: lightyellow;
 	-fx-border-color: red;
-	-fx-border-style: solid inside ;
+	-fx-border-style: solid inside;
 	-fx-border-width: 0.1em;
-	/*-fx-border-radius: 0.5em;*/
+	-fx-border-radius: 0.2em;
 }
