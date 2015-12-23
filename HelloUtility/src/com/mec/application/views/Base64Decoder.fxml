@@ -23,8 +23,10 @@
          <children>
             <Button fx:id="decodeGzippedButton" defaultButton="true" mnemonicParsing="false" onAction="#onDecodeBase64Gzip" text="Decode GZipped &gt;&gt;" />
             <Button fx:id="decodeBase64Button" mnemonicParsing="false" onAction="#onDecodeBase64" text="Decode Base64 &gt;&gt;" />
+            <Button fx:id="switchButton" mnemonicParsing="false" onAction="#onSwitch" text="&lt; Switch &gt;" />
             <Button fx:id="encodeBase64Button" mnemonicParsing="false" onAction="#onEncodBase64" text="&lt;&lt; Encode Base64" />
             <Button fx:id="encodeGzippedButton" mnemonicParsing="false" onAction="#onEncodeBase64Gzip" text="&lt;&lt; Encode Gzipped" />
+<!--             <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClear" text="&lt;&lt; Clear &gt;&gt;" /> -->
          </children>
       </VBox>
       <TextArea fx:id="decodedText" prefHeight="600.0" prefWidth="500.0" GridPane.columnIndex="2" />

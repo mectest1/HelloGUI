@@ -14,6 +14,7 @@ import java.util.zip.GZIPOutputStream;
 
 import com.mec.resources.Msg;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -38,7 +39,11 @@ public class BaseCodeDecoderController {
 	@FXML
 	private Button encodeBase64Button;
 	
+	@FXML
+	private Button switchButton;
 	
+//	@FXML
+//	private Button clearButton;
 	
 	@FXML
 	private void onDecodeBase64Gzip(){
@@ -68,13 +73,41 @@ public class BaseCodeDecoderController {
 		decodeBase64Button.setText(Msg.get(this, "decodeBase64Button.label"));
 		encodeGzippedButton.setText(Msg.get(this, "encodeGzippedButton.label"));
 		encodeBase64Button.setText(Msg.get(this, "encodeBase64Button.label"));
+		switchButton.setText(Msg.get(this, "switchButton.label"));
+//		clearButton.setText(Msg.get(this, "clearButton.label"));
 		
 		decodeGzippedButton.disableProperty().bind(encodedText.textProperty().isEmpty());
 		decodeBase64Button.disableProperty().bind(encodedText.textProperty().isEmpty());
 		
 		encodeGzippedButton.disableProperty().bind(decodedText.textProperty().isEmpty());
 		encodeBase64Button.disableProperty().bind(decodedText.textProperty().isEmpty());
+		
+		switchButton.disableProperty().bind(Bindings.and(decodedText.textProperty().isEmpty(), encodedText.textProperty().isEmpty()));
+//		clearButton.disableProperty().bind(Bindings.and(decodedText.textProperty().isEmpty(), encodedText.textProperty().isEmpty()));
 	}
+	
+	@FXML
+	private void onSwitch(){
+		String decodedStr = decodedText.getText();
+		decodedText.setText(encodedText.getText());
+		encodedText.setText(decodedStr);
+	}
+	
+//	@FXML
+//	private void onClear(){
+//		boolean dFocused = false;
+//		if(decodedText.isFocused()){
+//			dFocused = true;
+//		}
+//		decodedText.clear();
+//		encodedText.clear();
+//		
+//		if(dFocused){
+//			decodedText.requestFocus();
+//		}else{
+//			encodedText.requestFocus();
+//		}
+//	}
 	private void decodeBase64(boolean isGZipped){
 		String encodedStr = encodedText.getText();
 		
@@ -151,7 +184,7 @@ public class BaseCodeDecoderController {
 		}
 		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(decodedObj);
-		oos.close();
+		oos.close();						//<- This will fix the "GZIPOutputStream not updated" problem; 
 		
 		encodedStr = Base64.getMimeEncoder().encodeToString(bos.toByteArray());
 		
