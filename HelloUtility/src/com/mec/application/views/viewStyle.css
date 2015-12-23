@@ -1,0 +1,12 @@
+/**
+	date 2015-12-23
+	Styles for all views in this package;
+**/
+
+
+.error-text{
+	-fx-background-color: lightyellow;
+	-fx-border-color: red;
+	-fx-border-style: solid;
+	-fx-border-width: 1px;
+}

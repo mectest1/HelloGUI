@@ -6,14 +6,12 @@ import com.mec.resources.ViewFactory;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.SplitPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 public class RootPaneController {
 	
 	@FXML
@@ -46,7 +44,7 @@ public class RootPaneController {
 //		com.sun.org.apache.xml.internal.security.Init.init();
 		
 		String viewUrl = Msg.get(this, "menu.view.base64decoder.url");
-		SplitPane viewPane = ViewFactory.loadView(viewUrl);
+		Pane viewPane = ViewFactory.loadView(viewUrl);
 		
 //		Stage stage = new Stage();
 //		stage.setScene(new Scene(viewPane));
