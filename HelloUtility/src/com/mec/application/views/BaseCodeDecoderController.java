@@ -148,7 +148,6 @@ public class BaseCodeDecoderController {
 		if(isGZipped){
 			os = new GZIPOutputStream(os); 	//<----Q: Bytes are not written into GZIPOutputStream, but why?
 											//A: Because the ObjectOutputStream is not closed ASAP. (flush() would not work)
-			
 		}
 		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(decodedObj);
