@@ -146,15 +146,16 @@ public class BaseCodeDecoderController {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		OutputStream os = bos;
 		if(isGZipped){
-			os = new GZIPOutputStream(os); 	//<-------------------------- failed to work correctly, but why?
+			os = new GZIPOutputStream(os); 	//<----Q: Bytes are not written into GZIPOutputStream, but why?
+											//A: Because the ObjectOutputStream is not closed ASAP. (flush() would not work)
+			
 		}
 		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(decodedObj);
-		
+		oos.close();
 		
 		encodedStr = Base64.getMimeEncoder().encodeToString(bos.toByteArray());
 		
-		oos.close();
 		return Optional.of(encodedStr);
 	}
 	
