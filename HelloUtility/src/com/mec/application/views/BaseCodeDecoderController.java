@@ -159,5 +159,5 @@ public class BaseCodeDecoderController {
 	}
 	
 	private static final String ERROR_OUTPUT = Msg.get(BaseCodeDecoderController.class, "decode.error.message");
-	private static final String ERROR_STYLE = Msg.get(BaseCodeDecoderController.class, "error-text"); 
+	private static final String ERROR_STYLE = Msg.get(BaseCodeDecoderController.class, "errorStyle"); 
 }
