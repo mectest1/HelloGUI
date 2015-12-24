@@ -23,9 +23,10 @@ public class JarTool {
 
 	private JarTool(){
 //		this.out = out;
+		initLog();
 	}
 	
-	public static JarTool newInstance(PrintWriter logWriter){
+	public static JarTool newInstance(){
 //		JarTool retval = new JarTool(logWriter);
 		JarTool retval = new JarTool();
 		return retval;
@@ -44,32 +45,49 @@ public class JarTool {
 	 * @param patchDistDir
 	 * @throws Exception
 	 */
-	public void writeToJar(String workspaceDirectory, String projectName, String[] modifyList
+//	public void writeToJar(File workspaceDirectory, String projectName, List<String> modifyList
+//			
+//			, File patchReleaseDirectory
+//			){
+//		
+//	}
+	
+	public void writeJavaToJar(File workspaceDirectory, String projectName, List<String> modifyList
 //			, String patchDistDir
-//			, 
+			, File patchReleaseDirectory
 			) throws Exception{
 //		fail("Not yet implemented");
-		workspaceDirectory = normalizPath(workspaceDirectory);
-		for(int i = 0; i < modifyList.length; ++i){
-			modifyList[i] = normalizPath(modifyList[i]);
+//		workspaceDirectory = normalizPath(workspaceDirectory);
+		for(int i = 0; i < modifyList.size(); ++i){
+			modifyList.set(i, normalizPath(modifyList.get(i)));
 		}
 		
 //		File curDir = new File(".");
-		File curDir = new File(workspaceDirectory);
+//		File curDir = new File(workspaceDirectory);
+		File curDir = new File(workspaceDirectory, projectName);
+//		if(!(curDir.exists() && curDir.isDirectory())){
+//			throw new IllegalArgumentException(String.format(Ms, args));
+//		}
+		validateDirectory(curDir, String.format(Msg.getExpMsg(this, "invalid.projectDirectory"), curDir.getCanonicalPath()));
 		
 //		out.printf("current work directory: %s\n", curDir.getCanonicalPath());
 		out.printf(Msg.get(this, "log.currentWorkDir"), curDir.getCanonicalPath());
 		
 //		File distDir = new File(curDir, "dist");
-		File distDir = new File(curDir, Msg.get(this, "default.dist.dir"));
-		if(!distDir.exists()){
-			distDir.mkdir();
-		}
+//		File distDir = new File(curDir, Msg.get(this, "default.dist.dir"));
+//		if(!distDir.exists()){
+//			distDir.mkdir();
+//		}
+		File distDir = patchReleaseDirectory;
 		
 //		final File sourceDir = new File(curDir, "src");
 //		final File classDir = new File(curDir, "bin");
-		final File sourceDir = new File(curDir, Msg.get(this, "default.source.dir"));
-		final File classDir = new File(curDir, Msg.get(this, "default.binary.dir"));
+//		final File sourceDir = new File(curDir, Msg.get(this, "default.source.dir"));
+//		final File classDir = new File(curDir, Msg.get(this, "default.binary.dir"));
+		final File sourceDir = getFirstExisted(curDir, SOURCE_FOLDER);
+		final File classDir = getFirstExisted(curDir, BINARY_FOLDER);
+		validateDirectory(sourceDir, String.format(Msg.getExpMsg(this, "invalid.sourceDirectory"), sourceDir.getCanonicalFile()));
+		validateDirectory(classDir, String.format(Msg.getExpMsg(this, "invalid.binaryDirectory"), classDir.getCanonicalFile()));
 //		String[] modifyList = null;11
 //		String[] packagedFiles = new String[]{
 ////				"com/mec/resources/"
@@ -84,7 +102,8 @@ public class JarTool {
 		File patchFile = new File(distDir, String.format(Msg.get(this, "default.jar.name"), projectName));
 		if(patchFile.exists()){
 //			patchFile.renameTo(new File(patchFile.getParentFile(), String.format("testPatch_del%s.jar", System.currentTimeMillis())));
-			patchFile.renameTo(new File(patchFile.getParentFile(), String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis())));
+			File tmpFile = new File(patchFile.getParentFile(), String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
+			patchFile.renameTo(tmpFile);
 		}
 //		patchFile = new File(distDir, "testPatch.jar");
 		patchFile = new File(distDir, String.format(Msg.get(this, "default.jar.name"), projectName));
@@ -92,36 +111,64 @@ public class JarTool {
 //		patchFile.createNewFile();
 		JarOutputStream outputJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
 		
-		Arrays.asList(modifyList).stream().forEach(packageFile -> {
-			try{
-				if(NIX_PATH.equals(String.valueOf(packageFile.charAt(0)))){
-					packageFile = packageFile.substring(1);
-				}
-				
-				Set<String> classEntries = getClassEntries(sourceDir, classDir, packageFile);
-				out.printf(Msg.get(this, "log.debug.classEntries"), classEntries);
-				
-				String packageDir = packageFile.substring(0, packageFile.lastIndexOf(NIX_PATH));
-//				packageFile = packageFile.replaceAll("\\.java$", ".class");
-//				zipFile(outputJar, classDir, packageFile);
-				classEntries.stream().forEach(entry -> {
-					
-				try {
-					zipFile(outputJar, classDir, String.format(Msg.get(this, "config.packagePathAndEntry"), packageDir, entry));
-				} catch (Exception e) {
-					e.printStackTrace(out);
-				}
-						
-				});
-			}catch(Exception e){
-				e.printStackTrace(out);
+		for (String packageFile : modifyList) {
+//		modifyList.stream().forEach(packageFile -> {
+//			try{
+//				if(NIX_PATH.equals(String.valueOf(packageFile.charAt(0)))){
+//				if(packageFile.startsWith(NIX_PATH)){
+//					packageFile = packageFile.substring(1);
+//				}
+			packageFile = trimLeadingSlash(packageFile);
+			
+			if(isJavaFile(packageFile)){
+				writeJavaClassToJar(outputJar, sourceDir, classDir, packageFile);
+			}else{
+				out.printf(String.format(Msg.get(this, "error.unsupported.fileType"), packageFile));
 			}
-		});
+//			Set<String> classEntries = getClassEntries(sourceDir, classDir, packageFile);
+//			out.printf(Msg.get(this, "log.debug.classEntries"), classEntries);
+//			String packageDir = packageFile.substring(0, packageFile.lastIndexOf(NIX_PATH));
+//			//				packageFile = packageFile.replaceAll("\\.java$", ".class");
+//			//				zipFile(outputJar, classDir, packageFile);
+//			classEntries.stream().forEach(entry -> {
+//		
+//				try {
+//					zipFile(outputJar, classDir, String.format(Msg.get(this, "config.packagePathAndEntry"), packageDir, entry));
+//				} catch (Exception e) {
+//					e.printStackTrace(out);
+//				}
+//		
+//			});
+//			}catch(Exception e){
+//				e.printStackTrace(out);
+//			}
+//		});
+		}
 		
-//		outputJar.flush();
+		
+		//		outputJar.flush();
 		outputJar.close();
 	}
 	
+	private void writeJavaClassToJar(ZipOutputStream outputJar, File sourceDir, File classDir, String packageFile){
+		Set<String> classEntries = getClassEntries(sourceDir, classDir, packageFile);
+		out.printf(Msg.get(this, "log.debug.classEntries"), classEntries);
+		String packageDir = packageFile.substring(0, packageFile.lastIndexOf(NIX_PATH));
+		//				packageFile = packageFile.replaceAll("\\.java$", ".class");
+		//				zipFile(outputJar, classDir, packageFile);
+//		classEntries.stream().forEach(entry -> {
+	
+		for (String entry : classEntries) {
+			try {
+				zipFile(outputJar, classDir,
+						String.format(Msg.get(this, "config.packagePathAndEntry"), packageDir, entry));
+			} catch (Exception e) {
+				e.printStackTrace(out);
+			} 
+		}
+	
+//		});
+	}
 	
 	
 	/**
@@ -226,23 +273,93 @@ public class JarTool {
 		return Arrays.asList(filteredClasses);
 	}
 	
+	private boolean isJavaFile(String fileName){
+		return stringEndsWithSuffix(fileName, Arrays.asList(Msg.get(this, "suffix.java")));
+	}
 	
-	private String normalizPath(String path){
+	public static boolean stringEndsWithSuffix(String str, List<String> suffix){
+		if(null == str || str.isEmpty() || null == suffix || suffix.isEmpty()){
+			return false;
+		}
+		boolean retval = false;
+		for(String s : suffix){
+			if(str.endsWith(s)){
+				retval = true;
+				break;
+			}
+		}
+		
+		return retval;
+	}
+	public static void validateDirectory(File directory, String errorMsg) throws IllegalArgumentException{
+		if(!(directory.exists() && directory.isDirectory())){
+			throw new IllegalArgumentException(errorMsg);
+		}
+//		return true;
+	}
+	
+	
+	public static File getFirstExisted(File parentDir, List<String> fileCandidates){
+		File retval = null;
+		for(String fileCandidate : fileCandidates){
+			retval = new File(parentDir, fileCandidate);
+			if(retval.exists()){
+				break;
+			}
+		}
+		
+		return retval;
+	}
+	
+	public static String excptionToStr(Exception e){
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		try {
+			sw.close();
+		} catch (IOException e1) {
+			return e.getMessage();
+		}
+		return sw.toString();
+	}
+	public static String normalizPath(String path){
 		if(null == path || path.isEmpty()){
 			return path;
 		}
-		return path.replaceAll(WIN_PATH, NIX_PATH);
+		return path.replaceAll(WIN_PATH_PATTERN, NIX_PATH);
 	}
 	
+	public static String trimLeadingSlash(String line){
+		return trimLeading(line, NIX_PATH);
+	}
+	
+	public static String trimLeading(String line, String trimmedStr){
+		if(null == line || line.isEmpty() || null == trimmedStr || trimmedStr.isEmpty()){
+			return line;
+		}
+		if(line.startsWith(trimmedStr)){
+			line = line.substring(trimmedStr.length());
+		}
+		return line;
+	}
 	public String getLog(){
 		out.flush();
-		return logStr.toString();
+		String retval = logStr.toString();
+		initLog();
+		return retval;
+	}
+	private void initLog(){
+		logStr = new StringWriter();
+		out = new PrintWriter(logStr);
 	}
 	
 	private static final int BUFFER_SIZE = 1024;
 //	private static final PrintStream out = System.out;
-	private StringWriter logStr = new StringWriter();
-	private PrintWriter out = new PrintWriter(logStr);
-	private static final String NIX_PATH = Msg.get(JarTool.class, "config.nixPath");
-	private static final String WIN_PATH = Msg.get(JarTool.class, "config.winPath"); 
+	private StringWriter logStr;
+	private PrintWriter out;
+	public static final String NIX_PATH = Msg.get(JarTool.class, "config.nixPath");
+	public static final String WIN_PATH_PATTERN = Msg.get(JarTool.class, "config.winPath.pattern"); 
+	
+	
+	private static final List<String> BINARY_FOLDER = Msg.getList(JarTool.class, "binary.dir");
+	public static final List<String> SOURCE_FOLDER = Msg.getList(JarTool.class, "source.dir");
 }

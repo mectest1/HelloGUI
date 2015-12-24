@@ -57,7 +57,7 @@ public class RootPaneController {
 	
 	@FXML
 	private void onPatchRelease(){
-		ViewFactory.showNewStage(Msg.get(this, "patchRelease.url"), Msg.get(this, "patchRelease.title"));
+		ViewFactory.showNewStage(Msg.get(this, "menu.view.patchRelease.url"), Msg.get(this, "patchRelease.title"));
 	}
 	
 	

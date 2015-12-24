@@ -1,5 +1,7 @@
 package com.mec.resources;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.function.Function;
@@ -101,6 +103,33 @@ public class Msg {
 		}else{
 			return defaultValue;
 		}
+	}
+	
+	public static List<String> getList(Class<?> clazz, String tag){
+		List<String> retval = new ArrayList<String>();
+		String value = get(clazz, tag);
+		if(null != value){
+			retval.add(value);
+		}
+		
+		int count = 1;
+		String tagAppendix = tag;
+		while(true){
+			tagAppendix = tag + "." + count;
+			value = get(clazz, tagAppendix);
+//			if(null == value || value.isEmpty()){
+			if(value.endsWith(tagAppendix)){
+				break;
+			}
+			retval.add(value);
+			++count;
+		}
+		
+		return retval;
+	}
+	
+	public static List<String> getList(Object obj, String tag){
+		return getList(obj.getClass(), tag);
 	}
 	
 	public static String getExpMsg(Object obj, String tag){
