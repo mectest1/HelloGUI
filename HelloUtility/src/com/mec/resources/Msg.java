@@ -179,6 +179,19 @@ public class Msg {
 	
 }
 
+class Derp{
+	class Derp2{
+		class Derp3{
+			class Derp5{
+				
+			}
+		}
+	}
+	
+	class Derp4{
+		
+	}
+}
 
 
 /**

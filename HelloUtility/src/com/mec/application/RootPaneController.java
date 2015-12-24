@@ -43,13 +43,22 @@ public class RootPaneController {
 		
 //		com.sun.org.apache.xml.internal.security.Init.init();
 		
-		String viewUrl = Msg.get(this, "menu.view.base64decoder.url");
-		Pane viewPane = ViewFactory.loadView(viewUrl);
-		
-//		Stage stage = new Stage();
-//		stage.setScene(new Scene(viewPane));
-		Stage stage = ViewFactory.newStage(viewPane, Msg.get(this, "menu.view.base64decoder.title"));
-		
-		stage.show();
+//		String viewUrl = Msg.get(this, "menu.view.base64decoder.url");
+//		Pane viewPane = ViewFactory.loadView(viewUrl);
+//		
+////		Stage stage = new Stage();
+////		stage.setScene(new Scene(viewPane));
+//		Stage stage = ViewFactory.newStage(viewPane, Msg.get(this, "menu.view.base64decoder.title"));
+//		
+//		stage.show();
+		ViewFactory.showNewStage(Msg.get(this, "menu.view.base64decoder.url"), Msg.get(this, "menu.view.base64decoder.title"));
 	}
+	
+	
+	@FXML
+	private void onPatchRelease(){
+		ViewFactory.showNewStage(Msg.get(this, "patchRelease.url"), Msg.get(this, "patchRelease.title"));
+	}
+	
+	
 }

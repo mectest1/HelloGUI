@@ -88,6 +88,7 @@ public class BaseCodeDecoderController {
 	
 	@FXML
 	private void onSwitch(){
+		onPrepare(null);
 		String decodedStr = decodedText.getText();
 		decodedText.setText(encodedText.getText());
 		encodedText.setText(decodedStr);
@@ -141,8 +142,11 @@ public class BaseCodeDecoderController {
 	}
 	
 	private void onPrepare(TextArea textArea){
-		textArea.getStyleClass().remove(ERROR_STYLE);
-		textArea.clear();
+		decodedText.getStyleClass().remove(ERROR_STYLE);
+		encodedText.getStyleClass().remove(ERROR_STYLE);
+		if(null != textArea){
+			textArea.clear();
+		}
 	}
 	private void onError(TextArea textArea, String errorInfo){
 		textArea.getStyleClass().add(ERROR_STYLE);
