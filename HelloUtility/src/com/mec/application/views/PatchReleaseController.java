@@ -84,7 +84,7 @@ public class PatchReleaseController {
 			appendLog(jarTool.getLog());
 		}catch(Exception e){
 //			appendLog(Msg.getExpMsg(e, e.getMessage()));
-			appendLog(String.format(Msg.get(this, "exception.log"), e.getClass().getName(), JarTool.excptionToStr(e)));
+			appendLog(String.format(Msg.get(this, "exception.log"), e.getClass().getName(), JarTool.exceptionToStr(e)));
 		}
 	}
 	

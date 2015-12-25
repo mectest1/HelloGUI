@@ -1,6 +1,8 @@
 package com.mec.application;
 
 import com.mec.resources.DialogFactory;
+import com.mec.resources.ErrorLogger;
+import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
 import com.mec.resources.ViewFactory;
 
@@ -10,9 +12,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-public class RootPaneController {
+import javafx.scene.control.TextArea;
+public class RootPaneController implements ErrorLogger{
+	
+	@FXML
+	private TextArea logMsg;
 	
 	@FXML
 	private void onExit(){
@@ -39,6 +43,12 @@ public class RootPaneController {
 	}
 	
 	@FXML
+	private void initialize(){
+//		prepareNewLog();
+		ViewFactory.setLogOutput(this);
+	}
+	
+	@FXML
 	private void onBase64Decoder(){
 		
 //		com.sun.org.apache.xml.internal.security.Init.init();
@@ -60,5 +70,37 @@ public class RootPaneController {
 		ViewFactory.showNewStage(Msg.get(this, "menu.view.patchRelease.url"), Msg.get(this, "patchRelease.title"));
 	}
 	
+	@FXML
+	private void onClearLog(){
+		logMsg.clear();
+//		prepareNewLog();
+	}
+	
+//	private void prepareNewLog(){
+//		try {
+//			if (null != sw) {
+//				sw.close();
+//			}
+//			sw = new StringWriter();
+//			PrintWriter pw = new PrintWriter(sw);
+//			ViewFactory.setLogOutput(pw);
+//		} catch (Exception e) {
+//			appendLog(JarTool.exceptionToStr(e));
+//		}
+//	}
+	private void appendLog(String msg){
+		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
+	}
+	
+	
+
+	@Override
+	public void log(Exception e) {
+		appendLog(JarTool.exceptionToStr(e));
+	}
+
+
+
+//	private StringWriter sw;
 	
 }

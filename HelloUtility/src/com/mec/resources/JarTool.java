@@ -311,7 +311,7 @@ public class JarTool {
 		return retval;
 	}
 	
-	public static String excptionToStr(Exception e){
+	public static String exceptionToStr(Exception e){
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));
 		try {
