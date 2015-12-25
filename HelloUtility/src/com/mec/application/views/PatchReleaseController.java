@@ -120,11 +120,11 @@ public class PatchReleaseController implements ErrorLogger{
 		
 		for(File jarFile : patchReleaseDir.listFiles()){
 			String jarFileName = jarFile.getName();
-			if(JarTool.EE_LIB_JAR.matcher(jarFileName).matches()){
+			if(JarTool.WEB_CONTENT_JAR.matcher(jarFileName).matches()){
+				//
+			}else if(JarTool.EE_LIB_JAR.matcher(jarFileName).matches()){
 				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.getCanonicalPath()));
 				Files.move(jarFile.toPath(), new File(eeLibDir, jarFileName).toPath());
-			}else if(JarTool.WEB_CONTENT_JAR.matcher(jarFileName).matches()){
-				//
 			}else{
 				log(String.format(Msg.get(this, "info.dontMove"), jarFileName, patchReleaseDir));
 			}

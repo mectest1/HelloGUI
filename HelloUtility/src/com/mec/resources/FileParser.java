@@ -121,7 +121,7 @@ public class FileParser {
 			throw new IllegalArgumentException(String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line));
 		}
 		
-		
+		retval = JarTool.trimLeadingSlash(retval);
 		return retval;
 	}
 	
