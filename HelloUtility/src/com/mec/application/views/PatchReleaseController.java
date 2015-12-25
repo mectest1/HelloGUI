@@ -53,6 +53,10 @@ public class PatchReleaseController implements ErrorLogger{
 				);
 		startPatch.disableProperty().bind(fieldEmpty);
 		clearLogBtn.disableProperty().bind(logMsg.textProperty().isEmpty());
+		
+		workSpaceDirectory.setPromptText(Msg.get(this, "prompt.workspaceDir"));
+		modifyList.setPromptText(Msg.get(this, "prompt.modifyList"));
+		patchReleaseDirectory.setPromptText(Msg.get(this, "prompt.patchReleaseDir"));
 	}
 	
 	
