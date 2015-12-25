@@ -109,13 +109,14 @@ public class JarTool {
 //		if(!patchFile.exists()){
 //			patchFile.createNewFile();
 //		}
-		File patchFile = createNewFile(distDir
-				, String.format(Msg.get(this, "default.jar.name"), projectName)
-				, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
+//		File patchFile = createNewFile(distDir
+//				, String.format(Msg.get(this, "default.jar.name"), projectName)
+//				, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
 //		patchFile = new File(distDir, "testPatch.jar");
 //		patchFile.deleteOnExit();
 //		patchFile.createNewFile();
-		JarOutputStream eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
+//		JarOutputStream eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
+		JarOutputStream eelibJar = null;	
 		JarOutputStream webContentJar = null;
 		
 		for (String packageFile : modifyList) {
@@ -128,6 +129,12 @@ public class JarTool {
 			packageFile = trimLeadingSlash(packageFile);
 			
 			if(isJavaFile(packageFile)){
+				if(null == eelibJar){
+					File patchFile = createNewFile(distDir
+							, String.format(Msg.get(this, "default.jar.name"), projectName)
+							, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
+					eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
+				}
 				writeJavaClassToJar(eelibJar, sourceDir, classDir, packageFile);
 			}else if(isWebContentFile(packageFile)){
 				if(null == webContentJar){
@@ -166,7 +173,9 @@ public class JarTool {
 		
 		
 		//		outputJar.flush();
-		eelibJar.close();
+		if(null != eelibJar){
+			eelibJar.close();
+		}
 		if(null != webContentJar){
 			webContentJar.close();
 		}
