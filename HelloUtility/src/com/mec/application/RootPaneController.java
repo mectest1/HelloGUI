@@ -46,6 +46,7 @@ public class RootPaneController implements ErrorLogger{
 	private void initialize(){
 //		prepareNewLog();
 		ViewFactory.setLogOutput(this);
+		logMsg.getStyleClass().clear(); //clear default style classes for log msg
 	}
 	
 	@FXML
