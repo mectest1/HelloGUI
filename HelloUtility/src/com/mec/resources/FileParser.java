@@ -13,17 +13,32 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javafx.scene.shape.Line;
+
 public class FileParser {
 
 	
-	public static Map<String, List<String>> parseModifyList(String content){
+	/**
+	 * Accepted only normalized modify list content format: one file for each line;
+	 * e.g.: 
+	 * 	/EximBillsELoan/src/com/cs/eximap/eloan/utility/ASUtilityService.java
+	 *  /EximBillWeb/WebContent/screen/eLOAN/IAAC_InqAmzPosting.jsp
+	 * You may need to invoke {@link #normalizeModifyList(String)} before invoking this one;
+	 * @param content
+	 * @return
+	 */
+//	public static Map<String, List<String>> parseModifyList(String content){
+	public static Map<String, List<String>> parseModifyList(List<String> lines){
 		Map<String, List<String>> retval = new HashMap<>();
-		if(null == content || content.isEmpty()){
+//		if(null == content || content.isEmpty()){
+//			return retval;
+//		}
+		if(null == lines || lines.isEmpty()){
 			return retval;
 		}
 		
-		content.replaceAll(CARRIAGE_RETURN, NEWLINE);
-		String[] lines = content.split(NEWLINE);
+//		content.replaceAll(CARRIAGE_RETURN, NEWLINE);
+//		String[] lines = content.split(NEWLINE);
 		for(String line : lines){
 //			if(isCommentLine(line)){
 			if(isModifyListCommentLine(line)){
@@ -55,6 +70,62 @@ public class FileParser {
 		
 		return retval;
 	}
+	
+	public static List<String> normalizeModifyList(String content){
+		List<String> retval = new ArrayList<String>();
+		if(null == content || content.isEmpty()){
+			return retval;
+		}
+		content.replaceAll(CARRIAGE_RETURN, NEWLINE);
+		String[] lines = content.split(NEWLINE);
+		
+		for(String line : lines){
+			if(!isModifyListCommentLine(line)){
+				line = normalizeModifyListLine(line);
+			}
+			if(null != line){
+				retval.add(line);
+			}
+		}
+		
+		return retval;
+	}
+	
+	
+	/**
+	 * INPUT:
+	 * 	ServerJS.java - CSEECore/src/com/cs/core/parser (2 matches)
+	 * OUTPUT:
+	 * 	CSEECore/src/com/cs/core/parser/ServerJS.java
+	 * @param line
+	 * @return
+	 */
+	public static String normalizeModifyListLine(String line){
+		if(null == line || line.trim().isEmpty()){
+			return line;
+		}
+		String retval = null;
+		
+//		Pattern p = Pattern.compile(MODIFY_LIST_NAME_PATTERN_CANON);
+		if(MODIFY_LIST_NAME_PATTERN_CANON.matcher(line).matches()){
+			retval = line;
+		}else if(MODIFY_LIST_NAME_PATTERN_SVN.matcher(line).matches()){
+			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN.matcher(line);
+//			while(m.find()){
+			m.find();
+			String fileName = m.group(1);
+			String path = m.group(2);
+			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
+//			}
+		}else{
+			throw new IllegalArgumentException(String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line));
+		}
+		
+		
+		return retval;
+	}
+	
+	
 	public static List<String> getClassesFromJavaFile(File javaFile) throws FileNotFoundException, IOException{
 		List<String> retval = new ArrayList<String>();
 		FileReader fis = new FileReader(javaFile);
@@ -89,7 +160,7 @@ public class FileParser {
 		return isStringStartsWith(line, COMMENT_START);
 	}
 	
-	private static boolean isStringStartsWith(String line, List<String> startsWith){
+	public static boolean isStringStartsWith(String line, List<String> startsWith){
 		if(null == line || line.isEmpty()){
 			return false;
 		}
@@ -99,6 +170,21 @@ public class FileParser {
 			}
 		}
 		return false;
+	}
+	
+	public static boolean isStringEndsWithSuffix(String str, List<String> suffix){
+		if(null == str || str.isEmpty() || null == suffix || suffix.isEmpty()){
+			return false;
+		}
+		boolean retval = false;
+		for(String s : suffix){
+			if(str.endsWith(s)){
+				retval = true;
+				break;
+			}
+		}
+		
+		return retval;
 	}
 	
 	private static String trimSourceFolderPrefix(String line){
@@ -130,4 +216,6 @@ public class FileParser {
 //	private static final List<String> SOURCE_FOLDER = Msg.getList(JarTool.class, "source.dir");
 	private static final List<String> SOURCE_FOLDER = JarTool.SOURCE_FOLDER;
 	private static final List<String> JAVA_CLASS_PARSE_IGNORE_LINE_START = Msg.getList(FileParser.class, "java.classParse.ignore.start");
+	private static final Pattern MODIFY_LIST_NAME_PATTERN_CANON = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.canon")); 
+	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn"));
 }

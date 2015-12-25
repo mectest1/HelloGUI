@@ -47,6 +47,8 @@ public class RootPaneController implements ErrorLogger{
 //		prepareNewLog();
 		ViewFactory.setLogOutput(this);
 		logMsg.getStyleClass().clear(); //clear default style classes for log msg
+		logMsg.getStyleClass().add(Msg.get(this, "style.logMsg"));
+//		logMsg.setStyle("-fx-background-color: white;");
 	}
 	
 	@FXML
@@ -91,13 +93,14 @@ public class RootPaneController implements ErrorLogger{
 //	}
 	private void appendLog(String msg){
 		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
+		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to bottom
 	}
 	
 	
 
 	@Override
-	public void log(Exception e) {
-		appendLog(JarTool.exceptionToStr(e));
+	public void log(String msg) {
+		appendLog(msg);
 	}
 
 

@@ -1,9 +1,15 @@
 package com.mec.application.views;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
+import com.mec.resources.ErrorLogger;
 import com.mec.resources.FileParser;
 import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
@@ -11,14 +17,12 @@ import com.mec.resources.Msg;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class PatchReleaseController {
+public class PatchReleaseController implements ErrorLogger{
 
 	@FXML
 	private TextField workSpaceDirectory;
@@ -73,7 +77,8 @@ public class PatchReleaseController {
 			}
 			
 			String modifyListContent = modifyList.getText();
-			Map<String, List<String>> modifyListMap = FileParser.parseModifyList(modifyListContent);
+			List<String> modifyList = FileParser.normalizeModifyList(modifyListContent);
+			Map<String, List<String>> modifyListMap = FileParser.parseModifyList(modifyList);
 			
 			for(String projectName : modifyListMap.keySet()){
 				List<String> sourceFileList = modifyListMap.get(projectName);
@@ -81,7 +86,9 @@ public class PatchReleaseController {
 				jarTool.writeJavaToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
 			}
 			
-			appendLog(jarTool.getLog());
+			relocateJars(patchReleaseDir);
+			writeReadMe(patchReleaseDir, modifyList);
+//			appendLog(jarTool.getLog());
 		}catch(Exception e){
 //			appendLog(Msg.getExpMsg(e, e.getMessage()));
 			appendLog(String.format(Msg.get(this, "exception.log"), e.getClass().getName(), JarTool.exceptionToStr(e)));
@@ -99,6 +106,55 @@ public class PatchReleaseController {
 			
 //	}
 	
+	private void relocateJars(File patchReleaseDir) throws IOException{
+		File eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+		if(eeLibDir.exists()){
+			File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis()));
+			eeLibDir.renameTo(tmp);
+			eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+		}
+		if(!eeLibDir.exists()){
+			eeLibDir.mkdir();
+		}
+		JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.getCanonicalPath()));
+		
+		for(File jarFile : patchReleaseDir.listFiles()){
+			String jarFileName = jarFile.getName();
+			if(JarTool.EE_LIB_JAR.matcher(jarFileName).matches()){
+				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.getCanonicalPath()));
+				Files.move(jarFile.toPath(), new File(eeLibDir, jarFileName).toPath());
+			}else if(JarTool.WEB_CONTENT_JAR.matcher(jarFileName).matches()){
+				//
+			}else{
+				log(String.format(Msg.get(this, "info.dontMove"), jarFileName, patchReleaseDir));
+			}
+		}
+	}
+	
+	private void writeReadMe(File patchReleaseDir, List<String> contentLines) throws IOException{
+//		File readMe = new File(patchReleaseDir, Msg.get(this, "path.README"));
+//		if(readMe.exists()){
+//			File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.README.bak"), System.currentTimeMillis()));
+//			readMe.renameTo(tmp);
+//			readMe = new File(patchReleaseDir, Msg.get(this, "path.README"));
+//		}
+//		if(!readMe.exists()){
+//			readMe.createNewFile();
+//		}
+		File readMe = JarTool.createNewFile(patchReleaseDir, 
+				Msg.get(this, "path.README"), 
+				String.format(Msg.get(this, "path.README.bak"), Msg.get(this, "path.README"), System.currentTimeMillis()));
+		try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(readMe)));){
+			for(String line : contentLines){
+				if(null == line){
+					continue;
+				}
+				writer.println(line);
+			}
+		}
+		
+	}
+	
 	@FXML
 	private void onClearLog(){
 		logMsg.clear();
@@ -107,10 +163,19 @@ public class PatchReleaseController {
 	private void appendLog(String msg){
 //		logs.concat("\n" + msg);
 		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
+//		logMsg.positionCaret(logMsg.getText().length());
+		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to the bottom;
 	}
 	
-//	private StringWriter jarToolLogs = new StringWriter();
-	private JarTool jarTool = JarTool.newInstance();
-	private StringProperty logs = new SimpleStringProperty();
+	@Override
+	public void log(String msg) {
+		appendLog(msg);
+	}
+
+
+
+	//	private StringWriter jarToolLogs = new StringWriter();
+	private JarTool jarTool = JarTool.newInstance(this);
+//	private StringProperty logs = new SimpleStringProperty();
 	private BooleanProperty fieldEmpty = new SimpleBooleanProperty();
 }
