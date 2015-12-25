@@ -7,7 +7,7 @@
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.PatchReleaseController">
   <columnConstraints>
-    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="150.0" />
+    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="150.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="494.0" />
   </columnConstraints>
   <rowConstraints>
