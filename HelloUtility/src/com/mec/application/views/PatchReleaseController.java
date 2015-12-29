@@ -111,15 +111,7 @@ public class PatchReleaseController implements ErrorLogger{
 //	}
 	
 	private void relocateJars(File patchReleaseDir) throws IOException{
-		File eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
-		if(eeLibDir.exists()){
-			File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis()));
-			eeLibDir.renameTo(tmp);
-			eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
-		}
-		if(!eeLibDir.exists()){
-			eeLibDir.mkdir();
-		}
+		File eeLibDir = null;
 		JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.getCanonicalPath()));
 		
 		for(File jarFile : patchReleaseDir.listFiles()){
@@ -127,6 +119,17 @@ public class PatchReleaseController implements ErrorLogger{
 			if(JarTool.WEB_CONTENT_JAR.matcher(jarFileName).matches()){
 				//
 			}else if(JarTool.EE_LIB_JAR.matcher(jarFileName).matches()){
+				if(null == eeLibDir){
+					eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+					if(eeLibDir.exists()){
+						File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis()));
+						eeLibDir.renameTo(tmp);
+						eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+					}
+					if(!eeLibDir.exists()){
+						eeLibDir.mkdir();
+					}
+				}
 				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.getCanonicalPath()));
 				Files.move(jarFile.toPath(), new File(eeLibDir, jarFileName).toPath());
 			}else{
