@@ -323,6 +323,11 @@ public class JarTool {
 		}
 		return sw.toString();
 	}
+	/**
+	 * Replace all '\' with '/' in directory path;
+	 * @param path directory path
+	 * @return
+	 */
 	public static String normalizePath(String path){
 		if(null == path || path.isEmpty()){
 			return path;
