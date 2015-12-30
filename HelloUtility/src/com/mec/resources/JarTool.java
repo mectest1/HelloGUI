@@ -45,87 +45,30 @@ public class JarTool {
 	 * @param patchDistDir
 	 * @throws Exception
 	 */
-//	public void writeToJar(File workspaceDirectory, String projectName, List<String> modifyList
-//			
-//			, File patchReleaseDirectory
-//			){
-//		
-//	}
 	
 	public void writeJavaToJar(File workspaceDirectory, String projectName, List<String> modifyList
 //			, String patchDistDir
 			, File patchReleaseDirectory
 			) throws Exception{
-//		fail("Not yet implemented");
-//		workspaceDirectory = normalizPath(workspaceDirectory);
 		for(int i = 0; i < modifyList.size(); ++i){
 			modifyList.set(i, normalizPath(modifyList.get(i)));
 		}
 		
-//		File curDir = new File(".");
-//		File curDir = new File(workspaceDirectory);
 		File curDir = new File(workspaceDirectory, projectName);
-//		if(!(curDir.exists() && curDir.isDirectory())){
-//			throw new IllegalArgumentException(String.format(Ms, args));
-//		}
 		validateDirectory(curDir, String.format(Msg.getExpMsg(this, "invalid.projectDirectory"), curDir.getCanonicalPath()));
 		
-//		out.printf("current work directory: %s\n", curDir.getCanonicalPath());
-//		out.printf(Msg.get(this, "log.currentWorkDir"), curDir.getCanonicalPath());
 		logger.log(String.format(Msg.get(this, "log.currentWorkDir"), curDir.getCanonicalPath()));
-//		File distDir = new File(curDir, "dist");
-//		File distDir = new File(curDir, Msg.get(this, "default.dist.dir"));
-//		if(!distDir.exists()){
-//			distDir.mkdir();
-//		}
 		File distDir = patchReleaseDirectory;
 		
-//		final File sourceDir = new File(curDir, "src");
-//		final File classDir = new File(curDir, "bin");
-//		final File sourceDir = new File(curDir, Msg.get(this, "default.source.dir"));
-//		final File classDir = new File(curDir, Msg.get(this, "default.binary.dir"));
 		final File sourceDir = getFirstExisted(curDir, SOURCE_FOLDER);
 		final File classDir = getFirstExisted(curDir, BINARY_FOLDER);
 		validateDirectory(sourceDir, String.format(Msg.getExpMsg(this, "invalid.sourceDirectory"), sourceDir.getCanonicalFile()));
 		validateDirectory(classDir, String.format(Msg.getExpMsg(this, "invalid.binaryDirectory"), classDir.getCanonicalFile()));
-//		String[] modifyList = null;11
-//		String[] packagedFiles = new String[]{
-////				"com/mec/resources/"
-//				 "/com/mec/resources/Msg.java"
-////				,"com/mec/resources/"
-////				,"com/mec/resources/"
-//		};
 		
-		
-//		File patchFile = new File(distDir, "testPatch.jar");
-//		String projectName = curDir.getPath().substring(curDir.getPath().subString, endIndex)
-//		File patchFile = new File(distDir, String.format(Msg.get(this, "default.jar.name"), projectName));
-//		if(patchFile.exists()){
-////			patchFile.renameTo(new File(patchFile.getParentFile(), String.format("testPatch_del%s.jar", System.currentTimeMillis())));
-//			File tmpFile = new File(patchFile.getParentFile(), String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
-//			patchFile.renameTo(tmpFile);
-//			patchFile = new File(distDir, String.format(Msg.get(this, "default.jar.name"), projectName));
-//		}
-//		if(!patchFile.exists()){
-//			patchFile.createNewFile();
-//		}
-//		File patchFile = createNewFile(distDir
-//				, String.format(Msg.get(this, "default.jar.name"), projectName)
-//				, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
-//		patchFile = new File(distDir, "testPatch.jar");
-//		patchFile.deleteOnExit();
-//		patchFile.createNewFile();
-//		JarOutputStream eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
 		JarOutputStream eelibJar = null;	
 		JarOutputStream webContentJar = null;
 		
 		for (String packageFile : modifyList) {
-//		modifyList.stream().forEach(packageFile -> {
-//			try{
-//				if(NIX_PATH.equals(String.valueOf(packageFile.charAt(0)))){
-//				if(packageFile.startsWith(NIX_PATH)){
-//					packageFile = packageFile.substring(1);
-//				}
 			packageFile = trimLeadingSlash(packageFile);
 			
 			if(isInDirectory(packageFile, sourceDir)){
@@ -153,31 +96,11 @@ public class JarTool {
 				}
 				writeWebContentToJar(webContentJar, curDir, packageFile);
 			}else{
-//				out.printf(String.format(Msg.get(this, "error.unsupported.fileType"), packageFile));
 				logger.log(String.format(Msg.get(this, "error.unsupported.fileType"), packageFile));
 			}
-//			Set<String> classEntries = getClassEntries(sourceDir, classDir, packageFile);
-//			out.printf(Msg.get(this, "log.debug.classEntries"), classEntries);
-//			String packageDir = packageFile.substring(0, packageFile.lastIndexOf(NIX_PATH));
-//			//				packageFile = packageFile.replaceAll("\\.java$", ".class");
-//			//				zipFile(outputJar, classDir, packageFile);
-//			classEntries.stream().forEach(entry -> {
-//		
-//				try {
-//					zipFile(outputJar, classDir, String.format(Msg.get(this, "config.packagePathAndEntry"), packageDir, entry));
-//				} catch (Exception e) {
-//					e.printStackTrace(out);
-//				}
-//		
-//			});
-//			}catch(Exception e){
-//				e.printStackTrace(out);
-//			}
-//		});
 		}
 		
 		
-		//		outputJar.flush();
 		if(null != eelibJar){
 			eelibJar.close();
 		}
@@ -193,16 +116,9 @@ public class JarTool {
 	 */
 	private void writeWebContentToJar(ZipOutputStream webContentJar, File webProjectDirectory, String packageFile) throws IOException{
 		final File webContentFolder = getFirstExisted(webProjectDirectory, WEB_CONTENT_FOLDER);
-//		validateDirectory(webContentFolder, String.format(Msg.get(this, "exception.invalid.webContentDirectory"), webContentFolder.getCanonicalPath()));
-//		//
 		String defaultWebContentJarDir = Msg.get(this, "webContent.dir");
-//		String webContentJarName = String.format(Msg.get(this, "default.jar.name"), defaultWebContentJarDir);
-//		File webContentJarFile =  createNewFile(distDirectory, webContentJarName, null);
-//		File webContentJarFile  = new File(distDirectory, webContentJarName);
-//		try(JarOutputStream webContentJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(webContentJarFile)));){
-			String entryName = trimLeadingSlash(trimLeading(packageFile, defaultWebContentJarDir));
-			zipFile(webContentJar, webContentFolder, entryName);
-//		}
+		String entryName = trimLeadingSlash(trimLeading(packageFile, defaultWebContentJarDir));
+		zipFile(webContentJar, webContentFolder, entryName);
 	}
 	
 	public static File createNewFile(File parentDirectory, String fileName, String bakFileName) throws IOException{
@@ -419,17 +335,7 @@ public class JarTool {
 		}
 		return line;
 	}
-//	public String getLog(){
-//		out.flush();
-//		String retval = logStr.toString();
-//		initLog();
-//		return retval;
-//	}
-//	private void initLog(){
-//		logStr = new StringWriter();
-//		out = new PrintWriter(logStr);
-//	}
-	
+
 	private void setLogger(ErrorLogger logger){
 		this.logger = logger;
 	}
