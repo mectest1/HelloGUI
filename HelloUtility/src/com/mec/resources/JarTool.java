@@ -165,7 +165,16 @@ public class JarTool {
 	
 	
 	/**
-	 * 
+	 * INPUT:
+	 * <dl>
+	 * 	<dt>outputJar:</dt> <dd>JarOutputStream("E:\Date\2015-12\Defect #36895\_testPatch\EE_LIB\EximBillsBusBase.jar")</dd>
+	 * 	<dt>entriesParentDirectory:</dt> <dd>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307\EximBillsFactoringObjects\bin</dd>
+	 * 	<dt>entryName:</dt>
+	 * 				<dd>com/cs/eximap/busiintf/factoring/bo/ASEFactoringBaseBO.java<br/>
+	 * 				com/cs/eximap/busiintf/factoring/bo/trxref.xml<br/>
+	 * 				SYS_JS/SYS_BaseFunc_CAL.js
+	 * 				</dd>
+	 * </dl>
 	 * @param outputJar the JarOutputStream
 	 * @param entriesParentDirectory the parent directory that contains all entry files
 	 * @param entryName entry name that will be zipped into file;
