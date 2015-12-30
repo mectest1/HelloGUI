@@ -67,14 +67,14 @@ public class PatchReleaseController implements ErrorLogger{
 //				throw new IllegalArgumentException(Msg.get(this, "error.filedsRequired"));
 //			}
 			
-			String workspaceDirStr = workSpaceDirectory.getText();
+			String workspaceDirStr = JarTool.normalizPath(workSpaceDirectory.getText());
 			File workspaceDir = new File(workspaceDirStr);
 //			if(!(workspaceDir.exists() && workspaceDir.isDirectory())){
 //				throw new IllegalArgumentException(String.format(Msg.getExpMsg(this, "invalid.workspace"), workspaceDirStr));
 //			}
 			JarTool.validateDirectory(workspaceDir, String.format(Msg.getExpMsg(this, "invalid.workspace"), workspaceDirStr));
 			
-			String patchReleaseDirStr = patchReleaseDirectory.getText();
+			String patchReleaseDirStr = JarTool.normalizPath(patchReleaseDirectory.getText());
 			File patchReleaseDir = new File(patchReleaseDirStr);
 			if(!(patchReleaseDir.exists())){
 				appendLog(String.format(Msg.get(this, "info.patchReleaseDir.create"), patchReleaseDir));
