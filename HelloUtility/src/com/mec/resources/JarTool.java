@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -101,14 +102,27 @@ public class JarTool {
 		}
 		
 		
-		if(null != eelibJar){
-			eelibJar.close();
-		}
-		if(null != webContentJar){
-			webContentJar.close();
-		}
+//		if(null != eelibJar){
+//			eelibJar.close();
+//		}
+//		if(null != webContentJar){
+//			webContentJar.close();
+//		}
+		closeOutputStream(eelibJar, webContentJar);
 	}
 	
+	/**
+	 * Close these OutputStream instances when they're not null.
+	 * @param oses
+	 * @throws IOException
+	 */
+	public static void closeOutputStream(OutputStream ... oses) throws IOException{
+		for(OutputStream os : oses){
+			if(null != os){
+				os.close();
+			}
+		}
+	}
 	/**
 	 * project
 	 * @param projectDirectory
