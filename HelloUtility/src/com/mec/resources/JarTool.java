@@ -46,7 +46,7 @@ public class JarTool {
 	 * @throws Exception
 	 */
 	
-	public void writeJavaToJar(File workspaceDirectory, String projectName, List<String> modifyList
+	public void writeFilesToJar(File workspaceDirectory, String projectName, List<String> modifyList
 //			, String patchDistDir
 			, File patchReleaseDirectory
 			) throws Exception{

@@ -87,7 +87,7 @@ public class PatchReleaseController implements ErrorLogger{
 			for(String projectName : modifyListMap.keySet()){
 				List<String> sourceFileList = modifyListMap.get(projectName);
 				
-				jarTool.writeJavaToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
+				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
 			}
 			
 			relocateJars(patchReleaseDir);
