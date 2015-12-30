@@ -13,7 +13,7 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="185.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="185.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
       <TabPane>
