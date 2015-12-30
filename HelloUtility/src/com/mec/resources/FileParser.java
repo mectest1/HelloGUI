@@ -51,7 +51,7 @@ public class FileParser {
 				continue;
 			}
 			
-			line = JarTool.normalizPath(line);
+			line = JarTool.normalizePath(line);
 			
 //			if(line.startsWith(JarTool.NIX_PATH)){
 //				line = line.substring(1);

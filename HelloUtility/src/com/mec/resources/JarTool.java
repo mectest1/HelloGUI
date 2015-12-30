@@ -51,7 +51,7 @@ public class JarTool {
 			, File patchReleaseDirectory
 			) throws Exception{
 		for(int i = 0; i < modifyList.size(); ++i){
-			modifyList.set(i, normalizPath(modifyList.get(i)));
+			modifyList.set(i, normalizePath(modifyList.get(i)));
 		}
 		
 		File curDir = new File(workspaceDirectory, projectName);
@@ -323,7 +323,7 @@ public class JarTool {
 		}
 		return sw.toString();
 	}
-	public static String normalizPath(String path){
+	public static String normalizePath(String path){
 		if(null == path || path.isEmpty()){
 			return path;
 		}
