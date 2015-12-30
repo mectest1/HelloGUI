@@ -71,7 +71,7 @@ public class JarTool {
 		for (String packageFile : modifyList) {
 			packageFile = trimLeadingSlash(packageFile);
 			
-			if(isInDirectory(packageFile, sourceDir)){
+			if(isInDirectory(packageFile, sourceDir)){	//package file in source directory;
 				if(null == eelibJar){
 					File patchFile = createNewFile(distDir
 							, String.format(Msg.get(this, "default.jar.name"), projectName)
