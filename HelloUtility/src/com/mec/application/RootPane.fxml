@@ -24,7 +24,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="View">
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#onBase64Decoder" text="Base 64 (En|De)coder" />
+                      <MenuItem mnemonicParsing="false" onAction="#onBase64Decoder" text="Base64 Decoder&amp;Encoder" />
                       <MenuItem mnemonicParsing="false" onAction="#onPatchRelease" text="Patch Release Manager" />
                     </items>
                   </Menu>

@@ -112,7 +112,6 @@ public class PatchReleaseController implements ErrorLogger{
 	
 	private void relocateJars(File patchReleaseDir) throws IOException{
 		File eeLibDir = null;
-		JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.getCanonicalPath()));
 		
 		for(File jarFile : patchReleaseDir.listFiles()){
 			String jarFileName = jarFile.getName();
@@ -128,6 +127,7 @@ public class PatchReleaseController implements ErrorLogger{
 					}
 					if(!eeLibDir.exists()){
 						eeLibDir.mkdir();
+						JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.getCanonicalPath()));
 					}
 				}
 				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.getCanonicalPath()));

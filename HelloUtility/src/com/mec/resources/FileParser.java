@@ -21,8 +21,14 @@ public class FileParser {
 	/**
 	 * Accepted only normalized modify list content format: one file for each line;
 	 * e.g.: 
+	 * INPUT:
 	 * 	/EximBillsELoan/src/com/cs/eximap/eloan/utility/ASUtilityService.java
 	 *  /EximBillWeb/WebContent/screen/eLOAN/IAAC_InqAmzPosting.jsp
+	 * OUTPUT:
+	 * 	{
+	 * 		EximBillsELoan: [com/cs/eximap/eloan/utility/ASUtilityService.java]
+	 * 		EximBillWeb: [WebContent/screen/eLOAN/IAAC_InqAmzPosting.jsp]
+	 * 	}
 	 * You may need to invoke {@link #normalizeModifyList(String)} before invoking this one;
 	 * @param content
 	 * @return

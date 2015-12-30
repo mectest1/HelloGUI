@@ -128,14 +128,19 @@ public class JarTool {
 //				}
 			packageFile = trimLeadingSlash(packageFile);
 			
-			if(isJavaFile(packageFile)){
+			if(isInDirectory(packageFile, sourceDir)){
 				if(null == eelibJar){
 					File patchFile = createNewFile(distDir
 							, String.format(Msg.get(this, "default.jar.name"), projectName)
 							, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
 					eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
 				}
-				writeJavaClassToJar(eelibJar, sourceDir, classDir, packageFile);
+				if(isJavaFile(packageFile)){
+					writeJavaClassToJar(eelibJar, sourceDir, classDir, packageFile);
+				}else{
+//					writeSourceFileToJar(eelibJar, sourceDir, classDir, packageFile);
+					zipFile(eelibJar, classDir, packageFile);
+				}
 			}else if(isWebContentFile(packageFile)){
 				if(null == webContentJar){
 					final File webContentFolder = getFirstExisted(curDir, WEB_CONTENT_FOLDER);
@@ -219,6 +224,7 @@ public class JarTool {
 		}
 		return patchFile;
 	}
+	
 	private void writeJavaClassToJar(ZipOutputStream outputJar, File sourceDir, File classDir, String packageFile){
 		Set<String> classEntries = getClassEntries(sourceDir, classDir, packageFile);
 //		out.printf(Msg.get(this, "log.debug.classEntries"), classEntries);
@@ -275,9 +281,9 @@ public class JarTool {
 	 * 	"com/mec/resources/Msg.java"
 	 * 
 	 * OUTPUT:
-	 * 	"com/mec/resources/Msg.class"
-	 * 	"com/mec/resources/Msg$GetCallerClassNameMethod.class"
-	 * 	"com/mec/resources/Msg$....class"
+	 * 	"Msg.class"
+	 * 	"Msg$GetCallerClassNameMethod.class"
+	 * 	"Msg$....class"
 	 * ...
 	 * @param classDir
 	 * @param javaFilePath
@@ -346,6 +352,13 @@ public class JarTool {
 	
 	private boolean isJavaFile(String fileName){
 		return FileParser.isStringEndsWithSuffix(fileName, Arrays.asList(Msg.get(this, "suffix.java")));
+	}
+	
+	private boolean isInDirectory(String filePath, File directory){
+		boolean retval = false;
+		File file = new File(directory, filePath);
+		retval = file.exists();
+		return retval;
 	}
 	
 	private boolean isWebContentFile(String fileName){

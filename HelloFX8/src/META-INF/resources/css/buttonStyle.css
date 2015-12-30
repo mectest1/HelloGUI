@@ -1,8 +1,14 @@
 /*@CHARSET "UTF-8";*/
 
+.root{
+	-fx-cursor: hand;
+	-my-button-color: blue;
+}
+
 .button{
 	-fx-background-color: red;
-	-fx-text-fill: white;
+	/*-fx-text-fill: white;*/
+	-fx-text-fill: -my-button-color;
 }
 
 
