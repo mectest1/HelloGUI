@@ -11,7 +11,9 @@
 	-fx-text-fill: -my-button-color;
 }
 
-
+#closeButton{
+	-fx-text-fill: yellow;
+}
 .hbox{
 	-fx-border-color: blue;
 	-fx-border-width: 2px;

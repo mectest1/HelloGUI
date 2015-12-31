@@ -293,6 +293,12 @@ public class JarTool {
 		return FileParser.isStringEndsWithSuffix(fileName, Arrays.asList(Msg.get(this, "suffix.java")));
 	}
 	
+	/**
+	 * Check if the specified file is in directory
+	 * @param filePath the specified file
+	 * @param directory dose the file reside in this directory?
+	 * @return
+	 */
 	private boolean isInDirectory(String filePath, File directory){
 		boolean retval = false;
 		File file = new File(directory, filePath);
@@ -327,6 +333,11 @@ public class JarTool {
 		return retval;
 	}
 	
+	/**
+	 * Convert exception to full stack trace string. The output would be same as {@link Exception#printStackTrace()}
+	 * @param e convert this exception to string with fill stack trace info
+	 * @return
+	 */
 	public static String exceptionToStr(Exception e){
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));

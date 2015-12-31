@@ -1,6 +1,5 @@
 package com.mec.application;
 	
-import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
 
 import javafx.application.Application;
