@@ -66,6 +66,24 @@ public class Msg {
 		return get(obj.getClass(), tag);
 	}
 	
+	public static <R> R get(Class<?> clazz, String tag, Function<String, R> converter, R defaultValue){
+		if(null == converter){
+			return defaultValue;
+		}
+		String strval = get(clazz, tag);
+		R retval;
+		try {
+			retval = converter.apply(strval);
+		} catch (Exception e) {
+//			e.printStackTrace();
+			retval = null;
+		}
+		if(null != retval){
+			return retval;
+		}else{
+			return defaultValue;
+		}
+	}
 	/**
 	 * <p>
 	 * Instead of simply return the property value as a string (as specified in the message bundle),
@@ -85,22 +103,7 @@ public class Msg {
 	 * @return
 	 */
 	public static <R> R get(Object obj, String tag, Function<String, R> converter, R defaultValue){
-		if(null == converter){
-			return defaultValue;
-		}
-		String strval = get(obj, tag);
-		R retval;
-		try {
-			retval = converter.apply(strval);
-		} catch (Exception e) {
-//			e.printStackTrace();
-			retval = null;
-		}
-		if(null != retval){
-			return retval;
-		}else{
-			return defaultValue;
-		}
+		return get(obj.getClass(), tag, converter, defaultValue);
 	}
 	
 	public static String getExpMsg(Object obj, String tag){
