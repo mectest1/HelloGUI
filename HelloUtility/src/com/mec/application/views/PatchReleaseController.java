@@ -6,8 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mec.resources.ErrorLogger;
 import com.mec.resources.FileParser;
@@ -82,12 +84,14 @@ public class PatchReleaseController implements ErrorLogger{
 			
 			String modifyListContent = modifyList.getText();
 			List<String> modifyList = FileParser.normalizeModifyList(modifyListContent);
-			Map<String, List<String>> modifyListMap = FileParser.parseModifyList(modifyList);
+			Map<String, Set<String>> modifyListMap = FileParser.parseModifyList(modifyList);
 			
 			for(String projectName : modifyListMap.keySet()){
-				List<String> sourceFileList = modifyListMap.get(projectName);
+				Set<String> sourceFileList = modifyListMap.get(projectName);
 				
-				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
+				
+//				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
+				jarTool.writeFilesToJar(workspaceDir, projectName, new ArrayList<>(sourceFileList), patchReleaseDir);
 			}
 			
 			relocateJars(patchReleaseDir);

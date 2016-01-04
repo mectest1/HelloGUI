@@ -7,13 +7,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javafx.scene.shape.Line;
 
 public class FileParser {
 
@@ -34,8 +34,8 @@ public class FileParser {
 	 * @return
 	 */
 //	public static Map<String, List<String>> parseModifyList(String content){
-	public static Map<String, List<String>> parseModifyList(List<String> lines){
-		Map<String, List<String>> retval = new HashMap<>();
+	public static Map<String, Set<String>> parseModifyList(List<String> lines){
+		Map<String, Set<String>> retval = new HashMap<>();
 //		if(null == content || content.isEmpty()){
 //			return retval;
 //		}
@@ -60,9 +60,9 @@ public class FileParser {
 			int projectIndex = line.indexOf(JarTool.NIX_PATH);
 			String projectName = line.substring(0, projectIndex);
 			
-			List<String> projectSourceList = retval.get(projectName);
+			Set<String> projectSourceList = retval.get(projectName);
 			if(null == projectSourceList){
-				projectSourceList = new ArrayList<>();
+				projectSourceList = new HashSet<>();
 				retval.put(projectName, projectSourceList);
 			}
 			
