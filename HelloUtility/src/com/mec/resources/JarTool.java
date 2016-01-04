@@ -48,12 +48,15 @@ public class JarTool {
 	 * @throws Exception
 	 */
 	
-	public void writeFilesToJar(File workspaceDirectory, String projectName, List<String> modifyList
+	public void writeFilesToJar(File workspaceDirectory, String projectName, Collection<String> modifyList
 //			, String patchDistDir
 			, File patchReleaseDirectory
 			) throws Exception{
-		for(int i = 0; i < modifyList.size(); ++i){
-			modifyList.set(i, normalizePath(modifyList.get(i)));
+		Set<String> modifyListSet = new HashSet<>();
+//		for(int i = 0; i < modifyList.size(); ++i){
+		for(String modifyListItem : modifyList){
+//			modifyList.set(i, normalizePath(modifyList.get(i)));
+			modifyListSet.add(normalizePath(modifyListItem));
 		}
 		
 		File curDir = new File(workspaceDirectory, projectName);
@@ -70,7 +73,7 @@ public class JarTool {
 		JarOutputStream eelibJar = null;	
 		JarOutputStream webContentJar = null;
 		
-		for (String packageFile : modifyList) {
+		for (String packageFile : modifyListSet) {
 			packageFile = trimLeadingSlash(packageFile);
 			
 			if(isInDirectory(packageFile, sourceDir)){	//package file in source directory;
