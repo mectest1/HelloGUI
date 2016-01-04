@@ -30,6 +30,9 @@ public class FileParser {
 	 * 		EximBillWeb: [WebContent/screen/eLOAN/IAAC_InqAmzPosting.jsp]
 	 * 	}
 	 * You may need to invoke {@link #normalizeModifyList(String)} before invoking this one;
+	 * <p>
+	 * Note that duplicate items in the result will be elimilated;
+	 * </p>
 	 * @param content
 	 * @return
 	 */
