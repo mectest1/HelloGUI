@@ -95,7 +95,7 @@ public class PatchReleaseController implements ErrorLogger{
 //			appendLog(jarTool.getLog());
 		}catch(Exception e){
 //			appendLog(Msg.getExpMsg(e, e.getMessage()));
-			appendLog(String.format(Msg.get(this, "exception.log"), e.getClass().getName(), JarTool.exceptionToStr(e)));
+			appendLog(String.format(Msg.get(this, "exception.log"), e.getClass().getSimpleName(), JarTool.exceptionToStr(e)));
 		}
 	}
 	
