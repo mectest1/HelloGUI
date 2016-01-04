@@ -67,8 +67,9 @@ public class FileParserTest {
 	@Test
 	public void testModifyListSVNNamePatterns() throws Exception{
 		String[] modifyList = new String[]{
-				"ServerJS.java - CSEECore/src/com/cs/core/parser (2 matches)"
+				  "HelloUtility/src/com/mec/resources/ViewFactory.java"
 				, "/HelloUtility/src/com/mec/resources/ViewFactory.java"
+				, "ServerJS.java - CSEECore/src/com/cs/core/parser (2 matches)"
 				, "BTAGGetSessionData.java - EximBillWeb/JavaSource/com/cs/eximweb/usertag (2 matches) 65264 mike.tang 1/4/16, 4:08 PM"
 		};
 		List<String> modifyListNamePattern = Msg.getList(FileParser.class, "pattern.modifyList.svn");
