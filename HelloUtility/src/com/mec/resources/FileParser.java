@@ -15,6 +15,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import javax.xml.bind.Unmarshaller;
+
 public class FileParser {
 
 	
@@ -216,6 +222,8 @@ public class FileParser {
 		}
 		return !isStringStartsWith(codeLine, JAVA_CLASS_PARSE_IGNORE_LINE_START);
 	}
+	
+	
 //	private static final Pattern classDeclartion = Pattern.compile("\\bclass\\b\\w+\\b", Pattern.MULTILINE);
 //	private static final String DEFAULT_CLASS_PATTERN = "\\bclass\\s+(\\w+)";
 	public static final Pattern CLASS_DECLARTION = Pattern.compile(Msg.get(FileParser.class, "classPattern"));
@@ -227,4 +235,56 @@ public class FileParser {
 	private static final List<String> JAVA_CLASS_PARSE_IGNORE_LINE_START = Msg.getList(FileParser.class, "java.classParse.ignore.start");
 	private static final Pattern MODIFY_LIST_NAME_PATTERN_CANON = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.canon")); 
 	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn"));
+	
+	
+	/**
+	 * Save &amp; load JavaBean to &amp; from XML file.
+	 * @author MEC
+	 *
+	 */
+	public static class BeanMarshal{
+		public static <T> void saveToXML(T obj, File xmlFile) throws JAXBException, PropertyException{
+			JAXBContext ctx = JAXBContext.newInstance(obj.getClass());
+			Marshaller m = ctx.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			
+			//
+			m.marshal(obj, xmlFile);
+		}
+		
+		@SuppressWarnings("unchecked")
+		public static <T> T loadFromXML(Class<? extends T> clazz, File xmlFile) throws JAXBException{
+			JAXBContext ctx = JAXBContext.newInstance(clazz);
+			Unmarshaller um = ctx.createUnmarshaller();
+			
+			//
+			return (T) um.unmarshal(xmlFile);
+		}
+	}
 }
+
+
+
+
+
+//public class BeanMarshal {
+//
+//	
+//	
+//	public static <T> void saveToXML(T obj, File xmlFile ) throws Exception{
+//		JAXBContext context = JAXBContext.newInstance(obj.getClass());
+//		Marshaller m = context.createMarshaller();
+//		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//		
+//		m.marshal(obj, xmlFile);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public static <T> T loadFromXML(Class<? extends T> clazz, File xmlFile) throws Exception{
+////	public static <T> T loadFromXML(File xmlFile) throws Exception{
+//		JAXBContext context = JAXBContext.newInstance(clazz);
+//		Unmarshaller um = context.createUnmarshaller();
+//		
+//		return (T) um.unmarshal(xmlFile);
+//	}
+//}
