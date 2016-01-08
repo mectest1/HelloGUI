@@ -105,6 +105,17 @@ public class Msg {
 		}
 	}
 	
+	/**
+	 * Get properties as list, e.g.:
+	 * <ul>
+	 * <li>prop.name</li>
+	 * <li>prop.name.1</li>
+	 * <li>prop.name.2</li>
+	 * </ul>
+	 * @param clazz
+	 * @param tag
+	 * @return
+	 */
 	public static List<String> getList(Class<?> clazz, String tag){
 		List<String> retval = new ArrayList<String>();
 		String value = get(clazz, tag);

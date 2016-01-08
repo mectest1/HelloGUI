@@ -81,6 +81,8 @@ public class FileParserTest {
 			});
 		}
 	}
+	
+//	@Ignore
 	@Test
 	public void testModifyListSVNName2Patterns() throws Exception{
 		String[] modifyList = new String[]{
@@ -99,6 +101,19 @@ public class FileParserTest {
 	}
 	
 	
+	@Ignore
+//	@ExpectedException(IllegalArgumentException.class)
+	@Test(expected=IllegalArgumentException.class)
+//	@Test
+	public void testUnrecognizableModifyList() throws Exception{
+		String[] modifyList = new String[]{
+				"DerpDerp"
+		};
+		
+		Arrays.asList(modifyList).stream().forEach(l -> {
+			out.printf("Normalied line: %s\n", FileParser.normalizeModifyListLine(l));
+		});
+	}
 	
 	
 	private static final PrintStream out = System.out;

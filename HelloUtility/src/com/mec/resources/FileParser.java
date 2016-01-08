@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -122,26 +123,48 @@ public class FileParser {
 		String retval = null;
 		
 		line = JarTool.normalizePath(line);
-//		Pattern p = Pattern.compile(MODIFY_LIST_NAME_PATTERN_CANON);
-		if(MODIFY_LIST_NAME_PATTERN_CANON.matcher(line).matches()){
-			retval = line;
-		}else if(MODIFY_LIST_NAME_PATTERN_SVN.matcher(line).matches()){
-			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN.matcher(line);
-//			while(m.find()){
-			m.find();
-			String path = m.group(2);
-			String fileName = m.group(1);
-			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
-//			}
-		}else if(MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line).matches()){
-			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line);
-			m.find();
-			String path = m.group(1);
-			String fileName = m.group(3);
-			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
-		}else{
-			throw new IllegalArgumentException(String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line));
+////		Pattern p = Pattern.compile(MODIFY_LIST_NAME_PATTERN_CANON);
+//		if(MODIFY_LIST_NAME_PATTERN_CANON.matcher(line).matches()){
+//			retval = line;
+//		}else if(MODIFY_LIST_NAME_PATTERN_SVN.matcher(line).matches()){
+//			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN.matcher(line);
+////			while(m.find()){
+//			m.find();
+//			String path = m.group(2);
+//			String fileName = m.group(1);
+//			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
+////			}
+//		}else if(MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line).matches()){
+//			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line);
+//			m.find();
+//			String path = m.group(1);
+//			String fileName = m.group(3);
+//			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
+//		}else{
+//			throw new IllegalArgumentException(String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line));
+//		}
+		
+		
+		List<Pattern> modifyListPatterns = new ArrayList<>();;
+		List<String> modifyListNamePatternStr = Msg.getList(FileParser.class, "pattern.modifyList.pattern");
+		for(String pStr : modifyListNamePatternStr){
+			modifyListPatterns.add(Pattern.compile(pStr));
 		}
+		List<String> outputFormat = Msg.getList(FileParser.class, "pattern.modifyList.outputFormat");
+		
+		List<String> outputIndicesStr = Msg.getList(FileParser.class, "pattern.modifyList.outputFormat.indices");
+		List<List<Integer>> outputIndices = outputIndicesStr.stream().map(indicesStr -> {
+			List<Integer> retIndices = new ArrayList<>();
+			String[] indexStrArray = indicesStr.split(Msg.get(FileParser.class, "pattern.modifyList.outputIndices.delimiter"));
+			for(String indexStr : indexStrArray){
+				retIndices.add(Integer.parseInt(indexStr.trim()));
+			}
+			return retIndices;
+		}).collect(Collectors.toList());
+		
+		retval = StringTemplate.getRegExtractor().extractAndOutput(line, modifyListPatterns, outputFormat, outputIndices, 
+				String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line)
+				);
 		
 		retval = JarTool.trimLeadingSlash(retval);
 		return retval;
@@ -240,10 +263,17 @@ public class FileParser {
 //	private static final List<String> SOURCE_FOLDER = Msg.getList(JarTool.class, "source.dir");
 	private static final List<String> SOURCE_FOLDER = JarTool.SOURCE_FOLDER;
 	private static final List<String> JAVA_CLASS_PARSE_IGNORE_LINE_START = Msg.getList(FileParser.class, "java.classParse.ignore.start");
-	private static final Pattern MODIFY_LIST_NAME_PATTERN_CANON = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.canon")); 
-	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn"));
-	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN2 = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn2"));
+//	private static final Pattern MODIFY_LIST_NAME_PATTERN_CANON = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.canon")); 
+//	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn"));
+//	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN2 = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn2"));
 	
+//	private static final List<Pattern> MODIFY_LIST_NAME_PATTERNS = new ArrayList<>();;
+//	static{
+//		List<String> modifyListNamePatternStr = Msg.getList(FileParser.class, "pattern.modifyList.pattern");
+//		for(String pStr : modifyListNamePatternStr){
+//			MODIFY_LIST_NAME_PATTERNS.add(Pattern.compile(pStr));
+//		}
+//	}
 	
 	/**
 	 * Save &amp; load JavaBean to &amp; from XML file.
@@ -269,6 +299,7 @@ public class FileParser {
 			return (T) um.unmarshal(xmlFile);
 		}
 	}
+
 }
 
 
