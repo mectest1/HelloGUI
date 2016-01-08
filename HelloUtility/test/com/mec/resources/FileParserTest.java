@@ -64,6 +64,7 @@ public class FileParserTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testModifyListSVNNamePatterns() throws Exception{
 		String[] modifyList = new String[]{
@@ -80,6 +81,25 @@ public class FileParserTest {
 			});
 		}
 	}
+	@Test
+	public void testModifyListSVNName2Patterns() throws Exception{
+		String[] modifyList = new String[]{
+				"HelloUtility/src/com/mec/resources/ViewFactory.java"
+				, "HelloGUI\\HelloUtility\\src\\com\\mec\\resources\\FileParser.java"
+				, "BTAGGetSessionData.java - EximBillWeb/JavaSource/com/cs/eximweb/usertag (2 matches) 65264 mike.tang 1/4/16, 4:08 PM"
+				, "EximBillWeb/JavaSource/com/cs/eximweb/usertag - BTAGJavaScriptURL.java (4 matches)"
+		};
+		List<String> modifyListNamePattern = Msg.getList(FileParser.class, "pattern.modifyList.svn2");
+		for(String pStr : modifyListNamePattern){
+			Pattern p = Pattern.compile(pStr);
+			Arrays.asList(modifyList).stream().forEach(l -> {
+				out.printf("Normalied line: %s\n", FileParser.normalizeModifyListLine(l));
+			});
+		}
+	}
+	
+	
+	
 	
 	private static final PrintStream out = System.out;
 //	private static final Pattern classDeclartion = Pattern.compile("\\bclass\\s+(\\w+)", Pattern.MULTILINE);

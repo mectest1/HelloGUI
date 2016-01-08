@@ -121,6 +121,7 @@ public class FileParser {
 		}
 		String retval = null;
 		
+		line = JarTool.normalizePath(line);
 //		Pattern p = Pattern.compile(MODIFY_LIST_NAME_PATTERN_CANON);
 		if(MODIFY_LIST_NAME_PATTERN_CANON.matcher(line).matches()){
 			retval = line;
@@ -128,10 +129,16 @@ public class FileParser {
 			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN.matcher(line);
 //			while(m.find()){
 			m.find();
-			String fileName = m.group(1);
 			String path = m.group(2);
+			String fileName = m.group(1);
 			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
 //			}
+		}else if(MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line).matches()){
+			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line);
+			m.find();
+			String path = m.group(1);
+			String fileName = m.group(3);
+			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
 		}else{
 			throw new IllegalArgumentException(String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line));
 		}
@@ -235,6 +242,7 @@ public class FileParser {
 	private static final List<String> JAVA_CLASS_PARSE_IGNORE_LINE_START = Msg.getList(FileParser.class, "java.classParse.ignore.start");
 	private static final Pattern MODIFY_LIST_NAME_PATTERN_CANON = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.canon")); 
 	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn"));
+	private static final Pattern MODIFY_LIST_NAME_PATTERN_SVN2 = Pattern.compile(Msg.get(FileParser.class, "pattern.modifyList.svn2"));
 	
 	
 	/**
