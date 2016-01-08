@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -123,27 +124,6 @@ public class FileParser {
 		String retval = null;
 		
 		line = JarTool.normalizePath(line);
-////		Pattern p = Pattern.compile(MODIFY_LIST_NAME_PATTERN_CANON);
-//		if(MODIFY_LIST_NAME_PATTERN_CANON.matcher(line).matches()){
-//			retval = line;
-//		}else if(MODIFY_LIST_NAME_PATTERN_SVN.matcher(line).matches()){
-//			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN.matcher(line);
-////			while(m.find()){
-//			m.find();
-//			String path = m.group(2);
-//			String fileName = m.group(1);
-//			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
-////			}
-//		}else if(MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line).matches()){
-//			Matcher m = MODIFY_LIST_NAME_PATTERN_SVN2.matcher(line);
-//			m.find();
-//			String path = m.group(1);
-//			String fileName = m.group(3);
-//			retval = String.format(Msg.get(FileParser.class, "modifyList.svn.reorganized"), path, fileName);
-//		}else{
-//			throw new IllegalArgumentException(String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line));
-//		}
-		
 		
 		List<Pattern> modifyListPatterns = new ArrayList<>();;
 		List<String> modifyListNamePatternStr = Msg.getList(FileParser.class, "pattern.modifyList.pattern");
@@ -153,16 +133,14 @@ public class FileParser {
 		List<String> outputFormat = Msg.getList(FileParser.class, "pattern.modifyList.outputFormat");
 		
 		List<String> outputIndicesStr = Msg.getList(FileParser.class, "pattern.modifyList.outputFormat.indices");
-		List<List<Integer>> outputIndices = outputIndicesStr.stream().map(indicesStr -> {
-			List<Integer> retIndices = new ArrayList<>();
-			String[] indexStrArray = indicesStr.split(Msg.get(FileParser.class, "pattern.modifyList.outputIndices.delimiter"));
-			for(String indexStr : indexStrArray){
-				retIndices.add(Integer.parseInt(indexStr.trim()));
-			}
-			return retIndices;
-		}).collect(Collectors.toList());
+		final String indicesDelimiter = Msg.get(FileParser.class, "pattern.modifyList.outputIndices.delimiter");
+		List<List<Integer>> outputIndices = outputIndicesStr.stream().map(indicesStr -> 
+			Arrays.asList(indicesStr.split(indicesDelimiter))
+				.stream().map(indexStr -> Integer.parseInt(indexStr.trim())).collect(Collectors.toList())
+		).collect(Collectors.toList());
 		
-		retval = StringTemplate.getRegExtractor().extractAndOutput(line, modifyListPatterns, outputFormat, outputIndices, 
+		retval = StringTemplate.getRegExtractor().extractAndOutput(
+				line, modifyListPatterns, outputFormat, outputIndices, 
 				String.format(Msg.get(FileParser.class,  "exception.modifyList.unrecognized"), line)
 				);
 		

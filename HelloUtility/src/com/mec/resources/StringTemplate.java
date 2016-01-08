@@ -15,6 +15,11 @@ public class StringTemplate {
 		
 	}
 	
+	/**
+	 * Get a Regular expression extractor, which will extract different parts 
+	 * from a string and reorganize & combine this parts and output a string.
+	 * @return a RegExtractor
+	 */
 	public static RegExtractor getRegExtractor(){
 		return regExtractor;
 	}
@@ -87,9 +92,6 @@ public class StringTemplate {
 			}
 			
 			Matcher m = extractPattern.matcher(inputStr);
-//			if(!m.matches()){
-//				return retval;
-//			}
 			
 			if(!m.find()){
 				return retval;

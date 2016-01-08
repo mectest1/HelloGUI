@@ -91,18 +91,19 @@ public class FileParserTest {
 				, "BTAGGetSessionData.java - EximBillWeb/JavaSource/com/cs/eximweb/usertag (2 matches) 65264 mike.tang 1/4/16, 4:08 PM"
 				, "EximBillWeb/JavaSource/com/cs/eximweb/usertag - BTAGJavaScriptURL.java (4 matches)"
 		};
-		List<String> modifyListNamePattern = Msg.getList(FileParser.class, "pattern.modifyList.svn2");
-		for(String pStr : modifyListNamePattern){
-			Pattern p = Pattern.compile(pStr);
-			Arrays.asList(modifyList).stream().forEach(l -> {
-				out.printf("Normalied line: %s\n", FileParser.normalizeModifyListLine(l));
-			});
-		}
+//		List<String> modifyListNamePattern = Msg.getList(FileParser.class, "pattern.modifyList.svn2");
+//		for(String pStr : modifyListNamePattern){
+//			Pattern p = Pattern.compile(pStr);
+//			Arrays.asList(modifyList).stream().forEach(l -> {
+//				out.printf("Normalied line: %s\n", FileParser.normalizeModifyListLine(l));
+//			});
+//		}
+		Arrays.asList(modifyList).stream().forEach(l -> 
+				out.printf("Normalied line: %s\n", FileParser.normalizeModifyListLine(l)));
 	}
 	
 	
-	@Ignore
-//	@ExpectedException(IllegalArgumentException.class)
+//	@Ignore
 	@Test(expected=IllegalArgumentException.class)
 //	@Test
 	public void testUnrecognizableModifyList() throws Exception{
