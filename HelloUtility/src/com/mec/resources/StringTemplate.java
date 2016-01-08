@@ -46,6 +46,7 @@ public class StringTemplate {
 		 * 	<dd>2, 1</dd>
 		 * <dt>OUTPUT:</dt>
 		 * 	<dd>CSEECore/src/com/cs/core/parser/ServerJS.java</dd>
+		 * </dl>
 		 * @param extractPattern the matching pattern what matches the <strong>whole</strong> <code>inputStr</code>
 		 * @param inputStr the input string
 		 * @param outputFormat the output format string
