@@ -1,6 +1,6 @@
 package com.mec.resources;
 
-public interface ErrorLogger {
+public interface MsgLogger {
 
 	default void log(Exception e){
 		log(JarTool.exceptionToStr(e));

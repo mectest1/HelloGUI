@@ -1,7 +1,7 @@
 package com.mec.application;
 
 import com.mec.resources.DialogFactory;
-import com.mec.resources.ErrorLogger;
+import com.mec.resources.MsgLogger;
 import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
 import com.mec.resources.ViewFactory;
@@ -13,7 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
-public class RootPaneController implements ErrorLogger{
+public class RootPaneController implements MsgLogger{
 	
 	@FXML
 	private TextArea logMsg;
@@ -91,16 +91,18 @@ public class RootPaneController implements ErrorLogger{
 //			appendLog(JarTool.exceptionToStr(e));
 //		}
 //	}
-	private void appendLog(String msg){
-		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
-		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to bottom
-	}
+//	private void appendLog(String msg){
+////		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
+//		logMsg.appendText(msg);
+////		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to bottom
+//	}
 	
 	
 
 	@Override
 	public void log(String msg) {
-		appendLog(msg);
+//		appendLog(msg);
+		logMsg.appendText(msg);
 	}
 
 

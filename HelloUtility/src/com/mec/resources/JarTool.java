@@ -27,7 +27,7 @@ public class JarTool {
 //		initLog();
 	}
 	
-	public static JarTool newInstance(ErrorLogger logger){
+	public static JarTool newInstance(MsgLogger logger){
 //		JarTool retval = new JarTool(logWriter);
 		JarTool retval = new JarTool();
 		retval.setLogger(logger);
@@ -379,7 +379,7 @@ public class JarTool {
 		return line;
 	}
 
-	private void setLogger(ErrorLogger logger){
+	private void setLogger(MsgLogger logger){
 		this.logger = logger;
 	}
 	private static final int BUFFER_SIZE = 1024;
@@ -388,7 +388,7 @@ public class JarTool {
 //	private PrintWriter out;
 	public static final String NIX_PATH = Msg.get(JarTool.class, "config.nixPath");
 	public static final String WIN_PATH_PATTERN = Msg.get(JarTool.class, "config.winPath.pattern"); 
-	private ErrorLogger logger;
+	private MsgLogger logger;
 	
 	private static final List<String> BINARY_FOLDER = Msg.getList(JarTool.class, "binary.dir");
 	public static final List<String> SOURCE_FOLDER = Msg.getList(JarTool.class, "source.dir");

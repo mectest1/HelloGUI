@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class ViewFactory {
 
-	public static void setLogOutput(ErrorLogger logger){
+	public static void setLogOutput(MsgLogger logger){
 //		ViewFactory.out = out;
 		ViewFactory.logger = logger;
 	}
@@ -57,5 +57,5 @@ public class ViewFactory {
 		}
 	}
 //	private static PrintWriter out;
-	private static ErrorLogger logger;
+	private static MsgLogger logger;
 }

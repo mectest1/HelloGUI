@@ -36,7 +36,7 @@ public class PersonTableUtil {
 	//Return Person Id TableColumn
 	public static TableColumn<Person, Integer> getIdColumn(){
 		TableColumn<Person, Integer> personIdCol = new TableColumn<>(Msg.get(PersonTableUtil.class, "id.header"));
-		personIdCol.setCellValueFactory(new PropertyValueFactory<>(Msg.get(PersonTableUtil.class, "personId.property")));
+		personIdCol.setCellValueFactory(new PropertyValueFactory<>(Msg.get(PersonTableUtil.class, "id.property")));
 		return personIdCol;
 	}
 	

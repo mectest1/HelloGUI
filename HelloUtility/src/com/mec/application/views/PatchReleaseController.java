@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mec.resources.ErrorLogger;
+import com.mec.resources.MsgLogger;
 import com.mec.resources.FileParser;
 import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
@@ -24,7 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class PatchReleaseController implements ErrorLogger{
+public class PatchReleaseController implements MsgLogger{
 
 	@FXML
 	private TextField workSpaceDirectory;
@@ -79,7 +79,7 @@ public class PatchReleaseController implements ErrorLogger{
 			String patchReleaseDirStr = JarTool.normalizePath(patchReleaseDirectory.getText());
 			File patchReleaseDir = new File(patchReleaseDirStr);
 			if(!(patchReleaseDir.exists())){
-				appendLog(String.format(Msg.get(this, "info.patchReleaseDir.create"), patchReleaseDir));
+				log(String.format(Msg.get(this, "info.patchReleaseDir.create"), patchReleaseDir));
 			}
 			
 			String modifyListContent = modifyList.getText();
@@ -96,7 +96,8 @@ public class PatchReleaseController implements ErrorLogger{
 //			appendLog(jarTool.getLog());
 		}catch(Exception e){
 //			appendLog(Msg.getExpMsg(e, e.getMessage()));
-			appendLog(String.format(Msg.get(this, "exception.log"), e.getClass().getSimpleName(), JarTool.exceptionToStr(e)));
+//			log(String.format(Msg.get(this, "exception.log"), e.getClass().getSimpleName(), JarTool.exceptionToStr(e)));
+			log(e);
 		}
 	}
 	
@@ -168,16 +169,18 @@ public class PatchReleaseController implements ErrorLogger{
 		logMsg.clear();
 	}
 	
-	private void appendLog(String msg){
-//		logs.concat("\n" + msg);
-		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
-//		logMsg.positionCaret(logMsg.getText().length());
-		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to the bottom;
-	}
+//	private void appendLog(String msg){
+////		logs.concat("\n" + msg);
+////		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
+////		logMsg.positionCaret(logMsg.getText().length());
+//		logMsg.appendText(msg);
+////		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to the bottom;
+//	}
 	
 	@Override
 	public void log(String msg) {
-		appendLog(msg);
+//		appendLog(msg);
+		logMsg.appendText(msg);
 	}
 
 
