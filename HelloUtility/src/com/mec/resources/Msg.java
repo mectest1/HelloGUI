@@ -3,6 +3,7 @@ package com.mec.resources;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 
@@ -34,12 +35,12 @@ public class Msg {
 	 * @param key
 	 * @return
 	 */
-	protected static String getFull(String key){
+	protected static Optional<String> getFull(String key){
 		
 		try {
-			return resources.getString(key);
+			return Optional.of(resources.getString(key));
 		} catch (MissingResourceException e) {
-			return key;
+			return Optional.empty();
 		}
 	}
 	
@@ -51,17 +52,24 @@ public class Msg {
 	 */
 	@Deprecated
 	public static String get(String tag){
-//		return getFull(String.format(getCaller.getCallerClassName(1), tag));
-		//Stacks:
-//		class com.mec.resources.Msg$SecurityManagerMethod$CallerSecurityManager,
-//		class com.mec.resources.Msg$SecurityManagerMethod,
-//		class com.mec.resources.Msg,
-//		class com.mec.fx.HelloFX8,
-		return getFull(String.format("%s.%s", getCaller.getCallerClassName(3), tag));
+//		return getFull(String.format("%s.%s", getCaller.getCallerClassName(3), tag));
+		String key = String.format(TAG_COMBINE_PATTERN, getCaller.getCallerClassName(3), tag);
+		Optional<String> val = getFull(key);
+		if(val.isPresent()){
+			return val.get();
+		}else{
+			return key;
+		}
 	}
 	
 	public static String get(Class<?> clazz, String tag){
-		return getFull(String.format("%s.%s", clazz.getName(), tag));
+		String key = String.format(TAG_COMBINE_PATTERN, clazz.getName(), tag);
+		Optional<String> val = getFull(key);
+		if(val.isPresent()){
+			return val.get();
+		}else{
+			return key;
+		}
 	}
 	
 	public static String get(Object obj, String tag){
@@ -118,24 +126,19 @@ public class Msg {
 	 */
 	public static List<String> getList(Class<?> clazz, String tag){
 		List<String> retval = new ArrayList<String>();
-		String value = get(clazz, tag);
-		if(null != value){
-			retval.add(value);
-		}
+		String baseKey = String.format(TAG_COMBINE_PATTERN, clazz.getName(), tag);
+		getFull(baseKey).ifPresent(e -> retval.add(e));
 		
-		int count = 1;
-		String tagAppendix = tag;
+		int count = 0;
+		Optional<String> value = null;
 		while(true){
-			tagAppendix = tag + "." + count;
-			value = get(clazz, tagAppendix);
-//			if(null == value || value.isEmpty()){
-			if(value.endsWith(tagAppendix)){
+			value = getFull(String.format(TAG_COMBINE_PATTERN, baseKey, ++count));
+			if(value.isPresent()){
+				retval.add(value.get());
+			}else{
 				break;
 			}
-			retval.add(value);
-			++count;
 		}
-		
 		return retval;
 	}
 	
@@ -144,20 +147,19 @@ public class Msg {
 	}
 	
 	public static String getExpMsg(Object obj, String tag){
-		return getFull(String.format("%s.exception.%s", obj.getClass().getName(), tag));
+		String key = String.format("%s.exception.%s", obj.getClass().getName(), tag);
+		
+		Optional<String> val = getFull(key);
+		if(val.isPresent()){
+			return val.get();
+		}else{
+			return key;
+		}
 	}
-	
-//	public static void clearCash(){
-//		ResourceBundle.clearCache();
-////		resources = ResourceBundle.getBundle(MESSAGES, Locale.getDefault());
-//		resources = ResourceBundle.getBundle(MESSAGES);
-//		System.out.printf("default locale: %s, resource.locale: %s\n", Locale.getDefault(), resources.getLocale());
-//	}
-	
 	
 	private static final String MESSAGES = "com.mec.resources.MessagesBundle";
 	private static ResourceBundle resources = ResourceBundle.getBundle(MESSAGES);
-//	private static final Messages instance = new Messages();
+	private static final String TAG_COMBINE_PATTERN = "%s.%s";
 	private static final GetCallerClassNameMethod getCaller = new SecurityManagerMethod();
 	
 	
