@@ -26,6 +26,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#onBase64Decoder" text="Base64 Decoder&amp;Encoder" />
                       <MenuItem mnemonicParsing="false" onAction="#onPatchRelease" text="Patch Release Manager" />
+                      <MenuItem mnemonicParsing="false" onAction="#onFileManager" text="File Manager" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">

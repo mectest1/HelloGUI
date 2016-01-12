@@ -88,6 +88,7 @@ public class PathTreeItem extends TreeItem<Path> {
 	}
 
 	
+	
 	private static final PrintStream out = System.out;
 }
 

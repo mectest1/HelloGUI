@@ -74,6 +74,11 @@ public class RootPaneController implements MsgLogger{
 	}
 	
 	@FXML
+	private void onFileManager(){
+		ViewFactory.showNewStage(Msg.get(this, "menu.view.fileManager.url"), Msg.get(this, "menu.view.fileManager.title"));
+	}
+	
+	@FXML
 	private void onClearLog(){
 		logMsg.clear();
 //		prepareNewLog();

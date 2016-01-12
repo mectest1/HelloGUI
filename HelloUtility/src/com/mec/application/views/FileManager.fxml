@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.FileManagerController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -31,12 +31,12 @@
    <left>
       <TabPane BorderPane.alignment="CENTER">
          <tabs>
-            <Tab closable="false" text="FileDirectory">
+            <Tab closable="false" text="My Computer">
                <content>
                   <VBox spacing="5.0">
                      <children>
                         <TextField />
-                        <TreeView maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />
+                        <TreeView fx:id="fileBrowser" maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets top="5.0" />
@@ -44,7 +44,7 @@
                   </VBox>
                </content>
             </Tab>
-            <Tab text="FileDirectory">
+            <Tab closable="false" text="Favorite">
                <content>
                   <VBox spacing="5.0">
                      <children>
@@ -101,6 +101,12 @@
       </VBox>
    </center>
    <bottom>
-      <HBox prefHeight="15.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <HBox prefHeight="15.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="statusInfo" editable="false" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin></HBox>
    </bottom>
 </BorderPane>

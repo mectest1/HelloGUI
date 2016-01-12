@@ -22,6 +22,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class FileParser {
 
 	
@@ -234,6 +237,15 @@ public class FileParser {
 		return !isStringStartsWith(codeLine, JAVA_CLASS_PARSE_IGNORE_LINE_START);
 	}
 	
+	
+	public static ImageView getImage(String imagePath){
+//		try {
+			Image img = new Image(imagePath);
+			return new ImageView(img);
+//		} catch (IOException e) {
+//			throw new IllegalArgumentException(e);
+//		}
+	}
 	
 //	private static final Pattern classDeclartion = Pattern.compile("\\bclass\\b\\w+\\b", Pattern.MULTILINE);
 //	private static final String DEFAULT_CLASS_PATTERN = "\\bclass\\s+(\\w+)";
