@@ -2,14 +2,14 @@ package com.mec.resources;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+//import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.jar.JarOutputStream;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -48,9 +49,10 @@ public class JarTool {
 	 * @throws Exception
 	 */
 	
-	public void writeFilesToJar(File workspaceDirectory, String projectName, Collection<String> modifyList
+	public void writeFilesToJar(Path workspaceDirectory, String projectName, Collection<String> modifyList
 //			, String patchDistDir
-			, File patchReleaseDirectory
+//			, File patchReleaseDirectory
+			, Path patchReleaseDirectory
 			) throws Exception{
 		Set<String> modifyListSet = new HashSet<>();
 //		for(int i = 0; i < modifyList.size(); ++i){
@@ -59,16 +61,22 @@ public class JarTool {
 			modifyListSet.add(normalizePath(modifyListItem));
 		}
 		
-		File curDir = new File(workspaceDirectory, projectName);
-		validateDirectory(curDir, String.format(Msg.getExpMsg(this, "invalid.projectDirectory"), curDir.getCanonicalPath()));
+//		File curDir = new File(workspaceDirectory, projectName);
+		Path curDir = workspaceDirectory.resolve(projectName);
+		validateDirectory(curDir, String.format(Msg.getExpMsg(this, "invalid.projectDirectory"), curDir.toAbsolutePath()));
 		
-		logger.log(String.format(Msg.get(this, "log.currentWorkDir"), curDir.getCanonicalPath()));
-		File distDir = patchReleaseDirectory;
+		logger.log(String.format(Msg.get(this, "log.currentWorkDir"), curDir.toAbsolutePath()));
+//		File distDir = patchReleaseDirectory;
+		Path distDir = patchReleaseDirectory;
 		
-		final File sourceDir = getFirstExisted(curDir, SOURCE_FOLDER);
-		final File classDir = getFirstExisted(curDir, BINARY_FOLDER);
-		validateDirectory(sourceDir, String.format(Msg.getExpMsg(this, "invalid.sourceDirectory"), sourceDir.getCanonicalFile()));
-		validateDirectory(classDir, String.format(Msg.getExpMsg(this, "invalid.binaryDirectory"), classDir.getCanonicalFile()));
+//		final File sourceDir = getFirstExisted(curDir, SOURCE_FOLDER);
+//		final File classDir = getFirstExisted(curDir, BINARY_FOLDER);
+		final Path sourceDir = getFirstExisted(curDir, SOURCE_FOLDER);
+		final Path classDir = getFirstExisted(curDir, BINARY_FOLDER);
+//		validateDirectory(sourceDir, String.format(Msg.getExpMsg(this, "invalid.sourceDirectory"), sourceDir.getCanonicalFile()));
+//		validateDirectory(classDir, String.format(Msg.getExpMsg(this, "invalid.binaryDirectory"), classDir.getCanonicalFile()));
+		validateDirectory(sourceDir, String.format(Msg.getExpMsg(this, "invalid.sourceDirectory"), sourceDir.toAbsolutePath()));
+		validateDirectory(classDir, String.format(Msg.getExpMsg(this, "invalid.binaryDirectory"), classDir.toAbsolutePath()));
 		
 		JarOutputStream eelibJar = null;	
 		JarOutputStream webContentJar = null;
@@ -78,10 +86,11 @@ public class JarTool {
 			
 			if(isInDirectory(packageFile, sourceDir)){	//package file in source directory;
 				if(null == eelibJar){
-					File patchFile = createNewFile(distDir
+					Path patchFile = createNewFile(distDir
 							, String.format(Msg.get(this, "default.jar.name"), projectName)
 							, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
-					eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
+//					eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
+					eelibJar = new JarOutputStream(new BufferedOutputStream(Files.newOutputStream(patchFile)));
 				}
 				if(isJavaFile(packageFile)){
 					writeJavaClassToJar(eelibJar, sourceDir, classDir, packageFile);
@@ -91,13 +100,14 @@ public class JarTool {
 				}
 			}else if(isWebContentFile(packageFile)){
 				if(null == webContentJar){
-					final File webContentFolder = getFirstExisted(curDir, WEB_CONTENT_FOLDER);
-					validateDirectory(webContentFolder, String.format(Msg.get(this, "exception.invalid.webContentDirectory"), webContentFolder.getCanonicalPath()));
+					final Path webContentFolder = getFirstExisted(curDir, WEB_CONTENT_FOLDER);
+					validateDirectory(webContentFolder, String.format(Msg.get(this, "exception.invalid.webContentDirectory"), webContentFolder.toAbsolutePath()));
 					//
 					String defaultWebContentJarDir = Msg.get(this, "webContent.dir");
 					String webContentJarName = String.format(Msg.get(this, "default.jar.name"), defaultWebContentJarDir);
-					File webContentJarFile  = createNewFile(distDir, webContentJarName, String.format(Msg.get(this, "default.jar.delName"), webContentJarName, System.currentTimeMillis()));
-					webContentJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(webContentJarFile)));
+					Path webContentJarFile  = createNewFile(distDir, webContentJarName, String.format(Msg.get(this, "default.jar.delName"), webContentJarName, System.currentTimeMillis()));
+//					webContentJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(webContentJarFile)));
+					webContentJar = new JarOutputStream(new BufferedOutputStream(Files.newOutputStream(webContentJarFile)));
 				}
 				writeWebContentToJar(webContentJar, curDir, packageFile);
 			}else{
@@ -132,34 +142,41 @@ public class JarTool {
 	 * @param projectDirectory
 	 * @param packageFile
 	 */
-	private void writeWebContentToJar(ZipOutputStream webContentJar, File webProjectDirectory, String packageFile) throws IOException{
-		final File webContentFolder = getFirstExisted(webProjectDirectory, WEB_CONTENT_FOLDER);
+	private void writeWebContentToJar(ZipOutputStream webContentJar, Path webProjectDirectory, String packageFile) throws IOException{
+		final Path webContentFolder = getFirstExisted(webProjectDirectory, WEB_CONTENT_FOLDER);
 		String defaultWebContentJarDir = Msg.get(this, "webContent.dir");
 		String entryName = trimLeadingSlash(trimLeading(packageFile, defaultWebContentJarDir));
 		zipFile(webContentJar, webContentFolder, entryName);
 	}
 	
-	public static File createNewFile(File parentDirectory, String fileName, String bakFileName) throws IOException{
-		File patchFile = new File(parentDirectory, fileName);
-		if(patchFile.exists()){
+	public static Path createNewFile(Path parentDirectory, String fileName, String bakFileName) throws IOException{
+//		File patchFile = new File(parentDirectory, fileName);
+		Path patchFile = parentDirectory.resolve(fileName);
+//		if(patchFile.exists()){
+		if(Files.exists(patchFile)){
 //			patchFile.renameTo(new File(patchFile.getParentFile(), String.format("testPatch_del%s.jar", System.currentTimeMillis())));
 			if(null !=  bakFileName && !bakFileName.trim().isEmpty()){
-				File tmpFile = new File(patchFile.getParentFile(), bakFileName);
-				patchFile.renameTo(tmpFile);
-				
+				Path tmpFile = patchFile.getParent().resolve(bakFileName);
+//				patchFile.renameTo(tmpFile);
+				Files.move(patchFile, tmpFile);
 			}else{
 				//
-				patchFile.delete();
+//				patchFile.delete();
+				Files.deleteIfExists(patchFile);
 			}
-			patchFile = new File(parentDirectory, fileName);
+//			patchFile = new File(parentDirectory, fileName);
+			patchFile = parentDirectory.resolve(fileName);
 		}
-		if(!patchFile.exists()){
-			patchFile.createNewFile();
+//		if(!patchFile.exists()){
+//			patchFile.createNewFile();
+//		}
+		if(!Files.exists(patchFile)){
+			Files.createFile(patchFile);
 		}
 		return patchFile;
 	}
 	
-	private void writeJavaClassToJar(ZipOutputStream outputJar, File sourceDir, File classDir, String packageFile){
+	private void writeJavaClassToJar(ZipOutputStream outputJar, Path sourceDir, Path classDir, String packageFile){
 		Set<String> classEntries = getClassEntries(sourceDir, classDir, packageFile);
 //		out.printf(Msg.get(this, "log.debug.classEntries"), classEntries);
 		logger.log(String.format(Msg.get(this, "log.debug.classEntries"), classEntries));
@@ -198,11 +215,12 @@ public class JarTool {
 	 * @param entryName entry name that will be zipped into file;
 	 * @throws IOException
 	 */
-	private void zipFile(ZipOutputStream outputJar, File entriesParentDirectory, String entryName) throws IOException{
+	private void zipFile(ZipOutputStream outputJar, Path entriesParentDirectory, String entryName) throws IOException{
 		if(null == entryName || entryName.isEmpty()){
 			return;
 		}
-		try(BufferedInputStream fis = new BufferedInputStream(new FileInputStream(new File(entriesParentDirectory, entryName)), BUFFER_SIZE);){
+//		try(BufferedInputStream fis = new BufferedInputStream(new FileInputStream(new File(entriesParentDirectory, entryName)), BUFFER_SIZE);){
+		try(InputStream fis = new BufferedInputStream(Files.newInputStream(entriesParentDirectory.resolve(entryName)))){
 //			out.printf("\tAdd zip entry: %s\n", packageFile);
 //			out.printf(Msg.get(this, "log.debug.entryAdded"), entryName);
 			logger.log(String.format(Msg.get(this, "log.debug.entryAdded"), entryName));
@@ -232,35 +250,38 @@ public class JarTool {
 	 * @param javaFilePath
 	 * @return
 	 */
-	private Set<String> getClassEntries(File sourceDir, File classDir, String javaFilePath){
+//	private Set<String> getClassEntries(File sourceDir, File classDir, String javaFilePath){
+	private Set<String> getClassEntries(Path sourceDir, Path classDir, String javaFilePath){
 		Set<String> retval = new HashSet<>();
 		String classFilePath = javaFilePath.replaceAll(Msg.get(this, "pattern.java2class.java"), Msg.get(this, "pattern.java2class.class"));
 		
 		
 //		String packageDir = javaFilePath.substring(0, javaFilePath.lastIndexOf("/"));
-		File classFileName = new File(classDir, classFilePath);
+//		File classFileName = new File(classDir, classFilePath);
+		Path classFileName = classDir.resolve(classFilePath);
 	
-		File classParent = classFileName.getParentFile();
-		String classFileNameStr = classFileName.getName().replaceAll(Msg.get(this, "pattern.removeClassSuffix"), "");
-		List<String> filteredClasses = extractInnerClasses(classParent, classFileNameStr);
-		retval.addAll(filteredClasses);
-		
-		
-		//
-		
-		File sourceFile = new File(sourceDir, javaFilePath);		
+//		File classParent = classFileName.getParentFile();
+		Path classParent = classFileName.getParent();
+		String classFileNameStr = classFileName.getFileName().toString().replaceAll(Msg.get(this, "pattern.removeClassSuffix"), "");
 		try {
-			List<String> otherClasses = FileParser.getClassesFromJavaFile(sourceFile);
-			otherClasses.stream().forEach(c -> {
-//				retval.add(c + ".");
-				retval.addAll(extractInnerClasses(classParent, c));
+			List<String> filteredClasses = extractInnerClasses(classParent, classFileNameStr);
+			retval.addAll(filteredClasses);
+			
+//			File sourceFile = new File(sourceDir, javaFilePath);		
+			Path sourceFile = sourceDir.resolve(javaFilePath);		
+				List<String> otherClasses = FileParser.getClassesFromJavaFile(sourceFile);
+				otherClasses.stream().forEach(c -> {
+//					retval.add(c + ".");
+					try {
+						retval.addAll(extractInnerClasses(classParent, c));
+					} catch (Exception e) {
+						logger.log(e);
+					}
 			});
+		
 		} catch (IOException e) {
-//			e.printStackTrace(out);
 			logger.log(e);
 		} 
-		
-		
 		
 		return retval;
 	}
@@ -279,18 +300,22 @@ public class JarTool {
 	 * @param classParent parent directory for class files
 	 * @param classFileNameStr all .class files as well as innert .class files;
 	 * @return
+	 * @throws IOException 
 	 */
-	private static List<String> extractInnerClasses(File classParent, String classFileNameStr){
+	private static List<String> extractInnerClasses(Path classParent, String classFileNameStr) throws IOException{
 
 //		Pattern cp = Pattern.compile("^" + classFileNameStr + "(\\$\\w+)*.class$");
 		Pattern cp = Pattern.compile(String.format(Msg.get(JarTool.class, "pattern.classFileName"), classFileNameStr));
-		String[] filteredClasses = classParent.list(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return cp.matcher(name).matches();
-			}
-		});
-		return Arrays.asList(filteredClasses);
+//		String[] filteredClasses = classParent.list(new FilenameFilter() {
+//			@Override
+//			public boolean accept(File dir, String name) {
+//				return cp.matcher(name).matches();
+//			}
+//		});
+		return Files.list(classParent)
+				.filter(f -> cp.matcher(f.getFileName().toString()).matches())
+				.map(f -> f.getFileName().toString()).collect(Collectors.toList());
+//		return Arrays.asList(filteredClasses);
 	}
 	
 	private boolean isJavaFile(String fileName){
@@ -303,11 +328,12 @@ public class JarTool {
 	 * @param directory dose the file reside in this directory?
 	 * @return
 	 */
-	private boolean isInDirectory(String filePath, File directory){
-		boolean retval = false;
-		File file = new File(directory, filePath);
-		retval = file.exists();
-		return retval;
+	private boolean isInDirectory(String filePath, Path directory){
+//		boolean retval = false;
+//		File file = new File(directory, filePath);
+//		retval = file.exists();
+//		return retval;
+		return Files.exists(directory.resolve(filePath));
 	}
 	
 	private boolean isWebContentFile(String fileName){
@@ -317,19 +343,24 @@ public class JarTool {
 	}
 	
 
-	public static void validateDirectory(File directory, String errorMsg) throws IllegalArgumentException{
-		if(!(directory.exists() && directory.isDirectory())){
+	public static void validateDirectory(Path directory, String errorMsg) throws IllegalArgumentException{
+//		if(!(directory.exists() && directory.isDirectory())){
+		if(! (Files.exists(directory) && Files.isDirectory(directory))){
 			throw new IllegalArgumentException(errorMsg);
 		}
 //		return true;
 	}
 	
 	
-	public static File getFirstExisted(File parentDir, List<String> fileCandidates){
-		File retval = null;
+	public static Path getFirstExisted(Path parentDir, List<String> fileCandidates){
+		Path retval = null;
 		for(String fileCandidate : fileCandidates){
-			retval = new File(parentDir, fileCandidate);
-			if(retval.exists()){
+//			retval = new File(parentDir, fileCandidate);
+//			if(retval.exists()){
+//				break;
+//			}
+			retval = parentDir.resolve(fileCandidate);
+			if(Files.exists(retval)){
 				break;
 			}
 		}

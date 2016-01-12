@@ -1,10 +1,9 @@
 package com.mec.resources;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -149,14 +148,18 @@ public class FileParser {
 	}
 	
 	
-	public static List<String> getClassesFromJavaFile(File javaFile) throws FileNotFoundException, IOException{
+//	public static List<String> getClassesFromJavaFile(File javaFile) throws FileNotFoundException, IOException{
+	public static List<String> getClassesFromJavaFile(Path javaFile) throws IOException{
 		List<String> retval = new ArrayList<String>();
-		FileReader fis = new FileReader(javaFile);
-		try(BufferedReader br = new BufferedReader(fis)){
-			br.lines().forEach(line -> {
-				extractClassNameFromLine(line).ifPresent(classNames -> retval.addAll(classNames));
-			});
-		}
+//		FileReader fis = new FileReader(javaFile);
+//		try(BufferedReader br = new BufferedReader(fis)){
+//			br.lines().forEach(line -> {
+//				extractClassNameFromLine(line).ifPresent(classNames -> retval.addAll(classNames));
+//			});
+//		}
+		Files.readAllLines(javaFile).forEach(line -> {
+			extractClassNameFromLine(line).ifPresent(classNames -> retval.addAll(classNames));
+		});
 		return retval;
 	}
 	

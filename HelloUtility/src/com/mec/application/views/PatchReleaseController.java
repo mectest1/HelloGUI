@@ -1,20 +1,22 @@
 package com.mec.application.views;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+//import java.io.File;
+//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.ArrayList;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.mec.resources.MsgLogger;
 import com.mec.resources.FileParser;
 import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
+import com.mec.resources.MsgLogger;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -70,15 +72,17 @@ public class PatchReleaseController implements MsgLogger{
 //			}
 			
 			String workspaceDirStr = JarTool.normalizePath(workSpaceDirectory.getText());
-			File workspaceDir = new File(workspaceDirStr);
+//			File workspaceDir = new File(workspaceDirStr);
+			Path workspaceDir = Paths.get(workspaceDirStr);
 //			if(!(workspaceDir.exists() && workspaceDir.isDirectory())){
 //				throw new IllegalArgumentException(String.format(Msg.getExpMsg(this, "invalid.workspace"), workspaceDirStr));
 //			}
 			JarTool.validateDirectory(workspaceDir, String.format(Msg.getExpMsg(this, "invalid.workspace"), workspaceDirStr));
 			
 			String patchReleaseDirStr = JarTool.normalizePath(patchReleaseDirectory.getText());
-			File patchReleaseDir = new File(patchReleaseDirStr);
-			if(!(patchReleaseDir.exists())){
+//			File patchReleaseDir = new File(patchReleaseDirStr);
+			Path patchReleaseDir = Paths.get(patchReleaseDirStr);
+			if(!(Files.exists(patchReleaseDir))){
 				log(String.format(Msg.get(this, "info.patchReleaseDir.create"), patchReleaseDir));
 			}
 			
@@ -89,6 +93,7 @@ public class PatchReleaseController implements MsgLogger{
 			for(String projectName : modifyListMap.keySet()){
 				Set<String> sourceFileList = modifyListMap.get(projectName);
 				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
+				log(FileParser.NEWLINE);
 			}
 			
 			relocateJars(patchReleaseDir);
@@ -112,35 +117,41 @@ public class PatchReleaseController implements MsgLogger{
 			
 //	}
 	
-	private void relocateJars(File patchReleaseDir) throws IOException{
-		File eeLibDir = null;
-		
-		for(File jarFile : patchReleaseDir.listFiles()){
-			String jarFileName = jarFile.getName();
+	private void relocateJars(Path patchReleaseDir) throws IOException{
+		Path eeLibDir = null;
+//		log(FileParser.NEWLINE);
+		for(Path jarFile : Files.list(patchReleaseDir).collect(Collectors.toList())){
+			String jarFileName = jarFile.getFileName().toString();
 			if(JarTool.WEB_CONTENT_JAR.matcher(jarFileName).matches()){
 				//
 			}else if(JarTool.EE_LIB_JAR.matcher(jarFileName).matches()){
 				if(null == eeLibDir){
-					eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
-					if(eeLibDir.exists()){
-						File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis()));
-						eeLibDir.renameTo(tmp);
-						eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+//					eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+					eeLibDir = patchReleaseDir.resolve(Msg.get(this, "path.EE_LIB"));
+					if(Files.exists(eeLibDir)){
+//						File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis()));
+//						eeLibDir.renameTo(tmp);
+						Files.move(eeLibDir, patchReleaseDir.resolve(String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis())));
+//						eeLibDir = new File(patchReleaseDir, Msg.get(this, "path.EE_LIB"));
+						eeLibDir =patchReleaseDir.resolve(Msg.get(this, "path.EE_LIB"));
 					}
-					if(!eeLibDir.exists()){
-						eeLibDir.mkdir();
-						JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.getCanonicalPath()));
+//					if(!eeLibDir.exists()){
+//						eeLibDir.mkdir();
+					if(Files.notExists(eeLibDir)){
+						Files.createDirectory(eeLibDir);
+						JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.toAbsolutePath()));
 					}
 				}
-				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.getCanonicalPath()));
-				Files.move(jarFile.toPath(), new File(eeLibDir, jarFileName).toPath());
+				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.toAbsolutePath()));
+//				Files.move(jarFile.toPath(), new File(eeLibDir, jarFileName).toPath());
+				Files.move(jarFile,eeLibDir.resolve(jarFileName));
 			}else{
 				log(String.format(Msg.get(this, "info.dontMove"), jarFileName, patchReleaseDir));
 			}
 		}
 	}
 	
-	private void writeReadMe(File patchReleaseDir, List<String> contentLines) throws IOException{
+	private void writeReadMe(Path patchReleaseDir, List<String> contentLines) throws IOException{
 //		File readMe = new File(patchReleaseDir, Msg.get(this, "path.README"));
 //		if(readMe.exists()){
 //			File tmp = new File(patchReleaseDir, String.format(Msg.get(this, "path.README.bak"), System.currentTimeMillis()));
@@ -150,10 +161,11 @@ public class PatchReleaseController implements MsgLogger{
 //		if(!readMe.exists()){
 //			readMe.createNewFile();
 //		}
-		File readMe = JarTool.createNewFile(patchReleaseDir, 
+		Path readMe = JarTool.createNewFile(patchReleaseDir, 
 				Msg.get(this, "path.README"), 
 				String.format(Msg.get(this, "path.README.bak"), Msg.get(this, "path.README"), System.currentTimeMillis()));
-		try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(readMe)));){
+//		try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(readMe)));){
+		try(PrintWriter writer = new PrintWriter((Files.newBufferedWriter(readMe)))){
 			for(String line : contentLines){
 				if(null == line){
 					continue;

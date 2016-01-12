@@ -139,7 +139,7 @@ public class PatchReleaseToolsTest {
 		
 		File sourceFile = new File(sourceDir, javaFilePath);		
 		try {
-			List<String> otherClasses = FileParser.getClassesFromJavaFile(sourceFile);
+			List<String> otherClasses = FileParser.getClassesFromJavaFile(sourceFile.toPath());
 			otherClasses.stream().forEach(c -> {
 //				retval.add(c + ".");
 				retval.addAll(extractInnerClasses(classParent, c));
