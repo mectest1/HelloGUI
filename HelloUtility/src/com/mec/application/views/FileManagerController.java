@@ -5,21 +5,29 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.DosFileAttributes;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.mec.resources.FileParser;
 import com.mec.resources.Msg;
 import com.mec.resources.MsgLogger;
 
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyEvent;
 
 /**
  * A file manager is needed;
@@ -42,12 +50,14 @@ public class FileManagerController implements MsgLogger{
 	@FXML
 	private void initialize(){
 		initFileBrowser();
+//		initAccelerators();
 	}
 	
 	
 	
 	@Override
 	public void log(String msg) {
+//		statusInfo.clear();
 		statusInfo.appendText(msg);
 	}
 
@@ -56,6 +66,7 @@ public class FileManagerController implements MsgLogger{
 	private void initFileBrowser(){
 //		TreeItem<Path> myComputer = new PathTreeItem(Paths.get(MY_COMUTER));
 		TreeItem<Path> myComputer = new PathTreeItem(Paths.get(Msg.get(this, "rootPath")), this);
+//		TreeItem<Path> myComputer = new PathTreeItem(Paths.get(Msg.get(this, "rootPath")));
 		myComputer.setExpanded(true);
 		
 		fileBrowser.setRoot(myComputer);
@@ -63,24 +74,78 @@ public class FileManagerController implements MsgLogger{
 		fileBrowser.setShowRoot(false);
 		fileBrowser.setCellFactory(tv -> new PathTreeCell());
 		
-		ListChangeListener<Integer> listener = change -> {
-			Optional<String> selectedFiles = fileBrowser.getSelectionModel()
-					.getSelectedItems().stream()
-					.map(p ->{
-						try {
-							return p.getValue().toAbsolutePath().toString();
-						} catch (Exception e) {
-							log(String.format(Msg.get(this, "exception.map"), p));
-							log(e);
-						}
-						return null;
-					})
-					.reduce((r, s) -> r + FileParser.NEWLINE + s);
-			selectedFiles.ifPresent( val -> statusInfo.setText(val));
-		};
-		fileBrowser.getSelectionModel().getSelectedIndices().addListener(listener);
+		
+		fileBrowser.getSelectionModel().getSelectedIndices().addListener(this::onFileBrowserListSelectoinChanged);
+		fileBrowser.addEventHandler(KeyEvent.KEY_PRESSED, this::onFileBrowserKeyPressed);
+//		fileBrowser.setOnKeyPressed(value);
 	}
 	
+	private void onFileBrowserKeyPressed(KeyEvent event){
+		KeyCode keyCode = event.getCode();
+		if(!(keyCode.isLetterKey() || keyCode.isDigitKey())){
+			return;
+		}
+			
+		String name = keyCode.getName();
+		int selected = fileBrowser.getSelectionModel().getSelectedIndex();
+		int index = selected + 1;
+		for(	; 	//Search: starts from the next item following current selected item
+				index < fileBrowser.getExpandedItemCount(); 
+				++index){
+			TreeItem<Path> item = fileBrowser.getTreeItem(index);
+			Path fn = item.getValue().getFileName();
+			if(null == fn){
+				fn = item.getValue().getRoot();
+			}
+			String fileName = fn.toString().toUpperCase();
+			if(fileName.startsWith(name)){
+				break;
+			}
+		}
+		if(index < fileBrowser.getExpandedItemCount()){
+			fileBrowser.getSelectionModel().clearAndSelect(index);;
+			fileBrowser.scrollTo(index);
+		}else{		//Not found? Then search from the beginning of the TreeView;
+			for( index = 0; index < selected; ++index){
+				TreeItem<Path> item = fileBrowser.getTreeItem(index);
+				Path fn = item.getValue().getFileName();
+				if(null == fn){
+					fn = item.getValue().getRoot();
+				}
+				String fileName = fn.toString().toUpperCase();
+				if(fileName.startsWith(name)){
+					break;
+				}
+			}
+			if(index < selected){
+				fileBrowser.getSelectionModel().clearAndSelect(index);
+				fileBrowser.scrollTo(index);
+			}
+		}
+	}
+	
+	private void onFileBrowserListSelectoinChanged(ListChangeListener.Change<? extends Integer> change){
+//		fileBrowser.getSelectionModel()
+//		.getSelectedItems().stream()
+//		.map(p ->p.getValue().toAbsolutePath().toString())
+//		.reduce((r, s) -> r + FileParser.NEWLINE + s)
+//		.ifPresent( val -> statusInfo.setText(val));
+		ObservableList<TreeItem<Path>> selectedItems = fileBrowser.getSelectionModel().getSelectedItems();
+		String fileName = "";
+		for(TreeItem<Path> item : selectedItems){
+			if(null == item){
+				continue;
+			}
+			Path p = item.getValue();
+			if(null == p || null == p.toAbsolutePath()){
+				continue;
+			}
+			fileName += p.toAbsolutePath().toString() + FileParser.NEWLINE;
+//			log(fileName + FileParser.NEWLINE);
+		}
+		statusInfo.setText(fileName);
+		
+	}
 	private static final class PathTreeCell extends TreeCell<Path>{
 
 		@Override
@@ -90,11 +155,12 @@ public class FileManagerController implements MsgLogger{
 				this.setText(null);
 				this.setGraphic(null);
 			}else{
-				String cellText = item.toString();
-				if(null != item.getFileName()){
-					cellText = item.getFileName().toString();
+				Path fn = item.getFileName();
+				if(null != fn){
+					this.setText(fn.toString());
+				}else{
+					this.setText(item.toString());
 				}
-				this.setText(cellText.toString());
 				this.setGraphic(this.getTreeItem().getGraphic());
 			}
 		}
@@ -142,14 +208,34 @@ public class FileManagerController implements MsgLogger{
 			Path currentPath = item.getValue();
 //			if(MY_COMUTER.equals(currentPath.getFileName().toString()) && null == item.getParent()){
 			if(null == item.getParent()){
-				FileSystems.getDefault().getRootDirectories().forEach(rootDirectory -> item.getChildren().add(new PathTreeItem(rootDirectory, this.logger)));
-			}else if(Files.isDirectory(currentPath)){
-				try {
-					Files.list(currentPath).forEach(pathItem -> item.getChildren().add(new PathTreeItem(pathItem, this.logger)));
-				} catch (IOException e) {
-					logger.log(e);
-//					throw new IllegalArgumentException(e);
+				FileSystems.getDefault().getRootDirectories().forEach(rootDirectory -> item.getChildren().add(new PathTreeItem(rootDirectory, logger)));
+				return;
+			}else if(!Files.isDirectory(currentPath)){
+				return;
+			}
+			
+			//Files.isDirectory(currentPath):
+			try {
+//				Files.list(currentPath).forEach(pathItem -> item.getChildren().add(new PathTreeItem(pathItem, this.logger)));
+				List<Path> files = Files.list(currentPath).sorted((l, r) -> {
+					if(Files.isDirectory(l) && ! Files.isDirectory(r)){	//<- Directory should be listed before ordinary files
+						return -1;
+					}else if(!Files.isDirectory(l) && Files.isDirectory(r)){
+						return 1;
+					}else{
+						return l.compareTo(r);
+					}
+				}).collect(Collectors.toList());
+				for(Path p : files){
+					DosFileAttributes attr = Files.readAttributes(p, DosFileAttributes.class);
+					if(attr.isHidden() || attr.isSystem()){
+						continue;
+					}
+					item.getChildren().add(new PathTreeItem(p, logger));
 				}
+			} catch (IOException e) {
+//				logger.log(e);
+				throw new IllegalArgumentException(e);
 			}
 		}
 		

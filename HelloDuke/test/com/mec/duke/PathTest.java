@@ -108,6 +108,7 @@ public class PathTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testPathElements(){
 		Path p1 = FileSystems.getDefault().getPath("test/com/mec/duke", "PathTest.java");
@@ -127,6 +128,24 @@ public class PathTest {
 			out.printf("name[%s] = %s\n", i, p2.getName(i));
 		}
 		out.printf("subpath(1, 2):%s\n", p2.subpath(1, 2));	//Note that the name elements do not include the root component
+		
+	}
+	
+	@Test
+	public void testRelativizePath(){
+		Path p1 = Paths.get("BNP.txt");
+		Path p2 = Paths.get("AEGON.txt");
+		
+//		p1.relativize(p2)=..\AEGON.txt, 
+//		p2.relativize(p1)=..\BNP.txt
+		out.printf("p1.relativize(p2)=%s, \np2.relativize(p1)=%s\n", p1.relativize(p2), p2.relativize(p1));
+		
+		
+//		p3.relativize(p4)=..\..\2010\AEGON.txt, 
+//		p4.relativize(p3)=..\..\2009\BNP.txt
+		Path p3 = Paths.get("parent/2009/BNP.txt");
+		Path p4 = Paths.get("parent/2010/AEGON.txt");
+		out.printf("p3.relativize(p4)=%s, \np4.relativize(p3)=%s\n", p3.relativize(p4), p4.relativize(p3));
 		
 	}
 	

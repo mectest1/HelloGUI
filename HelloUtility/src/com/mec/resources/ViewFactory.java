@@ -1,5 +1,7 @@
 package com.mec.resources;
 
+import java.util.Optional;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,14 +38,15 @@ public class ViewFactory {
 		return stage;
 	}
 	
-	public static void showNewStage(String viewUrl, String stageTitle){
+	public static Optional<Stage> showNewStage(String viewUrl, String stageTitle){
 		Pane viewPane = ViewFactory.loadView(viewUrl);
 		if(null == viewPane){
 			log(new IllegalArgumentException(String.format(Msg.get(ViewFactory.class, "exception.loadViewError"), viewUrl)));
-			return;
+			return Optional.empty();
 		}
 		Stage stage = ViewFactory.newStage(viewPane, stageTitle);
 		stage.show();
+		return Optional.of(stage);
 	}
 	
 	private static void log(Exception e){

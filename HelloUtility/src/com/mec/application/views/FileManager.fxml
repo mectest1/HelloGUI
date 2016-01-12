@@ -35,7 +35,11 @@
                <content>
                   <VBox spacing="5.0">
                      <children>
-                        <TextField />
+                        <HBox maxWidth="1.7976931348623157E308">
+                           <children>
+                              <TextField disable="true" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
                         <TreeView fx:id="fileBrowser" maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
@@ -48,7 +52,11 @@
                <content>
                   <VBox spacing="5.0">
                      <children>
-                        <TextField />
+                        <HBox maxWidth="1.7976931348623157E308">
+                           <children>
+                              <TextField disable="true" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
                         <TreeView maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
