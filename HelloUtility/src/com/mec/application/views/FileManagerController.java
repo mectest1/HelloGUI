@@ -251,6 +251,9 @@ public class FileManagerController implements MsgLogger{
 					}
 				}).collect(Collectors.toList());
 				for(Path p : files){
+					if(!Files.exists(p)){
+						continue;
+					}
 					DosFileAttributes attr = Files.readAttributes(p, DosFileAttributes.class);
 					if(attr.isHidden() || attr.isSystem()){
 						continue;
