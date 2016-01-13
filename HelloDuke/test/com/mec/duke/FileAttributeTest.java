@@ -17,6 +17,7 @@ import java.nio.file.attribute.DosFileAttributes;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 
@@ -176,10 +177,21 @@ public class FileAttributeTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testFileStoreAttribute2() throws Exception{
 		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
 		print(Files.getFileStore(p));
+	}
+	
+	@Test
+	public void testeUserDefinedAttribute() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		
+		FileStore store = Files.getFileStore(p);
+		boolean s = store.supportsFileAttributeView(UserDefinedFileAttributeView.class);
+		out.printf("FileStore supports user defined file attribute? %s\n", s);
+		
 	}
 	
 	private static final PrintStream out = System.out;
