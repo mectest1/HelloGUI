@@ -158,6 +158,7 @@ public class FileAttributeTest {
 		out.printf("\tpermissions: %s\n", entry.permissions());
 	}
 	
+	@Ignore
 	@Test
 	public void testFileStoreAttribute() throws Exception{
 		FileSystems.getDefault().getFileStores().forEach(this::print);
@@ -173,6 +174,12 @@ public class FileAttributeTest {
 		} catch (Exception e) {
 			e.printStackTrace(out);
 		}
+	}
+	
+	@Test
+	public void testFileStoreAttribute2() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		print(Files.getFileStore(p));
 	}
 	
 	private static final PrintStream out = System.out;
