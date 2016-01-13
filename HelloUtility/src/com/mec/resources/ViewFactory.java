@@ -1,11 +1,16 @@
 package com.mec.resources;
 
+import java.awt.TextField;
 import java.util.Optional;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class ViewFactory {
@@ -47,6 +52,25 @@ public class ViewFactory {
 		Stage stage = ViewFactory.newStage(viewPane, stageTitle);
 		stage.show();
 		return Optional.of(stage);
+	}
+	
+	public static Alert newAlert(AlertType alertType, String title, String header){
+		Alert retval = new Alert(alertType);
+		retval.setTitle(title);
+		retval.setHeaderText(header);
+		return retval;
+	}
+	
+	public static TextFlow newTextFlow(String text, Optional<Integer> maxLength){
+		if(maxLength.isPresent()){
+//			int maxSize = Msg.get(ViewFactory.class, "textFlow.maxSize", Integer::parseInt, 1000);
+			int ml = maxLength.get();
+			if(ml < text.length()){
+				text = new StringBuilder(text.substring(0, ml)).append(Msg.get(ViewFactory.class, "textFlow.ellipsis")).toString();
+			}
+		}
+		TextFlow tf = new TextFlow(new Text(text));
+		return tf;
 	}
 	
 	private static void log(Exception e){

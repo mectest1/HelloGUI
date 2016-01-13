@@ -11,12 +11,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mec.resources.FileParser;
+import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
 import com.mec.resources.MsgLogger;
+import com.mec.resources.ViewFactory;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
@@ -26,6 +31,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.TextFlow;
 
 /**
  * A file manager is needed;
@@ -56,8 +62,24 @@ public class FileManagerController implements MsgLogger{
 	
 	@Override
 	public void log(String msg) {
-//		statusInfo.clear();
 		statusInfo.appendText(msg);
+	}
+
+	
+
+
+	@Override
+	public void log(Exception e) {
+		Alert alert = ViewFactory.newAlert(AlertType.ERROR
+				, Msg.get(this, "error.title")
+				, String.format(Msg.get(this, "error.header"), e.getClass().getName(), e.getMessage())
+				);
+		TextFlow errorStack = ViewFactory.newTextFlow(JarTool.exceptionToStr(e)
+				, Optional.of(Msg.get(this, "error.details.maxLength", Integer::parseInt, 1000))
+				);
+//		errorStack.setPadding(new Insets(Msg.get(this, "error.dialog.padding", Integer::parseInt, 5)));
+		alert.getDialogPane().setExpandableContent(errorStack);
+		alert.showAndWait();
 	}
 
 
@@ -80,6 +102,7 @@ public class FileManagerController implements MsgLogger{
 //		fileBrowser.setOnKeyPressed(value);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void onFileBrowserKeyPressed(KeyEvent event){
 		TreeView<Path> fileBrowser = (TreeView<Path>) event.getTarget();
 		KeyCode keyCode = event.getCode();
@@ -235,8 +258,8 @@ public class FileManagerController implements MsgLogger{
 					item.getChildren().add(new PathTreeItem(p, logger));
 				}
 			} catch (IOException e) {
-//				logger.log(e);
-				throw new IllegalArgumentException(e);
+				logger.log(e);
+//				throw new IllegalArgumentException(e);
 			}
 		}
 		

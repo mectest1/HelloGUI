@@ -11,3 +11,21 @@
 	-fx-border-width: 0.1em;
 	-fx-border-radius: 0.2em;
 }
+
+
+/**
+ * Turn off the light gray area for the header background;
+ */
+.tab-pane .tab-header-area .tab-header-background{
+	-fx-background-color: transparent;
+	-fx-border-color: lightgray;
+	-fx-border-width: 0 0 1px 0;	
+}
+
+.tab-pane .tab-content-area{
+	-fx-border-color: lightgray ;
+	-fx-border-width: 0 1px 1px 1px;
+	-fx-border-style: solid;
+	-fx-padding: 5px;
+	
+}
