@@ -1,5 +1,6 @@
 package com.mec.duke;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
@@ -8,9 +9,16 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.DosFileAttributes;
+import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.UserPrincipal;
+import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,12 +31,12 @@ public class FileAttributeTest {
 //		fail("Not yet implemented");
 	}
 	
-	
 	@Ignore
 	@Test
 	public void testSupportedAttributeViews(){
 		FileSystem fs = FileSystems.getDefault();
-		fs.supportedFileAttributeViews().stream().forEach(out::println);
+//		owner, dos, acl, basic, user
+		fs.supportedFileAttributeViews().stream().forEach(s -> out.print(s + ", "));
 	}
 	
 	
@@ -72,6 +80,7 @@ public class FileAttributeTest {
 	}
 	
 	
+	@Ignore
 	@Test
 	public void testUpdateFileAttribute() throws Exception{
 		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
@@ -80,6 +89,90 @@ public class FileAttributeTest {
 		Files.getFileAttributeView(p, BasicFileAttributeView.class).setTimes(fileTime, fileTime, null);
 		Files.setLastModifiedTime(p, fileTime);
 		out.println("File last modified time updated successfully");
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testDosFileAttribute() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		DosFileAttributes attr = Files.readAttributes(p, DosFileAttributes.class);
+		out.printf("Is read only? %s\n", attr.isReadOnly());
+		out.printf("Is Hidden? %s\n", attr.isHidden());
+		out.printf("Is archive? %s\n", attr.isArchive());
+		out.printf("Is system? %s\n", attr.isSystem());
+	}
+	
+	@Ignore
+	@Test
+	public void testOwnderFileAttribute() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		FileOwnerAttributeView fv = Files.getFileAttributeView(p, FileOwnerAttributeView.class);
+		UserPrincipal owner = fv.getOwner();
+		out.printf("UserPrincile.name = %s\n", owner.getName());	//MIKETANG\MEC
+		
+		String principalName = "MIKETANG\\MEC";
+		owner = p.getFileSystem().getUserPrincipalLookupService().lookupPrincipalByName(principalName);
+		out.printf("Found principal: %s\n", owner);
+		
+		owner = (UserPrincipal) Files.getAttribute(p, "owner:owner");
+		out.printf("Get owner through Files.getAttributes: %s\n", owner);
+				
+	}
+	
+	@Ignore
+	@Test
+	public void testPosixFileAttributes() throws IOException{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		try {
+			PosixFileAttributes attr = Files.readAttributes(p, PosixFileAttributes.class);
+		} catch (UnsupportedOperationException e) {
+			out.println("POSIX File Attributes not supported in current file system.");
+			e.printStackTrace(out);
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testACLAttributes() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		AclFileAttributeView attr = Files.getFileAttributeView(p, AclFileAttributeView.class);
+		attr.getAcl().stream().forEach(this::print);
+	}
+	
+	@Ignore
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testAclAttributes2() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+
+		List<AclEntry> attr = (List<AclEntry>) Files.getAttribute(p, "acl:acl");
+		attr.stream().forEach(this::print);
+	}
+	
+	private void print(AclEntry entry){
+		out.printf("acl: %s\n", entry);
+		out.printf("\tprincipal: %s\n", entry.principal());
+		out.printf("\tflags: %s\n", entry.flags());
+		out.printf("\ttype: %s\n", entry.type());
+		out.printf("\tpermissions: %s\n", entry.permissions());
+	}
+	
+	@Test
+	public void testFileStoreAttribute() throws Exception{
+		FileSystems.getDefault().getFileStores().forEach(this::print);
+	}
+	
+	private void print(FileStore store){
+		try {
+			//Note that  FileStore.name is different with rootDirectories;
+			out.printf("FileStore %s, type: %s\n", store.name(), store.type());	
+			out.printf("\tTotal Spacee: %sGB\n", store.getTotalSpace() / (1024 * 1024 * 2014));
+			out.printf("\tUsable Space: %sGB\n", store.getUsableSpace() / (1024 * 1024 * 1024));
+			out.printf("\tRead Only? %s\n", store.isReadOnly());
+		} catch (Exception e) {
+			e.printStackTrace(out);
+		}
 	}
 	
 	private static final PrintStream out = System.out;

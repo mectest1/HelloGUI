@@ -146,7 +146,7 @@ public class PathTest {
 		Path p3 = Paths.get("parent/2009/BNP.txt");
 		Path p4 = Paths.get("parent/2010/AEGON.txt");
 		out.printf("p3.relativize(p4)=%s, \np4.relativize(p3)=%s\n", p3.relativize(p4), p4.relativize(p3));
-		
+		out.printf("p1.root = %s\n", p1.getRoot());
 	}
 	
 	private static final String TAB = "\t";

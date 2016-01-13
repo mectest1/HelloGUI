@@ -38,6 +38,7 @@
                         <HBox maxWidth="1.7976931348623157E308">
                            <children>
                               <TextField disable="true" HBox.hgrow="ALWAYS" />
+                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" style="-fx-graphic: url('META-INF/resources/img/Find_16x16.png');" fx:id="testBtn" text="Button" />
                            </children>
                         </HBox>
                         <TreeView fx:id="fileBrowser" maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />

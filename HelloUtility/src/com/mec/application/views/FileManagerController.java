@@ -14,11 +14,10 @@ import com.mec.resources.FileParser;
 import com.mec.resources.Msg;
 import com.mec.resources.MsgLogger;
 
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeCell;
@@ -26,7 +25,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -45,7 +43,8 @@ public class FileManagerController implements MsgLogger{
 	@FXML
 	private TextArea statusInfo;
 	
-	
+	@FXML
+	private Button testBtn;
 	
 	@FXML
 	private void initialize(){
@@ -68,6 +67,7 @@ public class FileManagerController implements MsgLogger{
 		TreeItem<Path> myComputer = new PathTreeItem(Paths.get(Msg.get(this, "rootPath")), this);
 //		TreeItem<Path> myComputer = new PathTreeItem(Paths.get(Msg.get(this, "rootPath")));
 		myComputer.setExpanded(true);
+//		testBtn.setGraphic(FileParser.getImage(Msg.get(this, "img.file")));
 		
 		fileBrowser.setRoot(myComputer);
 		fileBrowser.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -81,6 +81,7 @@ public class FileManagerController implements MsgLogger{
 	}
 	
 	private void onFileBrowserKeyPressed(KeyEvent event){
+		TreeView<Path> fileBrowser = (TreeView<Path>) event.getTarget();
 		KeyCode keyCode = event.getCode();
 		if(!(keyCode.isLetterKey() || keyCode.isDigitKey())){
 			return;
@@ -217,13 +218,13 @@ public class FileManagerController implements MsgLogger{
 			//Files.isDirectory(currentPath):
 			try {
 //				Files.list(currentPath).forEach(pathItem -> item.getChildren().add(new PathTreeItem(pathItem, this.logger)));
-				List<Path> files = Files.list(currentPath).sorted((l, r) -> {
-					if(Files.isDirectory(l) && ! Files.isDirectory(r)){	//<- Directory should be listed before ordinary files
+				List<Path> files = Files.list(currentPath).sorted((left, right) -> {
+					if(Files.isDirectory(left) && ! Files.isDirectory(right)){	//<- Directory should be listed before ordinary files
 						return -1;
-					}else if(!Files.isDirectory(l) && Files.isDirectory(r)){
+					}else if(!Files.isDirectory(left) && Files.isDirectory(right)){
 						return 1;
 					}else{
-						return l.compareTo(r);
+						return left.compareTo(right);
 					}
 				}).collect(Collectors.toList());
 				for(Path p : files){
