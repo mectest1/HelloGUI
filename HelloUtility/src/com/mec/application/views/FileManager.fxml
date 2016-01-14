@@ -38,7 +38,7 @@
                         <HBox maxWidth="1.7976931348623157E308">
                            <children>
                               <TextField disable="true" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="testBtn" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" style="-fx-graphic: url('META-INF/resources/img/Find_16x16.png');" text="Button" />
+                              <Button fx:id="searchFileBtn" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" style="-fx-graphic: url('META-INF/resources/img/Find_16x16.png');" text="Button" />
                            </children>
                         </HBox>
                         <TreeView fx:id="fileBrowser" maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />
@@ -68,7 +68,7 @@
                         <HBox maxWidth="1.7976931348623157E308">
                            <children>
                               <TextField disable="true" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="searchBtn" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" style="-fx-graphic: url('META-INF/resources/img/Find_16x16.png');" text="Button" />
+                              <Button fx:id="searchWorkspaceBtn" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" style="-fx-graphic: url('META-INF/resources/img/Find_16x16.png');" text="Button" />
                            </children>
                         </HBox>
                         <TreeView maxHeight="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS" />

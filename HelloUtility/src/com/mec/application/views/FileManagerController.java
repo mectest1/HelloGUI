@@ -50,7 +50,11 @@ public class FileManagerController implements MsgLogger{
 	private TextArea statusInfo;
 	
 	@FXML
-	private Button searchBtn;
+	private Button searchFileBtn;
+	@FXML
+	private Button searchWorkspaceBtn;
+	
+	
 	
 	@FXML
 	private void initialize(){
