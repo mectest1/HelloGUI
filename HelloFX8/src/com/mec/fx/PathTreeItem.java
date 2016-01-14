@@ -54,6 +54,11 @@ public class PathTreeItem extends TreeItem<Path> {
 		return super.getChildren();
 	}
 
+	public void reloadChildren(){
+		if(childrenLoaded){
+			childrenLoaded = false;
+		}
+	}
 
 
 	private void populateChildren(TreeItem<Path> item){

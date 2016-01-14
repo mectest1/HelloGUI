@@ -50,7 +50,7 @@ public class FileManagerController implements MsgLogger{
 	private TextArea statusInfo;
 	
 	@FXML
-	private Button testBtn;
+	private Button searchBtn;
 	
 	@FXML
 	private void initialize(){
@@ -251,7 +251,7 @@ public class FileManagerController implements MsgLogger{
 					}
 				}).collect(Collectors.toList());
 				for(Path p : files){
-					if(!Files.exists(p)){
+					if(!Files.exists(p)){	//Omit files without access permission
 						continue;
 					}
 					DosFileAttributes attr = Files.readAttributes(p, DosFileAttributes.class);

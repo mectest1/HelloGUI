@@ -2,6 +2,7 @@ package com.mec.duke;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -184,6 +185,7 @@ public class FileAttributeTest {
 		print(Files.getFileStore(p));
 	}
 	
+	@Ignore
 	@Test
 	public void testeUserDefinedAttribute() throws Exception{
 		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
@@ -193,6 +195,17 @@ public class FileAttributeTest {
 		out.printf("FileStore supports user defined file attribute? %s\n", s);
 		
 	}
+	
+	@Test
+	public void testUserDefinedAttribute2() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		
+		UserDefinedFileAttributeView udfav = Files.getFileAttributeView(p, UserDefinedFileAttributeView.class);
+		
+		int written = udfav.write("file.description", Charset.defaultCharset().encode("This file contains private info -- by mec"));
+		out.printf("user defined attribute written successfully. attr size: %s\n", written);
+	}
+	
 	
 	private static final PrintStream out = System.out;
 
