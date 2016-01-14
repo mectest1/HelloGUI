@@ -6,8 +6,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributes;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import com.mec.resources.FileParser;
@@ -19,7 +28,6 @@ import com.mec.resources.ViewFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -199,6 +207,7 @@ public class FileManagerController implements MsgLogger{
 		private Optional<Boolean> isLeaf = Optional.empty();
 		private boolean isChildrenLoaded = false;
 		private MsgLogger logger;
+		private static final ExecutorService populateChildrenService = Executors.newCachedThreadPool();
 		
 		public PathTreeItem(Path p, MsgLogger logger){
 			super(p);
@@ -210,7 +219,6 @@ public class FileManagerController implements MsgLogger{
 				icon = FileParser.getImage(Msg.get(FileManagerController.class, "img.file"));
 			}
 			this.setGraphic(icon);
-			
 		}
 		@Override
 		public boolean isLeaf() {
@@ -225,10 +233,12 @@ public class FileManagerController implements MsgLogger{
 			if(!isChildrenLoaded){
 				isChildrenLoaded = true;
 				populateChildren(this);
+//				Platform.runLater(() -> populateChildren(this));
+				
 			}
 			return super.getChildren();
 		}
-		
+	
 
 		private void populateChildren(TreeItem<Path> item){
 			item.getChildren().clear();
@@ -242,7 +252,13 @@ public class FileManagerController implements MsgLogger{
 				return;
 			}
 			
-			//Files.isDirectory(currentPath):
+			populateChildrenService.submit(() -> populateChildrenTask(item));
+		}
+		
+		
+		private void populateChildrenTask(TreeItem<Path> treeItem){
+			Path currentPath = treeItem.getValue();
+			List<PathTreeItem> retval = new ArrayList<>();
 			try {
 //				Files.list(currentPath).forEach(pathItem -> item.getChildren().add(new PathTreeItem(pathItem, this.logger)));
 				List<Path> files = Files.list(currentPath).sorted((left, right) -> {
@@ -262,11 +278,12 @@ public class FileManagerController implements MsgLogger{
 					if(attr.isHidden() || attr.isSystem()){
 						continue;
 					}
-					item.getChildren().add(new PathTreeItem(p, logger));
+					retval.add(new PathTreeItem(p, logger));
 				}
+				
+				treeItem.getChildren().addAll(retval);
 			} catch (IOException e) {
 				logger.log(e);
-//				throw new IllegalArgumentException(e);
 			}
 		}
 		
