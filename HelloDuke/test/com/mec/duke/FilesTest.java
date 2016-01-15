@@ -1,5 +1,6 @@
 package com.mec.duke;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.file.FileSystems;
@@ -11,6 +12,8 @@ import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -182,9 +185,19 @@ public class FilesTest {
 	public void testReadImage() throws Exception{
 		Path pin = Paths.get("src/META-INF/resources/img/", "Kenny_Avatar.jpg");
 		Path p2 = Paths.get("derpImage.jpg");
+		Path p3 = Paths.get("derpImage.png");
 		
-		Files.write(p2, Files.readAllBytes(pin), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+//		out.printf("Read from %s and write to %s\n", pin.normalize(), p2.normalize());
+//		Files.write(p2, Files.readAllBytes(pin), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+//		Files.deleteIfExists(p2);
+		
+		//
+		out.printf("ImageIO: read from %s and write to %s\n", pin.normalize(), p2.normalize());
+		BufferedImage bi = ImageIO.read(pin.toFile());
+		ImageIO.write(bi, "png", p3.toFile());	//<-- Still works`
 	}
+	
+	
 	
 	private static final PrintStream out = System.out;
 
