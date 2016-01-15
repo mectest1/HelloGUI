@@ -239,33 +239,6 @@ public class FileAttributeTest {
 	}
 	
 	
-	
-	@Ignore
-	@Test
-	public void testCreateFile() throws Exception{
-		Path p = Paths.get(".", "derp.txt");
-		
-//		Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rw------");
-//		FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(perms);
-//		Files.createFile(p, attr);
-		Files.deleteIfExists(p);
-		Files.createFile(p);
-		out.printf("%s created successfully.\n", p.toAbsolutePath().normalize());
-		
-	}
-	
-	
-	@Test
-	public void testWriteFile() throws Exception{
-		Path p = Paths.get(".", "derp.txt");
-		
-		Files.write(p, "Hello, World!".getBytes());
-		out.printf("Write file successfully.\n");
-		
-		out.printf("Now read from file: %s\n", p.toAbsolutePath().normalize());
-		Files.readAllLines(p).forEach(out::println);
-	}
-	
 	private static final PrintStream out = System.out;
 
 }

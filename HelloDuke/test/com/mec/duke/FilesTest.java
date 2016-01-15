@@ -4,19 +4,16 @@ import java.io.File;
 import java.io.PrintStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Ignore;
 import org.junit.Test;
-
-import com.sun.corba.se.spi.monitoring.MonitoredAttributeInfoFactory;
 
 public class FilesTest {
 
@@ -90,6 +87,7 @@ public class FilesTest {
 		return p2;
 	}
 	
+	@Ignore
 	@Test
 	public void testFilters() throws Exception{
 		Path p = Paths.get(".");
@@ -129,11 +127,65 @@ public class FilesTest {
 	}
 	
 	
+//	@Ignore
+//	@Test
+//	public void testGlobFilter() throws Exception{
+//		
+//	}
 	
+	
+
+	
+	@Ignore
 	@Test
-	public void testGlobFilter() throws Exception{
+	public void testCreateFile() throws Exception{
+		Path p = Paths.get(".", "derp.txt");
+		
+//		Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rw------");
+//		FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(perms);
+//		Files.createFile(p, attr);
+		Files.deleteIfExists(p);
+		Files.createFile(p);
+		out.printf("%s created successfully.\n", p.toAbsolutePath().normalize());
 		
 	}
+	
+	@Ignore
+	@Test
+	public void testWriteFile() throws Exception{
+		Path p = Paths.get(".", "derp.txt");
+		
+		Files.write(p, "Hello, World!".getBytes());
+		out.printf("Write file successfully.\n");
+		
+		out.printf("Now read from file: %s\n", p.toAbsolutePath().normalize());
+		Files.readAllLines(p).forEach(out::println);
+	}
+	
+	@Ignore
+	@Test
+	public void testWriteBytes() throws Exception{
+		Path pin = Paths.get("test", this.getClass().getPackage().getName().replaceAll("\\.", "/")
+				, this.getClass().getSimpleName() +  ".java"
+				);
+		out.printf("%s exists? %s\n", pin.normalize(), Files.exists(pin));
+		
+		Path pout = Paths.get("derp.txt");
+		
+		Files.write(pout, Files.readAllLines(pin), StandardOpenOption.APPEND);
+		
+		out.printf("Content of the %s file: \n", pout.normalize());
+		Files.readAllLines(pout).forEach(out::println);
+	}
+	
+	@Test
+	public void testReadImage() throws Exception{
+		Path pin = Paths.get("src/META-INF/resources/img/", "Kenny_Avatar.jpg");
+		Path p2 = Paths.get("derpImage.jpg");
+		
+		Files.write(p2, Files.readAllBytes(pin), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+	}
+	
 	private static final PrintStream out = System.out;
 
 }
