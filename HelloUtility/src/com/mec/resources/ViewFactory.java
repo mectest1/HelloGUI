@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -71,6 +72,16 @@ public class ViewFactory {
 		}
 		TextFlow tf = new TextFlow(new Text(text));
 		return tf;
+	}
+	
+	public static Optional<String> inputText(String defaultValue, String title, String header){
+		TextInputDialog textInput = new TextInputDialog(defaultValue);
+		
+		textInput.setTitle(title);
+		textInput.setHeaderText(header);
+		
+		Optional<String> retval = textInput.showAndWait();
+		return retval;
 	}
 	
 	private static void log(Exception e){

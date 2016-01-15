@@ -14,6 +14,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -207,7 +208,9 @@ public class FileManagerController implements MsgLogger{
 		private Optional<Boolean> isLeaf = Optional.empty();
 		private boolean isChildrenLoaded = false;
 		private MsgLogger logger;
-		private static final ExecutorService populateChildrenService = Executors.newCachedThreadPool();
+//		private static final ExecutorService populateChildrenService = Executors.newCachedThreadPool();
+		private static final ExecutorService populateChildrenService = new ForkJoinPool();
+//		private static final ExecutorService populateChildrenService = ForkJoinPool.commonPool();
 		
 		public PathTreeItem(Path p, MsgLogger logger){
 			super(p);
@@ -252,10 +255,12 @@ public class FileManagerController implements MsgLogger{
 				return;
 			}
 			
+//			populateChildrenService.submit(this::populateChildrenTask);
 			populateChildrenService.submit(() -> populateChildrenTask(item));
 		}
 		
 		
+//		private void populateChildrenTask(){
 		private void populateChildrenTask(TreeItem<Path> treeItem){
 			Path currentPath = treeItem.getValue();
 			List<PathTreeItem> retval = new ArrayList<>();

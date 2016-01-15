@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Ignore;
@@ -48,7 +49,7 @@ public class StringTest {
 	}
 	
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void testChar() throws Exception{
 		char c = 1;
@@ -85,6 +86,17 @@ public class StringTest {
 		
 		String s3 = "\01Derp\03\01Derpia\03";
 		out.printf("replace \\01|\\03 with 2: %s\n", pattern.matcher(s3).replaceAll("2"));
+	}
+	
+	@Test
+	public void testPatternMatch() throws Exception{
+		Pattern p = Pattern.compile("\01.*?\03");
+		String s = "\01Derp\03zzzzzz\01Derpia\03zzzz";
+		Matcher m = p.matcher(s);
+		while(m.find()){
+			out.println(m.group());
+		}
+		
 	}
 	
 	private static final PrintStream out = System.out;

@@ -1,7 +1,9 @@
 package com.mec.duke;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
@@ -15,12 +17,16 @@ import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributes;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -196,9 +202,10 @@ public class FileAttributeTest {
 		
 	}
 	
+	@Ignore
 	@Test
 	public void testUserDefinedAttribute2() throws Exception{
-		Path p = Paths.get("test/com/mec/duke/FileAttributeTest.java");
+		Path p = Paths.get("test/com/mec/duke/PathTest.java");
 		
 		UserDefinedFileAttributeView udfav = Files.getFileAttributeView(p, UserDefinedFileAttributeView.class);
 		
@@ -206,6 +213,58 @@ public class FileAttributeTest {
 		out.printf("user defined attribute written successfully. attr size: %s\n", written);
 	}
 	
+	
+	@Ignore
+	@Test
+	public void testUserDefinedAttribute3() throws Exception{
+		Path p = Paths.get("test/com/mec/duke/PathTest.java");
+		
+		UserDefinedFileAttributeView udfav = Files.getFileAttributeView(p, UserDefinedFileAttributeView.class);
+		
+		udfav.list().stream().forEach(attr -> {
+			try {
+				int attrSize = udfav.size(attr);
+				ByteBuffer attrValue = ByteBuffer.allocateDirect(attrSize);
+				udfav.read(attr, attrValue);
+				attrValue.flip();
+				out.printf("Attribute name: [%s], size of it: [%s], value: [%s]\n", attr, attrSize,
+						Charset.defaultCharset().decode(attrValue).toString());
+				
+				udfav.delete(attr);
+				out.printf("User defined attribute: [%s] has been removed.\n", attr);
+			} catch (IOException e) {
+				e.printStackTrace(out);
+			}
+		});
+	}
+	
+	
+	
+	@Ignore
+	@Test
+	public void testCreateFile() throws Exception{
+		Path p = Paths.get(".", "derp.txt");
+		
+//		Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rw------");
+//		FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(perms);
+//		Files.createFile(p, attr);
+		Files.deleteIfExists(p);
+		Files.createFile(p);
+		out.printf("%s created successfully.\n", p.toAbsolutePath().normalize());
+		
+	}
+	
+	
+	@Test
+	public void testWriteFile() throws Exception{
+		Path p = Paths.get(".", "derp.txt");
+		
+		Files.write(p, "Hello, World!".getBytes());
+		out.printf("Write file successfully.\n");
+		
+		out.printf("Now read from file: %s\n", p.toAbsolutePath().normalize());
+		Files.readAllLines(p).forEach(out::println);
+	}
 	
 	private static final PrintStream out = System.out;
 

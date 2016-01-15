@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.net.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.text.*?>
@@ -8,30 +9,60 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.BaseCodeDecoderController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="500.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="130.0" />
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="500.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
-   </rowConstraints>
-   <children>
-      <TextArea fx:id="encodedText" prefHeight="600.0" prefWidth="500.0" />
-      <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1">
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.BaseCodeDecoderController">
+   <center>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="500.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="130.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="500.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <Button fx:id="decodeGzippedButton" defaultButton="true" mnemonicParsing="false" onAction="#onDecodeBase64Gzip" text="Decode GZipped &gt;&gt;" />
-            <Button fx:id="decodeBase64Button" mnemonicParsing="false" onAction="#onDecodeBase64" text="Decode Base64 &gt;&gt;" />
-            <Button fx:id="switchButton" mnemonicParsing="false" onAction="#onSwitch" text="&lt; Switch &gt;" />
-            <Button fx:id="encodeBase64Button" mnemonicParsing="false" onAction="#onEncodBase64" text="&lt;&lt; Encode Base64" />
-            <Button fx:id="encodeGzippedButton" mnemonicParsing="false" onAction="#onEncodeBase64Gzip" text="&lt;&lt; Encode Gzipped" />
-<!--             <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClear" text="&lt;&lt; Clear &gt;&gt;" /> -->
+            <TextArea fx:id="encodedText" prefHeight="600.0" prefWidth="500.0" />
+            <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1">
+               <children>
+                  <Button fx:id="decodeGzippedButton" defaultButton="true" mnemonicParsing="false" onAction="#onDecodeBase64Gzip" text="Decode GZipped &gt;&gt;" />
+                  <Button fx:id="decodeBase64Button" mnemonicParsing="false" onAction="#onDecodeBase64" text="Decode Base64 &gt;&gt;" />
+                  <Button fx:id="switchButton" mnemonicParsing="false" onAction="#onSwitch" text="&lt; Switch &gt;" />
+                  <Button fx:id="encodeBase64Button" mnemonicParsing="false" onAction="#onEncodBase64" text="&lt;&lt; Encode Base64" />
+                  <Button fx:id="encodeGzippedButton" mnemonicParsing="false" onAction="#onEncodeBase64Gzip" text="&lt;&lt; Encode Gzipped" />
+      <!--             <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClear" text="&lt;&lt; Clear &gt;&gt;" /> -->
+               </children>
+            </VBox>
+            <TextArea fx:id="decodedText" prefHeight="600.0" prefWidth="500.0" GridPane.columnIndex="2" />
          </children>
-      </VBox>
-      <TextArea fx:id="decodedText" prefHeight="600.0" prefWidth="500.0" GridPane.columnIndex="2" />
-   </children>
-   <stylesheets>
-      <URL value="@viewStyle.css" />
-   </stylesheets>
-</GridPane>
+         <stylesheets>
+            <URL value="@viewStyle.css" />
+         </stylesheets>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu disable="true" mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Extra">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Base 64 -&gt; String (UTF-8)" onAction="#onExtraBase64ToStringUTF8"/>
+              <MenuItem mnemonicParsing="false" text="Base 64 -&gt; String" onAction="#onExtraBase64ToString"/>
+            </items>
+          </Menu>
+          <Menu disable="true" mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>

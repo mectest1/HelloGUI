@@ -7,12 +7,14 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.mec.resources.Msg;
+import com.mec.resources.ViewFactory;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -42,6 +44,8 @@ public class BaseCodeDecoderController {
 	@FXML
 	private Button switchButton;
 	
+	
+	
 //	@FXML
 //	private Button clearButton;
 	
@@ -63,6 +67,17 @@ public class BaseCodeDecoderController {
 	@FXML
 	private void onEncodBase64(){
 		encodeBase64(false);
+	}
+	
+	@FXML
+	private void onExtraBase64ToStringUTF8(){
+		decodeBase64ToStringDirectly(Msg.get(this, "charset.default"));
+	}
+	
+	@FXML
+	private void onExtraBase64ToString(){
+		Optional<String> charSetStr = ViewFactory.inputText(Msg.get(this, "charset.default"), Msg.get(this, "charset.new.title"), Msg.get(this, "charset.new.header")); 
+		decodeBase64ToStringDirectly(charSetStr.get());
 	}
 	
 	@FXML
@@ -125,6 +140,24 @@ public class BaseCodeDecoderController {
 		}
 	}
 	
+	private void decodeBase64ToStringDirectly(String charsetName){
+		String encodedStr = encodedText.getText();
+		
+		
+		onPrepare(decodedText);
+		Optional<String> decodedStr;
+		try {
+			Charset charset = Charset.forName(charsetName);
+			decodedStr = decodeBase64ToStringDirectly(encodedStr, charset);
+			decodedStr.ifPresent(str -> decodedText.setText(str));
+		} catch (Exception e) {
+			String errorInfo = String.format(ERROR_OUTPUT, e.getClass().getName(), e.getMessage());	//<- Should be generalized;
+//			decodedText.setText(errorInfo);
+			onError(decodedText, errorInfo);
+		}
+		
+	}
+	
 	private void encodeBase64(boolean isGZipped){
 		String decodedStr = decodedText.getText();
 		
@@ -174,6 +207,14 @@ public class BaseCodeDecoderController {
 		return Optional.of(decodedResult);
 	}
 	
+	private static Optional<String> decodeBase64ToStringDirectly(String encodedStr, Charset charSet){
+		if(null == encodedStr){
+			return Optional.empty();
+		}
+		byte[] decodedBytes = Base64.getMimeDecoder().decode(encodedStr.getBytes());
+		String retval = new String(decodedBytes, charSet);
+		return Optional.of(retval);
+	}
 	
 	public static Optional<String> encodeBase64(Object decodedObj, boolean isGZipped) throws IOException{
 		if(null == decodedObj){
