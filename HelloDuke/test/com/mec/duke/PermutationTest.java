@@ -3,7 +3,9 @@ package com.mec.duke;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Ignore;
@@ -18,6 +20,48 @@ public class PermutationTest {
 		Arrays.asList(Color.values()).forEach(c -> {
 			out.printf("ordinal: %s, color: %s\n", c.ordinal(), c.name());
 		});
+	}
+	
+	@Test
+	public void testPermutation(){
+		List<Integer> indices = Arrays.asList(0, 1, 2, 3, 4);
+		List<List<Integer>> permutationResult = permutate(indices);
+		permutationResult.forEach(out::println);
+		out.printf("permutation result size: %s\n", permutationResult.size());
+	}
+	
+	
+	
+	public static <T> List<List<T>> permutate(List<T> items){
+		List<List<T>> retval = new ArrayList<>();
+		
+		permutate(items, 0, retval);
+		
+		return retval;
+	}
+	
+	private static <T> void permutate(List<T> items, int startIndex, List<List<T>> resultCollector){
+		if(startIndex < items.size()){
+			resultCollector.add(new ArrayList<>(items));
+		}
+//		for(int i = startIndex + 1; i < items.size(); ++i){
+//			swap(items, startIndex, i);
+//			permutate(items, 1 + startIndex, resultCollector);
+//			swap(items, startIndex, i);	//<--swap back
+//		}
+		for(int swapFrom = startIndex; swapFrom < items.size() - 1 ; ++swapFrom){
+			for(int swapTo = swapFrom + 1; swapTo < items.size(); ++ swapTo){
+				swap(items, swapFrom, swapTo);
+				permutate(items, 1 + swapFrom, resultCollector);
+				swap(items, swapFrom, swapTo);
+			}
+		}
+	}
+	
+	private static <T> void swap(List<T> items, int i, int j){
+		T tmp = items.get(i);
+		items.set(i, items.get(j));
+		items.set(j, tmp);
 	}
 
 	private static final PrintStream out = System.out;
@@ -108,4 +152,7 @@ public class PermutationTest {
 		,HORSE
 		,FISH	//<-
 	}
+	
+	
+	
 }
