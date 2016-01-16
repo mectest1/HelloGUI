@@ -78,8 +78,6 @@ public class FileManagerController implements MsgLogger{
 		statusInfo.appendText(msg);
 	}
 
-	
-
 
 	@Override
 	public void log(Exception e) {
@@ -95,6 +93,22 @@ public class FileManagerController implements MsgLogger{
 		alert.showAndWait();
 	}
 
+	
+	@FXML
+	private void onAbout(){
+		Alert about = ViewFactory.newAlert(AlertType.INFORMATION
+				, Msg.get(this, "about.title")
+				, Msg.get(this, "about.header"));
+		about.setContentText(String.format(Msg.get(this, "about.content"), 
+				Paths.get(Msg.get(this, "path.current")).toAbsolutePath().normalize()
+				));
+		about.showAndWait();
+	}
+	
+	
+	
+	
+	
 
 
 	private void initFileBrowser(){
@@ -118,12 +132,12 @@ public class FileManagerController implements MsgLogger{
 	@SuppressWarnings("unchecked")
 	private void onFileBrowserKeyPressed(KeyEvent event){
 		TreeView<Path> fileBrowser = (TreeView<Path>) event.getTarget();
-		KeyCode keyCode = event.getCode();
-		if(!(keyCode.isLetterKey() || keyCode.isDigitKey())){
+		final KeyCode keyCode = event.getCode();
+		if(!isTraversableKey(keyCode)){
 			return;
 		}
 			
-		String name = keyCode.getName();
+		String name = getKeyPathStr(keyCode);
 		int selected = fileBrowser.getSelectionModel().getSelectedIndex();
 		int index = selected + 1;
 		for(	; 	//Search: starts from the next item following current selected item
@@ -161,6 +175,34 @@ public class FileManagerController implements MsgLogger{
 		}
 	}
 	
+	/**
+	 * Can the pressed key be used to traverse items in the file browser?
+	 * @param keyCode
+	 * @return
+	 */
+	private static final boolean isTraversableKey(KeyCode keyCode){
+		return (keyCode.isLetterKey() 
+				|| keyCode.isDigitKey()
+				|| KeyCode.PERIOD == keyCode
+//				|| KeyCode.UNDERSCORE == keyCode	//Should combine with SHIFT
+				);
+	}
+	
+	/**
+	 * Get the path characters used to traverse the file browser tree
+	 * @param keyCode
+	 * @return
+	 */
+	private static final String getKeyPathStr(KeyCode keyCode){
+		if(KeyCode.PERIOD == keyCode){
+			return CHAR_PERIOD;
+		}
+//		if(KeyCode.UNDERSCORE == keyCode){
+//			return CHAR_UNDERSTORE;
+//		}
+		return keyCode.getName();
+	}
+	
 	private void onFileBrowserListSelectoinChanged(ListChangeListener.Change<? extends Integer> change){
 //		fileBrowser.getSelectionModel()
 //		.getSelectedItems().stream()
@@ -183,8 +225,13 @@ public class FileManagerController implements MsgLogger{
 		statusInfo.setText(fileName);
 		
 	}
+	
+	public static final String CHAR_PERIOD = ".";
+//	public static final String CHAR_UNDERSTORE = "_";
+	
+	
 	private static final class PathTreeCell extends TreeCell<Path>{
-
+		
 		@Override
 		protected void updateItem(Path item, boolean empty) {
 			super.updateItem(item, empty);
