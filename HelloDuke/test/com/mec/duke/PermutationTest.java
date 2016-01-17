@@ -76,6 +76,14 @@ public class PermutationTest {
 			});
 		});
 		out.printf("Finished on %s\n", LocalDateTime.now());
+		//result:
+//		Started on 2016-01-17T19:14:50.339
+//		[House [index=0, color=YELLOW, nationality=NORWEGIAN, beverage=WATER, cigar=DUNHILL, pet=CAT], 
+//		House [index=1, color=BLUE, nationality=DANE, beverage=TEA, cigar=BLENDS, pet=HORSE], 
+//		House [index=2, color=RED, nationality=BRIT, beverage=MILK, cigar=PALL_MALL, pet=BIRD], 
+//		House [index=3, color=GREEN, nationality=GERMAN, beverage=COFFEE, cigar=PRINCE, pet=FISH], 
+//		House [index=4, color=WHITE, nationality=SWEDE, beverage=BEER, cigar=BLUEMASTER, pet=DOG]]
+//		Finished on 2016-01-17T22:29:41.456
 	}
 	
 	
