@@ -147,6 +147,18 @@ public class FileVisitorTest {
 		Files.walkFileTree(moveTo, DirectoryDeleteVisitor.newInstance());
 	}
 	
+	/**
+	 * Would work both on directories and files.
+	 * @param fromFile
+	 * @param toFile
+	 */
+	static void moveFile(Path fromFile, Path toFile){
+		try{
+			Files.move(fromFile, toFile, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+		}catch(IOException e){
+			e.printStackTrace(out);
+		}
+	}
 	static void copyFile(Path fromFile, Path toFile){
 		try{
 			if(Files.isDirectory(fromFile)){
