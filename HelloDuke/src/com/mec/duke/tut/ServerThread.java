@@ -12,7 +12,7 @@ public class ServerThread extends Thread {
 		this.server = server;
 		this.socket = socket;
 		
-		start();
+//		start();
 	}
 	
 	

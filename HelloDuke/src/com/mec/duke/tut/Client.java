@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.mec.duke.tut.view.ClientController;
 
@@ -18,6 +20,9 @@ public class Client extends Application{
 //	private Client(String host, int port){
 //		
 //	}
+	
+	private static final ExecutorService es = Executors.newCachedThreadPool();
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
@@ -47,7 +52,8 @@ public class Client extends Application{
 			ins = new DataInputStream(socket.getInputStream());
 			
 			receiveThread = new ClientThread(this);
-			new Thread(receiveThread).start();
+//			new Thread(receiveThread).start();
+			es.submit(receiveThread);
 //			init();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -74,7 +80,7 @@ public class Client extends Application{
 	}
 	public void receiveMessage(){
 		try {
-			String msgText = ins.readUTF();
+			String msgText = ins.readUTF();	//<-- will this method block?
 //			return msg;
 //			String msgText = client.receiveMessage();
 			if(null == msgText || msgText.isEmpty()){
