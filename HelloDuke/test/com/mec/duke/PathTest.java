@@ -131,6 +131,7 @@ public class PathTest {
 		
 	}
 	
+	@Ignore
 	@Test
 	public void testRelativizePath(){
 		Path p1 = Paths.get("BNP.txt");
@@ -147,6 +148,12 @@ public class PathTest {
 		Path p4 = Paths.get("parent/2010/AEGON.txt");
 		out.printf("p3.relativize(p4)=%s, \np4.relativize(p3)=%s\n", p3.relativize(p4), p4.relativize(p3));
 		out.printf("p1.root = %s\n", p1.getRoot());
+	}
+	
+	@Test
+	public void testCurrentPath3(){
+		Path p = Paths.get("derp");
+		out.printf("path: %s\n", p.toAbsolutePath());
 	}
 	
 	private static final String TAB = "\t";

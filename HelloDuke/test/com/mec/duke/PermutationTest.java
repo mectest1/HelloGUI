@@ -1,13 +1,16 @@
 package com.mec.duke;
 
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,6 +40,7 @@ public class PermutationTest {
 	}
 	
 	
+	
 //	@Ignore
 	@Test
 	public void trySolveHouseProblem(){
@@ -46,6 +50,7 @@ public class PermutationTest {
 		List<List<Cigar>> cigars = Permutation.permutate(Arrays.asList(Cigar.values()));
 		List<List<Pet>> pets = Permutation.permutate(Arrays.asList(Pet.values()));
 		
+		Path p = Paths.get("PermutationTest_result.txt");
 		out.printf("Started on %s\n", LocalDateTime.now());
 		colors.parallelStream().forEach(color -> {
 			nations.parallelStream().forEach(nation -> {
@@ -55,6 +60,14 @@ public class PermutationTest {
 							List<House> houses = getHouseList(color, nation, beverage, cigar, pet);
 								if(validateHouses(houses)){
 									out.println(houses);
+									try {
+										Files.write(p, houses.stream().map(h -> h.toString()).collect(Collectors.toList())
+												, StandardCharsets.UTF_8
+												, StandardOpenOption.APPEND, StandardOpenOption.CREATE, StandardOpenOption.WRITE
+												);
+									} catch (Exception e) {
+										e.printStackTrace(out);
+									}
 								}
 							
 						});
