@@ -172,7 +172,7 @@ public class PermutationTest {
 				||
 				(
 						0 < h.getIndex()
-						&& Cigar.BLENDS == h.getCigar()
+						&& Pet.HORSE == h.getPet()
 						&& Cigar.DUNHILL == house.get(h.getIndex() - 1).getCigar()
 						
 						)
@@ -307,7 +307,7 @@ public class PermutationTest {
 	}
 	
 	/**
-	 * Return the house list the specific order: from 0 to {@link House#HOUSE_NUMBER}. Characteristics for each house are given
+	 * Return the house list in specific order: from 0 to {@link House#HOUSE_NUMBER}. Characteristics for each house are given
 	 * through the parameters listed here.
 	 * @param colors colors for each house
 	 * @param nations nationality of each host of each house
