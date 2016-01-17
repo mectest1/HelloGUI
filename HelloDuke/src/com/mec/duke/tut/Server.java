@@ -6,8 +6,12 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
+	
+	private static final ExecutorService es = Executors.newCachedThreadPool();
 
 	public Server (int port) throws IOException{
 		listen(port);
@@ -31,7 +35,7 @@ public class Server {
 			outputStreams.put(s, dout);
 			
 			//
-			new ServerThread(this, s);
+			es.submit(new ServerThread(this, s));
 			
 		}
 		
