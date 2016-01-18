@@ -35,21 +35,26 @@ public class WatchServiceTest {
 //		dirWatch.watchDirectory(tmpDir, false);
 		dirWatch.watchDirectory(tmpDir, true);
 		
-		ForkJoinPool.commonPool().submit(() -> {
-			try {
-				Path p = Files.createTempDirectory(tmpDir, "tmp2_"); //<- Q: Why this operation won't trigger Watch Event?
-				p = Files.createTempFile(tmpDir, "tmp2", "derp_");
-			} catch (Exception e) {
-				e.printStackTrace(out);
-			}
-		});
+//		Thread.sleep(2 * 1000);					//Thus the watch service can start to receive watch events
+//		ForkJoinPool.commonPool().submit(() -> {
+//			try {
+//				Path p = Files.createTempDirectory(tmpDir, "tmp2_"); //<- Q: Why this operation won't trigger Watch Event?
+//				p = Files.createTempFile(tmpDir, "tmp2", "derp_");
+//			} catch (Exception e) {
+//				e.printStackTrace(out);
+//			}
+//		});
 		
-//		Files.deleteIfExists(p);
-//		Path p = Files.createTempDirectory(tmpDir, "tmp2_"); //<- Q: Why this operation won't trigger Watch Event?
-//		p = Files.createTempFile(tmpDir, "tmp2", "derp_");
+		Thread.sleep(5 * 1000);
+		Path p = Files.createTempDirectory(tmpDir, "tmp2_"); //<- Q: Why this operation won't trigger Watch Event?
+															//A: Maybe it's caused by the fact that when this
+															//file is created, the WatchService is yet to start?
+															//To resolve this problem, you may need to wait for awhile here.
+		Files.deleteIfExists(p);
+		p = Files.createTempFile(tmpDir, "tmp2", "_Derp");
 		
 	
-		Thread.sleep(30*1000);
+		Thread.sleep(3*1000);
 //		out.println("Wait for 5 seconds.");
 		FileVisitorTest.deleteFile(tmpDir);
 		Thread.sleep(5*1000);
@@ -63,6 +68,9 @@ public class WatchServiceTest {
 		DirectoryRecursiveWatch watch = DirectoryRecursiveWatch.newInstance();
 		ForkJoinPool.commonPool().submit(() -> watch.watchDirectory(tmpDir));	//<- Watch in the background;
 		
+		Thread.sleep(2 * 1000);
+		Files.createTempFile(tmpDir, "tmpfile_", "_derp");	//<-- This actually worked
+		Files.createTempDirectory(tmpDir, "tmpfile_");
 		Thread.sleep(2 * 1000);
 //		watch.cancelWatch();	//<-- Without close the WatchService, the watched path will not be able to be deleted;
 		FileVisitorTest.deleteFile(tmpDir);
@@ -190,7 +198,8 @@ public class WatchServiceTest {
 //									, StandardWatchEventKinds.ENTRY_MODIFY
 //									, StandardWatchEventKinds.ENTRY_DELETE
 //									));
-							registerTree(dir);
+//							registerTree(dir);	//<- wrong ~.~
+							registerTree(resolvedFile);
 						}
 //						else{
 //							registerPath(dir);
