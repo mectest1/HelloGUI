@@ -79,7 +79,7 @@ public class WatchServiceTest {
 		public static DirectoryRecursiveWatch newInstance(){
 			return new DirectoryRecursiveWatch();
 		}
-
+		
 		private void cancelWatch(){
 			keys.forEach(key -> key.cancel());
 			try {
@@ -91,6 +91,16 @@ public class WatchServiceTest {
 			}
 			
 		}
+		
+		public void addListener(WatchEventListener<Path> listener){
+			listeners.add(listener);
+		}
+		/**
+		 * Watch the specified directory and its sub-directories in synchronous mode. It's the caller's responsibility
+		 * to invoke this method in another thread. Or you can simply invoke {@link #watchDirectoryAsync(Path, ExecutorService)}
+		 * to use the provided ExecutorService to run the watch task.
+		 * @param path
+		 */
 		public void watchDirectory(Path path){
 			try {
 				//register the received path
@@ -165,7 +175,7 @@ public class WatchServiceTest {
 					}
 					Path dir = (Path) key.watchable();
 					Path fileName = event.context();
-					Path fullFileName = dir.resolve(fileName);
+					Path resolvedFile = dir.resolve(fileName);
 					if(!Files.isReadable(dir.resolve(fileName))){
 						continue;	//In case current file is inaccessible for now.
 					}
@@ -175,7 +185,7 @@ public class WatchServiceTest {
 //						if(!Files.isReadable(dir.resolve(fileName))){
 //							continue;	//In case current file is inaccessible for now.
 //						}
-						if(Files.isDirectory(fullFileName)){
+						if(Files.isDirectory(resolvedFile)){
 //							keys.add(dir.resolve(fileName).register(watchService, StandardWatchEventKinds.ENTRY_CREATE
 //									, StandardWatchEventKinds.ENTRY_MODIFY
 //									, StandardWatchEventKinds.ENTRY_DELETE
@@ -186,20 +196,20 @@ public class WatchServiceTest {
 //							registerPath(dir);
 //						}
 						
-						listeners.stream().forEachOrdered(l -> l.onEntryCreated(fullFileName));
+						listeners.stream().forEachOrdered(l -> l.onEntryCreated(resolvedFile));
 					}else if(StandardWatchEventKinds.ENTRY_DELETE == evt.kind()){
 //						Path dir = (Path) key.watchable();
 //						Path fileName = event.context();
 //						if(!Files.isReadable(dir.resolve(fileName))){
 //							continue;	//In case current file is inaccessible for now.
 //						}
-						if(Files.isDirectory(fullFileName)){
+						if(Files.isDirectory(resolvedFile)){
 							key.cancel();
 						}
 						
-						listeners.stream().forEachOrdered(l -> l.onEntryDeleted(fullFileName));
+						listeners.stream().forEachOrdered(l -> l.onEntryDeleted(resolvedFile));
 					}else if(StandardWatchEventKinds.ENTRY_MODIFY == evt.kind()){
-						listeners.stream().forEachOrdered(l -> l.onEntryModified(fullFileName));
+						listeners.stream().forEachOrdered(l -> l.onEntryModified(resolvedFile));
 					}
 					out.printf("%s -> %s\n", event.kind(), event.context());
 				}
