@@ -50,7 +50,7 @@ public class PermutationTest {
 		List<List<Cigar>> cigars = Permutation.permutate(Arrays.asList(Cigar.values()));
 		List<List<Pet>> pets = Permutation.permutate(Arrays.asList(Pet.values()));
 		
-		Path p = Paths.get("PermutationTest_result.txt");
+		Path p = Paths.get("data/PermutationTest_result.txt");
 		out.printf("Started on %s\n", LocalDateTime.now());
 		colors.parallelStream().forEach(color -> {
 			nations.parallelStream().forEach(nation -> {
