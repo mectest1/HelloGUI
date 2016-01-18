@@ -41,6 +41,9 @@ public class PermutationTest {
 	
 	
 	
+	/**
+	 * Try to solve the house problem by brutal force, without <strong>any</strong> optimization. 
+	 */
 //	@Ignore
 	@Test
 	public void trySolveHouseProblem(){

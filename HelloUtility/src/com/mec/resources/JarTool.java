@@ -219,12 +219,15 @@ public class JarTool {
 		if(null == entryName || entryName.isEmpty()){
 			return;
 		}
+		
 //		try(BufferedInputStream fis = new BufferedInputStream(new FileInputStream(new File(entriesParentDirectory, entryName)), BUFFER_SIZE);){
-		try(InputStream fis = new BufferedInputStream(Files.newInputStream(entriesParentDirectory.resolve(entryName)))){
+		Path entryFile = entriesParentDirectory.resolve(entryName);
+		try(InputStream fis = new BufferedInputStream(Files.newInputStream(entryFile))){
 //			out.printf("\tAdd zip entry: %s\n", packageFile);
 //			out.printf(Msg.get(this, "log.debug.entryAdded"), entryName);
 			logger.log(String.format(Msg.get(this, "log.debug.entryAdded"), entryName));
 			ZipEntry entry = new ZipEntry(entryName);
+			entry.setLastModifiedTime(Files.getLastModifiedTime(entryFile));	//<-- set the entry's last modified time
 			outputJar.putNextEntry(entry);
 			byte[] buffer = new byte[BUFFER_SIZE];
 			int count = 0;

@@ -157,14 +157,14 @@ public class FileVisitorTest {
 	 * @param fromFile
 	 * @param toFile
 	 */
-	static void moveFile(Path fromFile, Path toFile){
+	public static void moveFile(Path fromFile, Path toFile){
 		try{
 			Files.move(fromFile, toFile, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 		}catch(IOException e){
 			e.printStackTrace(out);
 		}
 	}
-	static void copyFile(Path fromFile, Path toFile){
+	public static void copyFile(Path fromFile, Path toFile){
 		try{
 			if(Files.isDirectory(fromFile)){
 				Files.copy(fromFile, toFile, StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
@@ -185,7 +185,7 @@ public class FileVisitorTest {
 		}
 	}
 	
-	static void deleteFile(Path p){
+	public static void deleteFile(Path p){
 //		if(Files.notExists(p)){
 //			return;
 //		}
