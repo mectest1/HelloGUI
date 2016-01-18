@@ -16,6 +16,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -78,11 +79,13 @@ public class FileVisitorTest {
 		Path tmpDir = createTempDir(Paths.get("."));
 		out.printf("Temporary directory creted: %s\n", tmpDir);
 		out.println("Temporary directory stucture:");
-		Files.walk(tmpDir).forEach(out::println);
-		
+//		Files.walk(tmpDir).forEach(out::println);
+		Stream<Path> s = Files.walk(tmpDir);
+		s.forEach(out::println);
+		s.close();
 		//
 		out.println("Waiting for 10 seconds...");
-//		Thread.sleep(10 * 1000);
+		Thread.sleep(5 * 1000);
 		out.println("Now starts to delete this temporary directory");
 		deleteFile(tmpDir);
 //		Files.deleteIfExists(tmpDir);
@@ -97,14 +100,15 @@ public class FileVisitorTest {
 		Files.walkFileTree(tmpDir, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE, new DirectoryCopyVisitor(tmpDir, copyTo));
 		
 
+		out.println("Wait for 5 seconds...");
 		Thread.sleep(5 * 1000);
-//		deleteFile(tmpDir);
-//		deleteFile(copyTo);
-		Files.walkFileTree(tmpDir, DirectoryDeleteVisitor.newInstance());
-		Files.walkFileTree(copyTo, DirectoryDeleteVisitor.newInstance());
+		deleteFile(tmpDir);
+		deleteFile(copyTo);
+//		Files.walkFileTree(tmpDir, DirectoryDeleteVisitor.newInstance());
+//		Files.walkFileTree(copyTo, DirectoryDeleteVisitor.newInstance());
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void testCopyDirectory2() throws Exception{
 		Path tmpDir = createTempDir(Paths.get("."));
@@ -136,6 +140,7 @@ public class FileVisitorTest {
 		Files.walkFileTree(moveTo, DirectoryDeleteVisitor.newInstance());
 	}
 	
+	@Ignore
 	@Test
 	public void testMoveDirectory2() throws Exception{
 		Path tmpDir = createTempDir(Paths.get("."));
@@ -163,7 +168,11 @@ public class FileVisitorTest {
 		try{
 			if(Files.isDirectory(fromFile)){
 				Files.copy(fromFile, toFile, StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-				Files.list(fromFile).forEach(subItem -> copyFile(subItem, toFile.resolve(fromFile.relativize(subItem))));
+//				Files.list(fromFile).forEach(subItem -> copyFile(subItem, toFile.resolve(fromFile.relativize(subItem))));	//<- unclosed stream
+				Stream<Path> s = Files.list(fromFile);
+				s.forEach(subItem -> copyFile(subItem, toFile.resolve(fromFile.relativize(subItem))));
+				s.close();
+				
 				Files.setLastModifiedTime(toFile, Files.getLastModifiedTime(fromFile));
 				out.printf("Copy directory %s to %s\n", fromFile, toFile);
 			}else{
@@ -187,14 +196,19 @@ public class FileVisitorTest {
 				out.printf("File %s deleted\n", p);
 					
 			}else{
-				Files.list(p).forEach(FileVisitorTest::deleteFile);
+//				Files.list(p).forEach(FileVisitorTest::deleteFile);	//<--------an unclosed stream will cause error when trying to delete this folder
+				Stream<Path> s = Files.list(p);
+				s.forEach(FileVisitorTest::deleteFile);
+				s.close();
 //				for (Path subItem : Files.list(p).collect(Collectors.toList())){
 //				deleteFile(subItem);
 //				}
 //				Files.list(p).forEach(FileVisitorTest::deleteFile);
-//				Files.delete(p);		//<-----This will not work, but File.deleteOnExit() will, why?
-				p.toFile().deleteOnExit();
-//				Files.deleteIfExists(p);
+//				Files.delete(p);		//Q: This will not work, but File.deleteOnExit() will, why? 
+										//A: The file stream is not closed yet; line 194
+										//ref: http://stackoverflow.com/questions/19935624/java-nio-file-files-deletepath-path-occasional-failure-to-recursively-delete
+//				p.toFile().deleteOnExit();
+				Files.deleteIfExists(p);
 				out.printf("Directory %s deleted\n", p);
 			}
 //			Files.deleteIfExists(p);
