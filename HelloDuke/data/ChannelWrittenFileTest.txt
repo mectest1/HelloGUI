@@ -59,3 +59,16 @@ Test Text
 7Test Text---------5
 8Test Text---------5
 9Test Text---------5
+
+Hello from WritableByteChannel @2016-01-19T20:50:22.742
+Hello from WritableByteChannel @2016-01-19T20:50:39.819
+Hello from WritableByteChannel @2016-01-19T20:54:02.287
+Hello from WritableByteChannel @2016-01-19T20:54:13.685Derp Derp2  DerpDerpia
+
+Derp Derp2  DerpDerpia
+Derp Derp2  DerpDerpia
+Derp Derpia Derp
+Derp Derp2  DerpDerpia
+Derp Derpia Derp
+0
+Hello fro from truncate@2016-01-19T23:08:12.207
