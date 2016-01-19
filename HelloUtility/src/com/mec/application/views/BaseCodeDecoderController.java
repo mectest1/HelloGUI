@@ -54,33 +54,39 @@ public class BaseCodeDecoderController {
 	
 	@FXML
 	private void onDecodeBase64Gzip(){
-		decodeBase64(true);
+//		decodeBase64(true);
+		proceedDecode(s -> decodeBase64(s, true));
 	}
 	
 	@FXML
 	private void onDecodeBase64(){
-		decodeBase64(false);
+//		decodeBase64(false);
+		proceedDecode(s -> decodeBase64(s, false));
 	}
 	
 	@FXML
 	private void onEncodeBase64Gzip(){
-		encodeBase64(true);
+//		encodeBase64(true);
+		proceedEncode(s -> encodeBase64(s, true));
 	}
 	
 	@FXML
 	private void onEncodBase64(){
-		encodeBase64(false);
+//		encodeBase64(false);
+		proceedEncode(s -> encodeBase64(s, false));
 	}
 	
 	@FXML
 	private void onExtraBase64ToStringUTF8(){
-		decodeBase64ToStringDirectly(Msg.get(this, "charset.default"));
+//		decodeBase64ToStringDirectly(Msg.get(this, "charset.default"));
+		proceedDecode(s -> decodeBase64ToStringDirectly(s, Msg.get(this, "charset.default")));
 	}
 	
 	@FXML
 	private void onExtraBase64ToString(){
 		Optional<String> charSetStr = ViewFactory.inputText(Msg.get(this, "charset.default"), Msg.get(this, "charset.new.title"), Msg.get(this, "charset.new.header")); 
-		decodeBase64ToStringDirectly(charSetStr.get());
+//		decodeBase64ToStringDirectly(charSetStr.get());
+		charSetStr.ifPresent(charset -> proceedDecode(s -> decodeBase64ToStringDirectly(s, charset)));
 	}
 
 	@FXML
@@ -127,17 +133,17 @@ public class BaseCodeDecoderController {
 //			encodedText.requestFocus();
 //		}
 //	}
-	private void decodeBase64(boolean isGZipped){
-		proceedDecode(s -> decodeBase64(s, isGZipped));
-	}
+//	private void decodeBase64(boolean isGZipped){
+//		proceedDecode(s -> decodeBase64(s, isGZipped));
+//	}
 	
-	private void decodeBase64ToStringDirectly(String charsetName){
-		proceedDecode(s -> decodeBase64ToStringDirectly(s, charsetName));
-	}
+//	private void decodeBase64ToStringDirectly(String charsetName){
+//		proceedDecode(s -> decodeBase64ToStringDirectly(s, charsetName));
+//	}
 	
-	private void encodeBase64(boolean isGZipped){
-		proceedEncode(s -> encodeBase64(s, isGZipped));
-	}
+//	private void encodeBase64(boolean isGZipped){
+//		proceedEncode(s -> encodeBase64(s, isGZipped));
+//	}
 	
 	private void proceedDecode(Function<String, Optional<String>> decodeFunc){
 
