@@ -2,6 +2,9 @@ package com.mec.duke;
 
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileChannel.MapMode;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
@@ -305,6 +308,109 @@ public class ChannelTest {
 			out.printf("Read from file: %s\n", p);
 			Files.readAllLines(p).forEach(out::println);
 		}
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testCopyThroughChannel() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		Path copyTo = p.resolveSibling("copy-to-file.txt");
+		
+		ByteBuffer buffer = ByteBuffer.allocate(4 * 1024);	//buffer capacity: 4KB
+//		ByteBuffer buffer = ByteBuffer.allocateDirect(4 * 1024);
+		
+//		try(ReadableByteChannel reader = Files.newByteChannel(p, StandardOpenOption.READ);
+//				WritableByteChannel writer = Files.newByteChannel(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		try(FileChannel reader = FileChannel.open(p, StandardOpenOption.READ);
+				FileChannel writer = FileChannel.open(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+				){
+			out.printf("Copy from %s to %s\n", p, copyTo);
+			//
+			for(buffer.rewind(); 0 < reader.read(buffer); buffer.clear()){
+				buffer.flip();	//don't forget to flip the buffer after reading
+				while(buffer.hasRemaining()){
+					writer.write(buffer);
+				}
+			}
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Read from file %s\n", copyTo);
+			
+			Files.readAllLines(copyTo).forEach(out::println);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Delete file %s\n", copyTo);
+			Files.deleteIfExists(copyTo);
+		}
+
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testCopyThroughChannel2() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		Path copyTo = p.resolveSibling("copy-to-file.txt");
+		
+//		try(ReadableByteChannel reader = Files.newByteChannel(p, StandardOpenOption.READ);
+//				WritableByteChannel writer = Files.newByteChannel(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		try(FileChannel reader = FileChannel.open(p, StandardOpenOption.READ);
+				FileChannel writer = FileChannel.open(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+				){
+			out.printf("Copy from %s to %s\n", p, copyTo);
+
+			writer.transferFrom(reader, 0, reader.size());	//<-- transfer into writer from reader
+//			reader.transferTo(0, reader.size(), writer);	//<-- or from the reader transfered to writer;
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Read from file %s\n", copyTo);
+			
+			Files.readAllLines(copyTo).forEach(out::println);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Delete file %s\n", copyTo);
+			Files.deleteIfExists(copyTo);
+		}
+		
+	}
+	
+	
+	@Test
+	public void testCopyThroughChannel3() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		Path copyTo = p.resolveSibling("copy-to-file.txt");
+		
+//		try(ReadableByteChannel reader = Files.newByteChannel(p, StandardOpenOption.READ);
+//				WritableByteChannel writer = Files.newByteChannel(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		try(FileChannel reader = FileChannel.open(p, StandardOpenOption.READ);
+				FileChannel writer = FileChannel.open(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+				){
+			out.printf("Copy from %s to %s\n", p, copyTo);
+			
+			MappedByteBuffer buffer = reader.map(MapMode.READ_ONLY, 0, reader.size());
+			writer.write(buffer);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Read from file %s\n", copyTo);
+			
+			Files.readAllLines(copyTo).forEach(out::println);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Delete file %s\n", copyTo);
+			Files.deleteIfExists(copyTo);
+		}
+		
 	}
 	
 	private static final PrintStream out = System.out;
