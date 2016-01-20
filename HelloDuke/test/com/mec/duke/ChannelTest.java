@@ -4,11 +4,14 @@ import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -75,9 +78,9 @@ public class ChannelTest {
 //		Files.deleteIfExists(p);
 	}
 
-//	@Ignore
+	@Ignore
 	@Test
-	public void testWriteFile2() throws Exception{
+	public void testReadFile2() throws Exception{
 		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
 		
 		out.printf("Read from file: %s\n", p);
@@ -109,9 +112,200 @@ public class ChannelTest {
 //		Files.deleteIfExists(p);
 	}
 	
+	@Ignore
+	@Test
+	public void testWriteFile2() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		try(WritableByteChannel writableChannel = Files.newByteChannel(p, StandardOpenOption.CREATE
+				, StandardOpenOption.APPEND
+//				, StandardOpenOption.WRITE	//<- without this flag, the content will still be appended
+				);){
+			
+			ByteBuffer content = ByteBuffer.wrap(("\nHello from WritableByteChannel @" + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).getBytes());
+//			content.flip();	//<- After initialization, position = 0; limit = capacity;
+							//in that case, ByteBuffer.flip() will set limit to 0;
+							//which will result into 0 bytes to be written into file.
+			int writtenBytes = writableChannel.write(content);
+			out.printf("%s bytes have been written into file.\n", writtenBytes);
+			out.println();
+			
+			out.printf("Read from file %s\n", p);
+			Files.readAllLines(p).forEach(out::println);
+		}
+		
+	}
 	
-//	@Test
-//	public void 
+	@Ignore
+	@Test
+	public void readCharFromDifferentPositions() throws Exception{
+		Path p = Paths.get("test", getClass().getName().replaceAll("\\.", "/") + ".java");
+//		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		String encoding = System.getProperty("file.encoding");
+		Charset charset  = Charset.forName(encoding);
+		//
+		ByteBuffer buffer = ByteBuffer.allocate(1);	//read exact one character from different positions:
+													//begin, middle, and end position;
+		try(SeekableByteChannel seekableByteChannel = Files.newByteChannel(p, StandardOpenOption.READ)){
+			//output the whole file
+//			for(buffer.clear(); 0 < seekableByteChannel.read(buffer); buffer.clear()){
+//				buffer.flip();
+//				out.print(charset.decode(buffer));
+//			}
+			
+			
+			
+			
+			//The initial position
+			out.printf("Read first character from file %s\n", p);
+			
+			//
+			seekableByteChannel.read(buffer);
+			buffer.flip();
+			out.println(Charset.forName(encoding).decode(buffer));
+			buffer.rewind();
+			
+			//get into the middle
+			seekableByteChannel.position(seekableByteChannel.size() / 2);
+			out.printf("Now read the middle character from file %s, position: %s\n", p, seekableByteChannel.position());
+			
+			seekableByteChannel.read(buffer);
+			buffer.flip();	//<--Don't forget this
+			out.println(Charset.forName(encoding).decode(buffer));
+			buffer.clear();
+			
+			//get the last character
+			seekableByteChannel.position(seekableByteChannel.size() - 1);
+			out.printf("Now read the last character from file %s, position: %s\n", p, seekableByteChannel.position());
+			
+			seekableByteChannel.read(buffer);
+			buffer.flip();	//<---Don't forget this, or you'll simply get an empty character
+			out.println(Charset.forName(encoding).decode(buffer));
+			buffer.clear();
+			
+			
+			
+		}
+		
+		
+		//
+	}
+	
+	@Ignore
+	@Test
+	public void testWriteInDifferentPositions() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		try(SeekableByteChannel seekableByteChannel = Files.newByteChannel(p
+//				, StandardOpenOption.READ		//READ + APPEND  not allowed, LOL
+				, StandardOpenOption.CREATE
+				, StandardOpenOption.WRITE
+//				, StandardOpenOption.APPEND		//When APPEND is set, the channel position cannot be set
+				)){
+			
+			String content1 = "\nDerp Derp2  Derp";
+			ByteBuffer buffer1 = ByteBuffer.wrap(content1.getBytes());
+			
+			String content2 = "Derpia";
+			ByteBuffer buffer2 = ByteBuffer.wrap(content2.getBytes());
+			
+			//
+			//locate position to the end;
+			seekableByteChannel.position(seekableByteChannel.size());	//No need for APPEND flag
+			
+			while(buffer1.hasRemaining()){
+				seekableByteChannel.write(buffer1);
+			}
+			
+			int replaceIndex = content1.indexOf("Derp2");
+			
+			//Set the channel's position to the text that needs to be replaced
+			long replacePosition = seekableByteChannel.size() - (buffer1.capacity() - replaceIndex);
+			seekableByteChannel.position(replacePosition);
+				//<- position set failed for APPEND
+				//Q: position cannot be set for APPEND flag?
+				//A: Yep. Add a breakpoint here and watch for seekableByteCHannel.position() before and after this line.
+				//	Then clear the APPEND flag and try again.
+			
+			
+			while(buffer2.hasRemaining()){
+				seekableByteChannel.write(buffer2);
+			}
+			
+			buffer1.clear();
+			buffer2.clear();
+			
+			//
+			out.printf("Read content from file %s\n", p);
+			Files.readAllLines(p).forEach(out::println);
+			
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testCopyBeginningContentToLast() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		ByteBuffer buffer = ByteBuffer.allocate(25);
+		buffer.put("\n".getBytes());
+		try(SeekableByteChannel seekableByteChannel = Files.newByteChannel(p
+				, StandardOpenOption.READ
+				, StandardOpenOption.WRITE
+				)){
+			for(int readedBytes = 0; -1 < readedBytes && buffer.hasRemaining();){
+				readedBytes = seekableByteChannel.read(buffer);
+			}
+			
+			//
+			buffer.flip();
+			
+			//
+			seekableByteChannel.position(seekableByteChannel.size());
+			while(buffer.hasRemaining()){
+				seekableByteChannel.write(buffer);
+			}
+			
+			out.printf("Read from file %s\n", p);
+			Files.readAllLines(p).forEach(out::println);
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testTruncateFile() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		String content = "\nHello fro from truncate@" + LocalDateTime.now();
+		
+		
+		ByteBuffer buffer = ByteBuffer.wrap(content.getBytes());
+		
+		//
+		try(SeekableByteChannel seekableByteChannel = Files.newByteChannel(p
+//				, StandardOpenOption.READ	//This flag conflicts with APPEND
+				, StandardOpenOption.WRITE
+//				, StandardOpenOption.APPEND	//
+				)){
+			
+			//Ref: API DOC:
+//			An implementation of this interface may prohibit truncation when connected to an entity, 
+//			typically a file, opened with the APPEND option.
+			
+			seekableByteChannel.truncate(seekableByteChannel.size() - buffer.capacity());
+				//Seems in JDK 8 on Windows, the channel can still be truncated 
+				//even when the APPEND flag is set.
+			
+			seekableByteChannel.position(seekableByteChannel.size());
+			while(buffer.hasRemaining()){
+				seekableByteChannel.write(buffer);
+			}
+			
+			//
+			out.printf("Read from file: %s\n", p);
+			Files.readAllLines(p).forEach(out::println);
+		}
+	}
 	
 	private static final PrintStream out = System.out;
 }
@@ -135,22 +329,4 @@ public class ChannelTest {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//A QUICK BROWN FOX JUMPS OVER THE LAZY DOG
