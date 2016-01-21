@@ -1,6 +1,6 @@
-0Test Text---------2
-1Test Text---------2
-2Test Text---------2
+
+Write to locked part of a Partly locked file @2016-01-20T11:06:38.489
+xt---------2
 3Test Text---------2
 4Test Text---------2
 5Test Text---------2
@@ -72,3 +72,19 @@ Derp Derp2  DerpDerpia
 Derp Derpia Derp
 0
 Hello fro from truncate@2016-01-19T23:08:12.207
+Write to locked file @2016-01-20T09:57:00.547
+Write to locked file @2016-01-20T10:05:34.192
+Try to write into file@2016-01-20T10:05:36.162
+Write to locked file @2016-01-20T10:06:55.936
+Try to write into file@2016-01-20T10:06:57.906
+Write to Partly locked file @2016-01-20T11:03:24.908
+Try to write into file@2016-01-20T11:03:26.888
+Try to write into file@2016-01-20T11:03:26.888
+Write to locked part of a Partly locked file @2016-01-20T11:05:42.840
+
+Write to unlocked part of a Partly locked file @2016-01-20T11:05:42.840
+Try to write into file@2016-01-20T11:05:44.820
+Try to write into file@2016-01-20T11:05:44.820
+Write to unlocked part of a Partly locked file @2016-01-20T11:06:38.489
+Try to write into file@2016-01-20T11:06:40.459
+Try to write into file@2016-01-20T11:06:40.459

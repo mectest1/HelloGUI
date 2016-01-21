@@ -2,16 +2,23 @@ package com.mec.duke;
 
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileChannel.MapMode;
+import java.nio.channels.FileLock;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumSet;
+import java.util.concurrent.ForkJoinPool;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -307,6 +314,223 @@ public class ChannelTest {
 		}
 	}
 	
+	
+	@Ignore
+	@Test
+	public void testMapedByteBuffer() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		ByteBuffer buffer;
+		try(FileChannel fc = FileChannel.open(p, EnumSet.of(StandardOpenOption.READ))){
+			//
+//			For most operating systems, mapping a file into memory is more expensive than 
+//			reading or writing a few tens of kilobytes of data via the usual read and write methods. 
+//			From the standpoint of performance it is generally only worth mapping relatively large files into memory. 
+			
+			buffer = fc.map(MapMode.READ_ONLY, 0, fc.size());	//map the whoe file into memory
+			
+			if(null == buffer){
+				out.println("No MappedByteBuffer is created");
+				return;
+			}
+			out.println("Read from MappedByteBuffer now:\n");
+			CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+			while(buffer.hasRemaining()){
+				out.println(decoder.decode(buffer));
+			}
+			buffer.clear();
+		}
+		
+	}
+	
+	@Ignore
+	@Test
+	public void testLockFile() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		try(FileChannel fc = FileChannel.open(p, EnumSet.of(
+//				StandardOpenOption.WRITE
+				StandardOpenOption.APPEND
+				))){
+			ForkJoinPool.commonPool().execute(() -> writeToLockFile(p));
+			out.printf("Lock file %s\n", p);
+			FileLock lock = fc.lock();
+//			FileLock lock = fc.tryLock();
+
+			fc.write(ByteBuffer.wrap(("\nWrite to locked file @" + LocalDateTime.now()).getBytes()));
+			Thread.sleep(LOCKED_TIME * 1000);
+			
+			lock.release();	//<--Release the log
+			out.printf("Release lock for file %s\n", p);
+			
+			
+			Thread.sleep(2 * 1000);
+			//
+			Files.readAllLines(p).forEach(out::println);
+		}
+		
+	}
+	
+	@Test
+	public void testLockPartOfFile() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		
+		try(FileChannel fc = FileChannel.open(p, EnumSet.of(
+				StandardOpenOption.WRITE
+//				StandardOpenOption.APPEND
+				))){
+			ForkJoinPool.commonPool().execute(() -> writeToLockFile(p));
+			out.printf("Partly Lock file %s\n", p);
+			FileLock lock = fc.lock(0, fc.size()/2, false);	//lock the first half of this channel
+//			FileLock lock = fc.tryLock();
+			
+			fc.position(0);	//<--------------------------- write in the unlocked part, note that the position cannot be set when APPEND is set.
+			fc.write(ByteBuffer.wrap(("\nWrite to locked part of a Partly locked file @" + LocalDateTime.now() + "\n").getBytes()));	
+			
+			fc.position(fc.size());	//<--------------------------- write in the unlocked part
+			fc.write(ByteBuffer.wrap(("\nWrite to unlocked part of a Partly locked file @" + LocalDateTime.now()).getBytes()));	
+			Thread.sleep(LOCKED_TIME * 1000);
+			
+			lock.release();	//<--Release the log
+			out.printf("Release part lock for file %s\n", p);
+			
+			
+			Thread.sleep(2 * 1000);
+			//
+			Files.readAllLines(p).forEach(out::println);
+		}
+		
+	}
+	
+	
+	void writeToLockFile(Path file){
+		try(FileChannel fc = FileChannel.open(file
+				, StandardOpenOption.WRITE
+				, StandardOpenOption.APPEND
+				)){
+			Thread.sleep(2 * 1000);	//<-  Wait for 2 seconds before trying to read || write to the file.
+			out.printf("Try to write into file %s @%s\n", file, LocalDateTime.now());
+			ByteBuffer buffer = ByteBuffer.wrap(("\nTry to write into file@" + LocalDateTime.now()).getBytes());
+			try {
+				fc.write(buffer);	//The process cannot access the file because another process has locked a portion of the file
+			} catch (Exception e) {
+				e.printStackTrace(out);
+			}
+			
+			
+			Thread.sleep(LOCKED_TIME * 1000);
+			out.printf("Try to write into file %s after a while @%s\n", file, LocalDateTime.now());
+			buffer.rewind();
+			fc.write(buffer);
+		}catch(Exception e){
+			e.printStackTrace(out);
+		}
+	}
+	
+
+	@Ignore
+	@Test
+	public void testCopyThroughChannel() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		Path copyTo = p.resolveSibling("copy-to-file.txt");
+		
+		ByteBuffer buffer = ByteBuffer.allocate(4 * 1024);	//buffer capacity: 4KB
+//		ByteBuffer buffer = ByteBuffer.allocateDirect(4 * 1024);
+		
+//		try(ReadableByteChannel reader = Files.newByteChannel(p, StandardOpenOption.READ);
+//				WritableByteChannel writer = Files.newByteChannel(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		try(FileChannel reader = FileChannel.open(p, StandardOpenOption.READ);
+				FileChannel writer = FileChannel.open(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+				){
+			out.printf("Copy from %s to %s\n", p, copyTo);
+			//
+			for(buffer.rewind(); 0 < reader.read(buffer); buffer.clear()){
+				buffer.flip();	//don't forget to flip the buffer after reading
+				while(buffer.hasRemaining()){
+					writer.write(buffer);
+				}
+			}
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Read from file %s\n", copyTo);
+			
+			Files.readAllLines(copyTo).forEach(out::println);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Delete file %s\n", copyTo);
+			Files.deleteIfExists(copyTo);
+		}
+
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testCopyThroughChannel2() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		Path copyTo = p.resolveSibling("copy-to-file.txt");
+		
+//		try(ReadableByteChannel reader = Files.newByteChannel(p, StandardOpenOption.READ);
+//				WritableByteChannel writer = Files.newByteChannel(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		try(FileChannel reader = FileChannel.open(p, StandardOpenOption.READ);
+				FileChannel writer = FileChannel.open(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+				){
+			out.printf("Copy from %s to %s\n", p, copyTo);
+
+			writer.transferFrom(reader, 0, reader.size());	//<-- transfer into writer from reader
+//			reader.transferTo(0, reader.size(), writer);	//<-- or from the reader transfered to writer;
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Read from file %s\n", copyTo);
+			
+			Files.readAllLines(copyTo).forEach(out::println);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Delete file %s\n", copyTo);
+			Files.deleteIfExists(copyTo);
+		}
+		
+	}
+	
+	
+	@Test
+	public void testCopyThroughChannel3() throws Exception{
+		Path p = Paths.get("data/ChannelWrittenFileTest.txt");
+		Path copyTo = p.resolveSibling("copy-to-file.txt");
+		
+//		try(ReadableByteChannel reader = Files.newByteChannel(p, StandardOpenOption.READ);
+//				WritableByteChannel writer = Files.newByteChannel(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		try(FileChannel reader = FileChannel.open(p, StandardOpenOption.READ);
+				FileChannel writer = FileChannel.open(copyTo, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+				){
+			out.printf("Copy from %s to %s\n", p, copyTo);
+			
+			MappedByteBuffer buffer = reader.map(MapMode.READ_ONLY, 0, reader.size());
+			writer.write(buffer);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Read from file %s\n", copyTo);
+			
+			Files.readAllLines(copyTo).forEach(out::println);
+			
+			
+			//
+			Thread.sleep(2 * 1000);
+			out.printf("Delete file %s\n", copyTo);
+			Files.deleteIfExists(copyTo);
+		}
+		
+	}
+	
+	private static final int LOCKED_TIME = 4;
 	private static final PrintStream out = System.out;
 }
 
