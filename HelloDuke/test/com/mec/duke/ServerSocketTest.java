@@ -6,7 +6,7 @@ import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
 
 import org.junit.Test;
 
@@ -44,11 +44,12 @@ public class ServerSocketTest {
 			out.println("Waiting for connections...");
 			
 			//wait for incoming connections
-//			ForkJoinPool.commonPool().execute(() -> acceptConnections(serverSocketChannel)); 
-			acceptConnections(serverSocketChannel);
+			ForkJoinPool.commonPool().execute(() -> acceptConnections(serverSocketChannel)); 
+//			acceptConnections(serverSocketChannel);
 			
 //			connectServer();
 			//
+			out.println("Server ended.");
 			Thread.sleep(50 * 1000);
 //			Arrays.asList("Hello", "World!").stream().forEach(out::println);
 		}

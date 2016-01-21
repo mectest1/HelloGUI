@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,6 +108,34 @@ public class StringTest {
 	public void testDeduce(){
 		Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream().reduce((l, r) -> l + r).ifPresent(out::println);
 	}
+	
+	
+	
+	
+	@Test
+	public void testEncapsulate(){
+//		Arrays.asList("Hello, World").stream().forEach(s -> encapsulateFunc(s, (String s2) -> printWitchException(s2)));	//<- unhandled exception
+//		Arrays.asList("Hello, World").stream().forEach(encapsulateFunc(this::printWithException));
+	}
+	
+	private void printWithException(String s) throws Exception{
+		out.println(s);
+	}
+	
+//	static <T, R>  Consumer<T, R> encapsulateFunc(Consumer<T, R> func){
+//		try{
+//			return func;
+//		}catch(Exception e){
+//			throw new RuntimeException(e);
+//		}
+//	}
+//	static <T>  Consumer<T> encapsulateFunc(Consumer<T> func){
+//		try{
+//			return func;
+//		}catch(Exception e){
+//			throw new RuntimeException(e);
+//		}
+//	}
 	
 	private static final PrintStream out = System.out;
 }
