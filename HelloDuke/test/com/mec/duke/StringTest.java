@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,6 +89,7 @@ public class StringTest {
 		out.printf("replace \\01|\\03 with 2: %s\n", pattern.matcher(s3).replaceAll("2"));
 	}
 	
+	@Ignore
 	@Test
 	public void testPatternMatch() throws Exception{
 		Pattern p = Pattern.compile("\01.*?\03");
@@ -97,6 +99,12 @@ public class StringTest {
 			out.println(m.group());
 		}
 		
+	}
+	
+	@Ignore
+	@Test
+	public void testDeduce(){
+		Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream().reduce((l, r) -> l + r).ifPresent(out::println);
 	}
 	
 	private static final PrintStream out = System.out;

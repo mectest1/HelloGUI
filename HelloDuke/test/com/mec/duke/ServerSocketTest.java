@@ -6,11 +6,11 @@ import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.concurrent.ForkJoinPool;
+import java.util.Arrays;
 
 import org.junit.Test;
 
-public class SocketsAppTest {
+public class ServerSocketTest {
 
 	@Test
 	public void testBlockingEchoServer() throws Exception{
@@ -44,16 +44,19 @@ public class SocketsAppTest {
 			out.println("Waiting for connections...");
 			
 			//wait for incoming connections
-			ForkJoinPool.commonPool().execute(() -> acceptConnections(serverSocketChannel)); 
+//			ForkJoinPool.commonPool().execute(() -> acceptConnections(serverSocketChannel)); 
+			acceptConnections(serverSocketChannel);
 			
+//			connectServer();
 			//
+			Thread.sleep(50 * 1000);
+//			Arrays.asList("Hello", "World!").stream().forEach(out::println);
 		}
 		
 		
 		
 	}
 
-	
 	private void acceptConnections(ServerSocketChannel serverSocketChannel){
 		try {
 			ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
@@ -68,22 +71,24 @@ public class SocketsAppTest {
 						
 						socketChannel.write(buffer);	//write 
 						
-//						if(buffer.hasRemaining()){
+						if(buffer.hasRemaining()){
 							buffer.compact();	//move content to start of buffer, and set position/limit to end of content/capacity.
 								//<-- What if false == buffer.hasRemaining()?
-//						}else{
+						}else{
 							buffer.clear();
-//						}
+						}
 					}
+					
 				}
-				
 			} 
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace(out);
 		}
 	}
 	
-	final int DEFAULT_PORT=  5555;
+	
+	
+	final int DEFAULT_PORT = 5555;
 	final String IP = "127.0.0.1";
 	
 	private static final PrintStream out = System.out;
