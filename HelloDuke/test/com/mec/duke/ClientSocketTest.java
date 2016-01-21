@@ -1,7 +1,5 @@
 package com.mec.duke;
 
-import static org.junit.Assert.fail;
-
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
@@ -11,12 +9,13 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.Random;
-import java.util.concurrent.ForkJoinPool;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ClientSocketTest {
 
+	@Ignore
 	@Test
 	public void testConnecToServer() throws Exception{
 //		fail("Not yet implemented");
