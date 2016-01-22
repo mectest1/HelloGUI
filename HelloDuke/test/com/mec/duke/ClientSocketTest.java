@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -106,6 +108,88 @@ public class ClientSocketTest {
 	}
 	
 	
+	@Test	//client test failed, may need to check this later (after knowing more about the network theory)
+	public void testNoBlockingClient() throws Exception{
+		ByteBuffer buffer = ByteBuffer.allocateDirect(2 * 1024);
+		ByteBuffer randomBuffer;
+		CharBuffer charBuffer;
+		
+		CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+		
+		//Open Selector and ServerSocketChannel by calling the open() method;
+		try(Selector selector = Selector.open()){
+			SocketChannel socketChannel = SocketChannel.open();
+			
+			//Check that both of them were successfully opened.
+			if(!(selector.isOpen() &&  socketChannel.isOpen())){
+				out.println("The socket channel or selector cannot be opened");
+				return;
+			}
+			
+			//Configure non-blocking mode
+			socketChannel.configureBlocking(false);
+			//set some options
+			socketChannel.setOption(StandardSocketOptions.SO_RCVBUF, 128 * 1024);
+			socketChannel.setOption(StandardSocketOptions.SO_SNDBUF, 128 * 1024);
+			socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
+			
+			//register the current channel with the given selector
+			socketChannel.register(selector, SelectionKey.OP_CONNECT);
+			out.printf("Localhost: %s\n", socketChannel.getLocalAddress());
+			
+			//waiting for the connection
+			while(selector.select(1000) > 0){
+				//get keys
+				for(SelectionKey key : selector.selectedKeys()){
+					
+					try(SocketChannel keySocketChannel = (SocketChannel) key.channel()){
+						//attempt a connection
+						if(key.isConnectable()){
+							//signal connection success
+							out.println("I am connected.");
+							
+							//close pending connections
+							if(keySocketChannel.isConnectionPending()){
+								keySocketChannel.finishConnect();
+							}
+							
+							//read/write from/to server
+							while(-1 < keySocketChannel.read(buffer)){
+								buffer.flip();
+								
+								charBuffer = decoder.decode(buffer);
+								out.printf("Received message: %s\n", charBuffer.toString());
+								
+								//
+								if(buffer.hasRemaining()){
+									buffer.compact();
+								}else{
+									buffer.clear();
+								}
+								
+								
+								//
+								int r = new Random().nextInt(100);
+								if(50 == r){
+									out.println("50 was generated! Close the socket channel");
+									break;
+								}else{
+									randomBuffer = ByteBuffer.wrap("Random Number".concat(String.valueOf(r)).getBytes("UTF-8"));
+									keySocketChannel.write(randomBuffer);
+									
+									Thread.sleep(1500);
+								}
+							}
+						}
+					}
+				}
+				selector.selectedKeys().clear();
+			}
+			
+		}
+		
+	}
+	
 
 	
 	final int DEFAULT_PORT = 5555;
@@ -114,3 +198,32 @@ public class ClientSocketTest {
 	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
