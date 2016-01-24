@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.mec.resources.Msg;
@@ -39,6 +40,14 @@ public class Person{
 		this.firstName.set(firstName);
 		this.lastName.set(lastName);
 		this.birthDate.set(birthDate);
+	}
+	
+	public Person(String[] fields){	//a convenient constructor to create new Person object from string array
+		firstName.set(fields[0]);
+		lastName.set(fields[1]);
+		if(2 < fields.length && Objects.nonNull(fields[2]) && !fields[2].isEmpty()){
+			birthDate.set(LocalDate.parse(fields[2]));
+		}
 	}
 	
 	//personId property
