@@ -71,7 +71,7 @@ public class ComboBoxWithConverterApp extends Application {
 	}
 	
 	
-	static class PersonStringConverter extends StringConverter<Person>{
+	public static class PersonStringConverter extends StringConverter<Person>{
 
 		@Override
 		public String toString(Person object) {
