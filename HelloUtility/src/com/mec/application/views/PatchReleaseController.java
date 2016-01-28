@@ -194,6 +194,14 @@ public class PatchReleaseController implements MsgLogger{
 //		appendLog(msg);
 		logMsg.appendText(msg);
 	}
+	
+
+//	@Override
+//	public void log(Exception e) {
+//		MsgLogger.super.log(e);	//<- use this syntax to invoke the defualt method in interface
+//	}
+
+
 
 
 
