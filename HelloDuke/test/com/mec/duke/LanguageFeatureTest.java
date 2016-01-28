@@ -1,7 +1,6 @@
 package com.mec.duke;
 
-import static org.junit.Assert.*;
-
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class LanguageFeatureTest {
@@ -17,4 +16,48 @@ public class LanguageFeatureTest {
 	interface C2 extends C{}
 	class A implements B, C{}
 
+	
+	//Example from http://www.oracle.com/technetwork/articles/java/architect-lambdas-part1-2080972.html
+	@Ignore
+	@Test
+	public void testInnertClasses(){
+
+	    InstanceOuter io = new InstanceOuter(12);
+
+	    // Is this a compile error? Seems nope.
+	    InstanceOuter.InstanceInner ii = io.new InstanceInner();
+
+	    // What does this print?
+	    ii.printSomething(); // prints 12
+
+	    // What about this?
+	    StaticOuter.StaticInner si = new StaticOuter.StaticInner();
+	    si.printSomething(); // prints 24
+	}
+	
+	static class InstanceOuter {
+		  public InstanceOuter(int xx) { x = xx; }
+
+		  private int x;
+
+		  class InstanceInner {
+		    public void printSomething() {
+		      System.out.println("The value of x in my outer is " + x);
+//		      ++x;	//would compile;
+		    }
+		  }
+		}
+
+		static class StaticOuter {
+		  private static int x = 24;
+
+		  static class StaticInner {
+		    public void printSomething() {
+		      System.out.println("The value of x in my outer is " + x);
+//		      ++x;	//would compile
+		    }
+		  }
+		}
+
+	
 }
