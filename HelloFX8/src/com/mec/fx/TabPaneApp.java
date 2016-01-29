@@ -3,6 +3,7 @@ package com.mec.fx;
 import com.mec.resources.Msg;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
@@ -10,10 +11,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TabPaneApp extends Application {
@@ -30,7 +33,19 @@ public class TabPaneApp extends Application {
 		TabPane tabPane = new TabPane();
 		tabPane.getTabs().addAll(generalTab, addressTab);
 		
+		ToggleButton floatBtn = new ToggleButton(Msg.get(this, "toggle.float"));
+		floatBtn.setOnAction(e -> {
+			if(floatBtn.isSelected()){
+				tabPane.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING);	//set TabPane to floating mode
+			}else{
+				tabPane.getStyleClass().remove(TabPane.STYLE_CLASS_FLOATING); //set TabPane in recessed mode
+			}
+		});
+		HBox toggleBar= new HBox(floatBtn);
+		toggleBar.setAlignment(Pos.CENTER_RIGHT);
+		
 		BorderPane root = new BorderPane(tabPane);
+		root.setBottom(toggleBar);
 		root.setStyle(Msg.get(FlowPaneApp.class, "style"));
 		
 		Scene scene = new Scene(root);
@@ -84,17 +99,7 @@ public class TabPaneApp extends Application {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	ImageView getImage(String imgUrl){
+	static ImageView getImage(String imgUrl){
 		return new ImageView(new Image(imgUrl));
 	}
 

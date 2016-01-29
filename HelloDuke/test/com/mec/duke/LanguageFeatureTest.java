@@ -1,10 +1,13 @@
 package com.mec.duke;
 
+import java.io.PrintStream;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class LanguageFeatureTest {
 
+	@Ignore
 	@Test
 	public void testInterfaceConversion() {
 		C2 c2 = (C2)new A();	//<- Come on, A is not event a type of C2, right?
@@ -36,28 +39,51 @@ public class LanguageFeatureTest {
 	}
 	
 	static class InstanceOuter {
-		  public InstanceOuter(int xx) { x = xx; }
+	  public InstanceOuter(int xx) { x = xx; }
 
-		  private int x;
+	  private int x;
 
-		  class InstanceInner {
-		    public void printSomething() {
-		      System.out.println("The value of x in my outer is " + x);
+	  class InstanceInner {
+	    public void printSomething() {
+	      System.out.println("The value of x in my outer is " + x);
 //		      ++x;	//would compile;
-		    }
-		  }
-		}
+	    }
+	  }
+	}
 
-		static class StaticOuter {
-		  private static int x = 24;
+	static class StaticOuter {
+	  private static int x = 24;
 
-		  static class StaticInner {
-		    public void printSomething() {
-		      System.out.println("The value of x in my outer is " + x);
+	  static class StaticInner {
+	    public void printSomething() {
+	      System.out.println("The value of x in my outer is " + x);
 //		      ++x;	//would compile
-		    }
-		  }
-		}
+	    }
+	  }
+	}
 
 	
+	
+	@Test
+	public void testClassBlockCode(){
+		D d = new D();
+		D d2 = new D();
+	}
+		
+	static class D{
+		static{
+			out.println("Static Code Executed\n");
+		}
+		{
+			out.println("Instance Code Executed");
+		}
+		public D(){
+			out.println("Constructor Executed\n");
+		}
+	}
+		
+	
+		
+	private static final PrintStream out = System.out;
+		
 }
