@@ -90,6 +90,12 @@ public class ContextMenuApp extends Application {
 			drawAlgorithm.accept(gc);
 		}
 		
+		public void clearAndDrawWith(GraphicsContext gc){
+			gc.clearRect(0, 0, CIRCLE_RADIUS, CIRCLE_RADIUS);
+			gc.setFill(Color.TAN);
+			drawAlgorithm.accept(gc);
+		}
+		
 		private Consumer<GraphicsContext> drawAlgorithm;
 		
 	}
