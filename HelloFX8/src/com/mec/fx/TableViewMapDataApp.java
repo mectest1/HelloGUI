@@ -61,7 +61,7 @@ public class TableViewMapDataApp extends Application {
 	
 	
 	@SuppressWarnings("unchecked")
-	public void addColumns(TableView table){
+	public void addColumns(TableView<Map> table){
 		TableColumn<Map, Integer> idCol = new TableColumn<>(Msg.get(this, "header.id"));
 		idCol.setCellValueFactory(new MapValueFactory<>(idColumnKey));
 		
