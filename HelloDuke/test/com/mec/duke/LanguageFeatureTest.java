@@ -1,6 +1,10 @@
 package com.mec.duke;
 
+import java.io.File;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -63,7 +67,7 @@ public class LanguageFeatureTest {
 	}
 
 	
-	
+	@Ignore
 	@Test
 	public void testClassBlockCode(){
 		D d = new D();
@@ -82,6 +86,20 @@ public class LanguageFeatureTest {
 		}
 	}
 		
+	
+	/**
+	 * Method Reference Types in Java8:
+	 * 1, Method.invoke(null, args ...) 
+	 * 2, Method.invoke(inst, args ...)
+	 * 3, Method.invoke(obj1, [obj2,] args...)
+	 * 3, Constructor.invoke(args, args ...)
+	 */
+	@Test
+	public void testMethodReference(){
+		File[] hiddenFiles = new File("c:/").listFiles(File::isHidden);	//<- Note that File.isHidden() is not static method -- it's only a normal instance method
+							
+		Arrays.stream(hiddenFiles).forEach(out::println);
+	}
 	
 		
 	private static final PrintStream out = System.out;
