@@ -1,12 +1,6 @@
 package com.mec.fx;
 
-import java.io.PrintStream;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
-
-import org.junit.Ignore;
-import org.junit.Test;
 
 import com.mec.resources.Msg;
 
@@ -16,20 +10,58 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.concurrent.Worker.State;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class OneShotTaskApp extends Application {
 
+	Button startBtn = new Button(Msg.get(this, "button.start"));
+	Button cancelBtn = new Button(Msg.get(this, "button.cancel"));
+	Button exitBtn = new Button(Msg.get(this, "button.exit"));
+	
+	
+	//Create the task
+	PrimeFinderTask task = new PrimeFinderTask();
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		//Add event handlers to the buttons
+		startBtn.setOnAction(e -> startTask());
+		cancelBtn.setOnAction(e -> task.cancel());
+		exitBtn.setOnAction(e -> primaryStage.close());
+		
+		//Enable/Disable the Start and Cancel buttons
+		startBtn.disableProperty().bind(task.stateProperty().isNotEqualTo(State.READY));
+		cancelBtn.disableProperty().bind(task.stateProperty().isNotEqualTo(State.RUNNING));
+		
+		//
+		GridPane pane = new WorkerStateUI(task);
+		HBox buttonBox = new HBox(5, startBtn, cancelBtn);
+		BorderPane root = new BorderPane(pane);
+		root.setTop(buttonBox);
+		root.setStyle(Msg.get(FlowPaneApp.class, "style"));
+		
+		Scene scene = new Scene(root);
+		primaryStage.setScene(scene);
+		primaryStage.setTitle(Msg.get(this, "title"));
+		primaryStage.show();
 	}
 
+	
+	void startTask(){
+		//Schedule the task on the background thread
+		Thread backgroundThread = new Thread(task);
+		backgroundThread.setDaemon(true);
+		backgroundThread.start();
+	}
 	
 //	@Ignore
 //	@Test
@@ -64,7 +96,7 @@ public class OneShotTaskApp extends Application {
 			final ObservableList<Long> results = FXCollections.observableArrayList();
 			
 			//Update the title
-			updateMessage(Msg.get(this, "title"));
+			updateTitle(Msg.get(this, "title"));
 			
 			long count = upperLimit - lowerLimit + 1;
 			long counter = 0;
@@ -83,7 +115,33 @@ public class OneShotTaskApp extends Application {
 					continue;
 				}
 				
-				//
+				//Increment the counter
+				++counter;
+				
+				//Update message;
+				updateMessage(String.format(Msg.get(this, "message"), i));
+				
+				//Sleep fpr some time to simulate a long running task
+				try{
+					Thread.sleep(sleepTimeInMillis);
+				}catch(InterruptedException e){
+					//Check if the task is cancelled
+					if(isCancelled()){
+						break;
+					}
+				}
+				
+				//Check if the number ifs a prim number
+				if(PrimeUtil.isPrime(i)){
+					//Add to the result list
+					results.add(i);
+					
+					//Publish the read-only list to give the GUI access to the partial results
+					updateValue(FXCollections.unmodifiableObservableList(results));
+				}
+				
+				//Update the progress
+				updateProgress(counter, count);
 				
 			}
 			
@@ -91,7 +149,28 @@ public class OneShotTaskApp extends Application {
 			
 			return results;
 		}
-	
+
+		@Override
+		protected void succeeded() {
+			super.succeeded();
+			updateMessage(Msg.get(this, "message.succeed"));
+		}
+
+		@Override
+		protected void cancelled() {
+			super.cancelled();
+			updateMessage(Msg.get(this, "message.cancelled"));
+		}
+
+		@Override
+		protected void failed() {
+			super.failed();
+			updateMessage(Msg.get(this, "message.failed"));
+		}
+
+		
+		
+		
 	}
 	
 //	private static final PrintStream out = System.out;
@@ -156,7 +235,9 @@ class WorkerStateUI extends GridPane{
 				);
 		progress.textProperty().bind(new When(worker.progressProperty().isEqualTo(-1))
 				.then(Msg.get(this, "info.unknown"))
-				.otherwise(worker.progressProperty().asString())
+//				.otherwise(worker.progressProperty().asString())
+				.otherwise(worker.progressProperty().multiply(100)
+						.asString(Msg.get(this, "info.progress.format")))
 				);
 		progressBar.progressProperty().bind(worker.progressProperty());
 		value.textProperty().bind(worker.valueProperty().asString());
