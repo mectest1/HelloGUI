@@ -16,7 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * ref: ref: http://www.programcreek.com/2013/02/leetcode-permutations-java/
+ * ref: http://www.programcreek.com/2013/02/leetcode-permutations-java/
  * @author MEC
  *
  */
@@ -373,7 +373,7 @@ public class PermutationTest {
 		 * </ul>
 		 * ]</dd>
 		 * <dl>
-		 * @param items items list to impose permutation
+		 * @param items items list to impose permutation on
 		 * @return
 		 */
 		public static <T> List<List<T>> permutate(List<T> items){
