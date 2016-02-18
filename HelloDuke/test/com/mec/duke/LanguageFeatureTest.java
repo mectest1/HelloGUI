@@ -2,9 +2,11 @@ package com.mec.duke;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -94,6 +96,7 @@ public class LanguageFeatureTest {
 	 * 3, Method.invoke(obj1, [obj2,] args...)
 	 * 3, Constructor.invoke(args, args ...)
 	 */
+	@Ignore
 	@Test
 	public void testMethodReference(){
 		File[] hiddenFiles = new File("c:/").listFiles(File::isHidden);	//<- Note that File.isHidden() is not static method -- it's only a normal instance method
@@ -102,6 +105,25 @@ public class LanguageFeatureTest {
 	}
 	
 		
+	class Outer{
+		private int x;			//<-
+		class Inner{
+			private int x;		//<-
+			void derp(){
+				out.println(Outer.this.x);	//<-
+			}
+			
+			void derp2(){
+				out.println(x);
+			}
+		}
+		
+		void derp(Inner inner){
+			out.println(inner.x);	//<- 
+		}
+	}
+	
+	
 	private static final PrintStream out = System.out;
 		
 }
