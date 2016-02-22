@@ -104,6 +104,18 @@ public class LanguageFeatureTest {
 		Arrays.stream(hiddenFiles).forEach(out::println);
 	}
 	
+	
+
+	@FunctionalInterface
+	interface FuncInterfaceWithMultipleAbstractMethods{
+		void derp();
+		boolean equals(Object obj);	//<- extract from java.lang.Object
+//		void derp2();	//<-Nah
+		String toString();	//<- Still OK
+//		Class<?> getClass();	//<- final method cannot be overridden;
+//		Object clone();	//<- Object.clone() is protected, thus means this method is abstract~?
+	}
+	
 		
 	class Outer{
 		private int x;			//<-
