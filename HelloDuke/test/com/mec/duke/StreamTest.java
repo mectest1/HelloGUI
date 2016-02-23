@@ -1,17 +1,24 @@
 package com.mec.duke;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -491,16 +498,136 @@ public class StreamTest {
 	
 	//-----------------------
 	
-	
+	@Ignore
 	@Test
-	public void testPrimtiveStream(){
+	public void testGeneratePythagoreanTriples(){
+		final int upperBound = 100;
+		Stream<int[]> pythagoreanTriples = IntStream.rangeClosed(1, upperBound).boxed().flatMap(a -> 	
+			//<- IntStream.flatMap can only return IntStream, thus IntStream should be boxed first
+			IntStream.rangeClosed(a, upperBound).filter(b -> 0 == (Math.sqrt(a * a + b * b) % 1))
+				.mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)})
+		);
 		
+		pythagoreanTriples.forEach(t -> out.printf("[%s, %s, %s]\n",t[0], t[1], t[2]));
+	}
+	
+	@Ignore
+	@Test
+	public void testPythagoreanTriples2(){
+		final int upperBound = 100;
+		IntStream.rangeClosed(1, upperBound).boxed().flatMap(a -> 
+			IntStream.rangeClosed(a, upperBound).mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)})
+				.filter(t -> 0 == t[2] % 1)	//check if the number is an integer
+		).forEach(t -> out.printf("[%s, %s, %s]\n", (int)t[0], (int)t[1], (int)t[2]));
+	}
+	
+	@Ignore
+	@Test
+	public void testStreamFromValues(){
+		Stream.of("Hello", "World").map(String::toUpperCase).forEach(out::println);
+	}
+	
+	@Ignore
+	@Test
+	public void testStreamNumbers(){
+		IntSummaryStatistics is = Arrays.stream(new int[]{2, 3, 5, 7, 11, 13}).summaryStatistics();
+		out.printf("Sum of the array: %s\n", is.getSum());
+	}
+	
+	@Ignore
+	@Test
+	public void testStreamFromFile() throws IOException{
+		Path p = Paths.get("test", getClass().getName().replaceAll("\\.", "/") + ".java");
+		try(Stream<String> lines = Files.lines(p, Charset.defaultCharset());){
+			List<String> words = lines.flatMap(l -> Arrays.stream(l.split("\\s+"))).collect(Collectors.toList());
+			out.printf("Word counts for file %s is %s, \nunique words: %s (counted with distinct())\nOr %s (counted with set)", 
+						p, words.stream().count(), words.stream().distinct().count(), 
+						words.stream().collect(Collectors.toSet()).size()
+						);
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testFibonacciThroughIterate(){
+		Stream.iterate(new int[]{0, 1}, t -> new int[]{t[1], t[0] + t[1]})
+			.map(t -> t[0])
+			.limit(10).forEach(out::println);
+	}
+	
+	@Ignore
+	@Test
+	public void testGenerate(){
+		Stream.generate(Math::random)
+			.limit(10)	//<- comment out this line to print out random number forever
+			.forEach(out::println);
+	}
+	
+	@Ignore
+	@Test
+	public void testGenerateWithState(){
+		IntSupplier s = new IntSupplier() {
+			int previous = 0;
+			int current = 1;	//<- record the states;
+			
+			@Override
+			public int getAsInt() {
+				int retval = previous;
+				int next = current + previous;
+				previous = current;
+				current = next;
+				return retval;
+			}
+		};
 		
+		IntStream.generate(s).limit(10).forEach(out::println);
+	}
+	
+	@Ignore
+	@Test
+	public void testGrouping(){
+		transactions().stream().collect(Collectors.groupingBy(
+				Transaction::getTrader, 	
+				Collectors.mapping(Transaction::getValue, Collectors.toList()))
+			).forEach((t, lv) -> out.printf("%s from %s - %s\n", t.getName(), t.getCity(), lv));
+		
+		transactions().stream().collect(Collectors.groupingBy(
+				t -> t.getTrader().getName(), 	
+//				(Supplier<TreeMap<String, List<Integer>>>)	//In case the Compiler failed to recognize the FunctionalInterface, may need to specify it explicitly;
+				TreeMap::new,
+				Collectors.mapping(Transaction::getValue, Collectors.toList()))
+				).forEach((t, lv) -> out.printf("%s - %s\n", t, lv));
+	}
+	
+	@Ignore
+	@Test
+	public void testCollect(){
+//		IntStream.range(0, 10).collect(() -> 0, (l, i) -> l + i, (Integer l, Integer r) -> l + r);
+		out.println(s.get().collect(Collectors.summarizingInt(i -> i)));
+		
+//		Function<Integer, Integer> id = Function.<Integer>identity();
+//		Function<Integer, Integer> id2 = Function.identity();
+		out.println(s.get().collect(Collectors.counting()));
+		out.println(s.get().collect(Collectors.summingInt(i -> i)));
+		out.println(s.get().collect(Collectors.minBy(Integer::compare)).get());
+		out.println(s.get().collect(Collectors.averagingInt(i -> i)));
+		out.println(s.get().collect(Collectors.maxBy(Integer::compare)).get());
+		
+		out.println(s.get().map(i -> Integer.toString(i)).collect(Collectors.joining(", ", "[", "]")));
+		out.println(s.get().map(i -> i.toString()).collect(Collectors.reducing((i, j) -> i + ", " + j)).get());
 		
 	}
 	
+	@Test
+	public void testReducing(){
+
+		//
+		out.println(s.get().reduce(Integer::sum).get());
+		out.println(s.get().collect(Collectors.summingInt(i -> i)));
+		out.println(s.get().collect(Collectors.reducing(Integer::sum)).get());
+	}
 	
-	
+	private Supplier<Stream<Integer>> s = () -> IntStream.range(0, 100).boxed();
 	
 	private static final PrintStream out = System.out;
 	
@@ -525,7 +652,28 @@ public class StreamTest {
 		
 		//
 		Stream<Integer> fibonacci2(){
-			return Stream.iterate(new int[]{0, 1}, t -> new int[]{t[1], t[0] + t[1]}).map(t -> t[0]);
+			return Stream.iterate(new int[]{0, 1}, t -> new int[]{t[1], t[0] + t[1]}).map(t -> t[0])
+//					.mapToInt(i -> i).boxed()
+					;
+		}
+		
+		//
+		Stream<Integer> fibonacci3(){
+			IntSupplier s = new IntSupplier() {
+				int previous = 0;
+				int current = 1;	//<- record the states;
+				
+				@Override
+				public int getAsInt() {
+					int retval = previous;
+					int next = current + previous;
+					previous = current;
+					current = next;
+					return retval;
+				}
+			};
+			
+			return IntStream.generate(s).boxed();
 		}
 	}
 	
