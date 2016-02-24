@@ -10,9 +10,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -618,14 +620,123 @@ public class StreamTest {
 		
 	}
 	
+	@Ignore
 	@Test
 	public void testReducing(){
 
 		//
 		out.println(s.get().reduce(Integer::sum).get());
 		out.println(s.get().collect(Collectors.summingInt(i -> i)));
-		out.println(s.get().collect(Collectors.reducing(Integer::sum)).get());
+		out.println(s.get().collect(Collectors.reducing(Integer::sum)).get());	//<------------------------
 	}
+	
+	
+	@Ignore
+	@Test
+	public void testGroupingBy(){
+		out.println(menus().mapToInt(Dish::getCalories).sum());
+//		IntStream.range(0, 10).boxed().mapToInt(Function.identity());	//<- compile error: cannot convert from Function to ToIntFunction;
+		IntStream.range(0, 10).boxed().mapToInt(i -> i);
+		
+		menus().collect(
+				Collectors.collectingAndThen(
+						Collectors.groupingBy(Dish::getType, Collectors.partitioningBy(Dish::isVegetarian))
+						,
+						m -> {
+							m.entrySet().forEach(out::println); 
+							return m.keySet();
+						}
+					)
+				
+			).forEach(out::println);
+		//
+//		Collectors.groupingB
+		menus().collect(Collectors.groupingBy(Dish::getType, Collectors.summingInt(Dish::getCalories))).entrySet().forEach(out::println);
+		//
+	}
+	
+	@Ignore
+	@Test
+	public void testGroupingBy2(){
+//		Function<Dish, CalorieLevel> classifier = d -> {
+//			if(400 >= d.getCalories()){
+//				return CalorieLevel.DIET;
+//			}else if(700 >= d.getCalories()){
+//				return CalorieLevel.NORMAL;
+//			}else{
+//				return CalorieLevel.FAT;
+//			}
+//		};
+		Function<Dish, CalorieLevel> classifier = CalorieLevel::getCalorieLevel;
+		menus().collect(Collectors.groupingBy(classifier)).entrySet().forEach(out::println);;
+		out.println();
+		menus()
+//		.collect(Collectors.groupingBy(Dish::getType, 
+//				Collectors.groupingBy(classifier)
+//				))
+//		.collect(Collectors.groupingBy(Dish::getType
+//				,
+//				Collectors.collectingAndThen(
+//							Collectors.groupingBy(classifier), 
+//							m -> m.values().stream().map(ld -> ld.stream().map(Dish::getName).collect(Collectors.toList())).collect(Collectors.toList())
+//						)
+//				
+//				))
+		.collect(Collectors.groupingBy(Dish::getType, 
+				Collectors.groupingBy(classifier,
+						Collectors.mapping(Dish::getName, Collectors.toList())
+						)
+				))
+		.entrySet().forEach(out::println);
+//		.forEach((k, v) -> out.printf("%s = {%s}\n", k, 
+//				v.values().stream().map(Dish::getName).collect(Collectors.joining(", ", "{", "}"))
+//				));
+		
+		
+		out.println();
+		out.println();
+		menus().collect(Collectors.groupingBy(Dish::getType, Collectors.summingInt(Dish::getCalories))).entrySet().forEach(out::println);
+	}
+	
+	@Ignore
+	@Test
+	public void testGroupingBy3(){
+		//<- Find Dish with highest calories for each Dish Type
+		menus().collect(Collectors.groupingBy(Dish::getType,  Collectors.maxBy(Comparator.comparingInt(Dish::getCalories)))).entrySet().forEach(out::println);
+		
+		out.println();
+		menus().collect(Collectors.groupingBy(Dish::getType, 
+				Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparingInt(Dish::getCalories)), Optional::get)	//<- Collect and extract the optinoal value
+				)).entrySet().forEach(out::println);
+	}
+	
+	@Test
+	public void testGroupingAndMapping(){
+		menus().collect(Collectors.groupingBy(Dish::getType,
+				Collectors.mapping(CalorieLevel::getCalorieLevel, 
+//						Collectors.toSet()
+						Collectors.toCollection(HashSet::new)	//<- specify the type of Set
+					)
+			)).entrySet().forEach(out::println);
+//		HashSet.class;
+	}
+	
+	
+	enum CalorieLevel{
+		DIET, NORMAL, FAT
+		;
+		
+		static CalorieLevel getCalorieLevel(Dish d){
+			if(400 >= d.getCalories()){
+				return CalorieLevel.DIET;
+			}else if(700 >= d.getCalories()){
+				return CalorieLevel.NORMAL;
+			}else{
+				return CalorieLevel.FAT;
+			}
+		}
+	
+	};
 	
 	private Supplier<Stream<Integer>> s = () -> IntStream.range(0, 100).boxed();
 	
