@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -710,6 +711,7 @@ public class StreamTest {
 				)).entrySet().forEach(out::println);
 	}
 	
+	@Ignore
 	@Test
 	public void testGroupingAndMapping(){
 		menus().collect(Collectors.groupingBy(Dish::getType,
@@ -722,6 +724,39 @@ public class StreamTest {
 	}
 	
 	
+	@Ignore
+	@Test
+	public void testPartition(){
+		menus().collect(Collectors.partitioningBy(Dish::isVegetarian
+				, Collectors.groupingBy(Dish::getType
+						, 
+						Collectors.mapping(Dish::getName, Collectors.toList())
+						)
+				)).entrySet().forEach(out::println);
+		
+		menus().collect(Collectors.partitioningBy(Dish::isVegetarian	//partition with isVegetarian
+//				, Collectors.collectingAndThen(
+//						Collectors.maxBy(Comparator.comparing(Dish::getCalories))
+//						, Optional::get)
+				, Collectors.collectingAndThen(
+					Collectors.collectingAndThen(
+						Collectors.maxBy(Comparator.comparing(Dish::getCalories))	//<- collect through "maxBy";
+						, Optional::get) 											//Then get the optional value
+					, Dish::getName													//Then get the dish name
+					)
+				)).entrySet().forEach(out::println);;
+				
+		menus().collect(Collectors.partitioningBy(Dish::isVegetarian
+				, Collectors.counting()
+				)).entrySet().forEach(out::println);
+	}
+	
+	@Test
+	public void testPartition2(){	//Parition prime numbers;
+		Predicate<Integer> isPrime = i -> !IntStream.rangeClosed(2, (int) Math.sqrt(i)).anyMatch(j -> 0 == i%j);
+		IntStream.rangeClosed(2, 100).boxed().collect(Collectors.partitioningBy(isPrime))
+			.entrySet().forEach(out::println);
+	}
 	enum CalorieLevel{
 		DIET, NORMAL, FAT
 		;
