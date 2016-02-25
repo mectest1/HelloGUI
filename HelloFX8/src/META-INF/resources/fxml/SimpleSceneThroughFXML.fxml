@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox>
+	<children>
+		<Label text="FXML is cool"/>
+		<Button text="Say Hello"/>
+	</children>
+</VBox>
