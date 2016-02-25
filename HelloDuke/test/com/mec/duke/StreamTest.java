@@ -9,20 +9,32 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collector.Characteristics;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -751,12 +763,169 @@ public class StreamTest {
 				)).entrySet().forEach(out::println);
 	}
 	
+	@Ignore
 	@Test
 	public void testPartition2(){	//Parition prime numbers;
 		Predicate<Integer> isPrime = i -> !IntStream.rangeClosed(2, (int) Math.sqrt(i)).anyMatch(j -> 0 == i%j);
 		IntStream.rangeClosed(2, 100).boxed().collect(Collectors.partitioningBy(isPrime))
 			.entrySet().forEach(out::println);
 	}
+	
+	
+	@Ignore
+	@Test
+	public void testCollectorsFactoryMethodSummary(){
+		//toList
+		menus().collect(Collectors.toList());
+		
+		//toSet
+		menus().collect(Collectors.toSet());
+		
+		//toCollection
+//		menus().collect(Collectors.toCollection(() -> new TreeSet<>()));
+		menus().collect(Collectors.toCollection(TreeSet<Dish>::new));
+		
+		//counting
+		menus().collect(Collectors.counting());
+		
+		//summingInt
+		menus().collect(Collectors.summingInt(Dish::getCalories));
+		
+		//averageInt
+		menus().collect(Collectors.averagingInt(Dish::getCalories));
+		
+		//summarizingInt
+		menus().collect(Collectors.summarizingInt(Dish::getCalories));
+		
+		//join
+		menus().map(Dish::getName).collect(Collectors.joining(", "));
+		
+		//maxBy
+		menus().collect(Collectors.maxBy(Comparator.comparingInt(Dish::getCalories)));
+		
+		//minBy
+		menus().collect(Collectors.minBy(Comparator.comparingInt(Dish::getCalories)));
+		
+		//reducing
+		menus().collect(Collectors.reducing(0, Dish::getCalories, Integer::sum));
+		
+		//collectingAndThen
+		menus().collect(Collectors.collectingAndThen(Collectors.toList(), List::size));
+		
+		//groupingBy
+		menus().collect(Collectors.groupingBy(Dish::getType));
+		
+		//partitioningBy
+		menus().collect(Collectors.partitioningBy(Dish::isVegetarian));
+		
+	}
+	
+	@Ignore
+	@Test
+	public void testCollecting(){
+//		menus().collect(
+//				ArrayList::new,
+//				List::add,
+//				(l1, l2) -> {l1.addAll(l2); return l1;}
+//				);
+//		menus().collect(Collections::emptyList, List::add, List::add);	//<- the compiler cannot deduce the generic type here, since thre is not type to return;
+		
+		List<Dish> dishes = menus().collect(ArrayList::new, List::add, List::addAll);	//<- this will work;
+	}
+	
+	@Ignore
+	@Test
+	public void testCollectorInterface(){
+		DoubleStream.generate(Math::random).limit(10).boxed()
+			.collect(new ToListCollector<Double>())			//1
+			.stream().forEach(out::println);
+		;
+		
+		DoubleStream.generate(Math::random).limit(10).boxed()
+		.collect(new ToListCollector2<Double>())			//2
+		.stream().forEach(out::println);
+		;
+		
+		Collector<Double, List<Double>, List<Double>> toListCollector3 = Collector.of(ArrayList::new, 
+				List::add, 
+				(t1, t2) -> {t1.addAll(t2); return t1;}, 
+				Characteristics.IDENTITY_FINISH);
+		DoubleStream.generate(Math::random).limit(10).boxed()
+		.collect(toListCollector3)							//3
+		.stream().forEach(out::println);
+		;
+		
+		
+	}
+	
+	static class ToListCollector2<T> implements Collector<T, List<T>, List<T>>{
+
+		@Override
+		public Supplier<List<T>> supplier() {
+			return ArrayList::new;
+		}
+
+		@Override
+		public BiConsumer<List<T>, T> accumulator() {
+//			return List<T>::add;
+			return List::add;
+		}
+
+		@Override
+		public BinaryOperator<List<T>> combiner() {
+			return (t1, t2) -> {
+				t1.addAll(t2);
+				return t1;
+			};
+		}
+
+		@Override
+		public Function<List<T>, List<T>> finisher() {
+			return Function.identity();
+		}
+
+		@Override
+		public Set<Characteristics> characteristics() {
+//			return EnumSet.<Collector.Characteristics>of(Characteristics.IDENTITY_FINISH);	//or
+			return Collections.unmodifiableSet(EnumSet.of(Characteristics.IDENTITY_FINISH));	//<- this set should be immutable
+		}
+		
+	}
+	
+	static class ToListCollector<T> implements Collector<T, List<? super T>, List<? super T>>{
+
+		@Override
+		public Supplier<List<? super T>> supplier() {
+			return ArrayList::new;
+		}
+
+		@Override
+		public BiConsumer<List<? super T>, T> accumulator() {
+			return (a, t) -> a.add(t);
+		}
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public BinaryOperator<List<? super T>> combiner() {
+			return (t1, t2) -> {
+				t2.stream().forEach(e -> t1.add((T)e));
+				return t1;
+			};
+		}
+
+		@Override
+		public Function<List<? super T>, List<? super T>> finisher() {
+			return Function.identity();
+		}
+
+		@Override
+		public Set<Characteristics> characteristics() {
+			return Collections.unmodifiableSet(EnumSet.of(Characteristics.IDENTITY_FINISH));
+		}
+
+		
+	}
+	
 	enum CalorieLevel{
 		DIET, NORMAL, FAT
 		;
@@ -774,6 +943,94 @@ public class StreamTest {
 	};
 	
 	private Supplier<Stream<Integer>> s = () -> IntStream.range(0, 100).boxed();
+	
+	
+	@Ignore
+	@Test
+	public void testCollector2(){
+		IntStream.rangeClosed(2, 100).boxed().collect(new PrimeNumberCollector()).entrySet().forEach(out::println);
+	}
+	
+	/**
+	 * i: number to test whether it is prime;
+	 * primes: previously tested prime number
+	 */
+	final BiPredicate<Integer, Collection<Integer>> isPrime = (i, primes) -> {
+		return !primes.stream().filter(j -> j <= Math.sqrt(i)).anyMatch(j -> 0 == i %j);
+	};
+	
+	class PrimeNumberCollector implements Collector<Integer, Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>>{
+
+		@Override
+		public Supplier<Map<Boolean, List<Integer>>> supplier() {
+			return () -> new HashMap<Boolean, List<Integer>>(){
+				private static final long serialVersionUID = 8686539634523436098L;
+
+				{
+					put(true, new ArrayList<Integer>());
+					put(false, new ArrayList<Integer>());
+				}
+			};
+		}
+
+		@Override
+		public BiConsumer<Map<Boolean, List<Integer>>, Integer> accumulator() {
+			return (m, i) -> m.get(isPrime.test(i, m.get(true))).add(i);
+		}
+
+		@Override
+		public BinaryOperator<Map<Boolean, List<Integer>>> combiner() {
+//			throw new UnsupportedOperationException();	//<- This collector doesn't support parallelism;
+			return (m1, m2) -> {
+				m1.get(true).addAll(m2.get(true));
+				m1.get(false).addAll(m2.get(false));
+				return m1;
+			};
+		}
+
+		@Override
+		public Function<Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>> finisher() {
+			return Function.identity();
+		}
+
+		@Override
+		public Set<Characteristics> characteristics() {
+//			return null;
+			return Collections.unmodifiableSet(EnumSet.of(Characteristics.IDENTITY_FINISH));
+		}
+		
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testParallelStream(){
+		Stream.iterate(1L, i -> i + 1).limit(100_000).parallel().reduce(Long::sum).ifPresent(out::println);
+		out.println(LongStream.rangeClosed(0, 1000_000_000).parallel().sum());										//Totally OK
+//		LongStream.iterate(1, i -> i + 1).limit(100_000_000).parallel().reduce(Long::sum).ifPresent(out::println);	//OutOfMemoryError
+				//<- note that iterate is highly in-effective for parallelism;
+		
+		//Compare the used time 
+//		out.println(LongStream.rangeClosed(0, 1000_000_000).sum());
+	}
+	
+	
+	@Test
+	public void testSideEffectParallelSum(){
+		class Accumulator{
+			long sum = 0;
+			void add(long x){
+				sum += x;
+			}
+		}
+		Accumulator accumulator = new Accumulator();
+		
+		IntStream.range(0, 10).forEach(i -> {
+			Accumulator a = new Accumulator();
+			LongStream.rangeClosed(1, 1000_000).parallel().forEach(a::add);
+			out.println(a.sum);	//<- WARNING: wrong result for side effect;
+		});
+	}
 	
 	private static final PrintStream out = System.out;
 	

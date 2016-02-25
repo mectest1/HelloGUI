@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -105,7 +106,6 @@ public class LanguageFeatureTest {
 	}
 	
 	
-
 	@FunctionalInterface
 	interface FuncInterfaceWithMultipleAbstractMethods{
 		void derp();
@@ -136,6 +136,81 @@ public class LanguageFeatureTest {
 	}
 	
 	
+
+//	@Ignore
+	@Test
+	public void testGenerics(){
+//		List<? super ? extends Object> derp  = new ArrayList<>();	//<- derp, this fails;
+		
+//		Collector joinList = Collectors.joining(",", "[", "]");
+		List l1 = new ArrayList();
+		l1.add("what");
+		l1.add(1);
+		out.println(l1.stream().collect(Collectors.mapping(Object::toString, Collectors.joining(","))));
+		
+		//
+		List<? extends Object> l2 = new ArrayList<>();
+//		l2.add("what");	//not applicable 
+//		l2.add(1);		//not applicable
+//		out.println(l1.stream().collect(Collectors.mapping(Object::toString, Collectors.joining(","))));
+		
+		List<?> l3 = new ArrayList<>();
+//		l3.add("what");		//<- not applicable
+//		l3.add(1);			//<- not applicable
+//		l3.add(new Object());	//<- not applicable
+		
+		List<Integer> ints = IntStream.rangeClosed(0, 10).boxed().collect(Collectors.toList());
+		List<? extends Object> l4 = ints;	//valid expression;
+		List<? extends Number> l5 = ints;
+//		List<? super Number> l6 = ints;		//<- conversion failed.
+		
+		Object l40 = l4.get(0);	//<- get type: Object;
+		Number l50 = l5.get(0);	//<- get type: Number
+		
+		
+		Optional.of(l4.getClass() == l5.getClass()).ifPresent(out::println);
+	}
+	
+	//Due to type erasure, subclass of Throwable cannot be generic;
+//	static class GenericException<T> extends Exception{} //<- Generic class cannot sub-class java.lang.Throwable
+		
+		
+	
+	@Ignore
+	@Test
+	public void testCodeBlock(){
+//		Derp d = new Derp();
+		
+		Derp d2 = new Derp2();
+	}
+	
+	
+	static class Derp{
+		static{
+			out.println("static");	//1, and only once;
+		}
+		
+		{
+			out.println("Block Code");	//2, every time a new instance is created;
+		}
+		
+		Derp(){
+			out.println("Constructor");	//3, A lot has happened before constructor 
+		}
+	}
+	
+	static class Derp2 extends Derp{
+		static{
+			out.println("static 2");
+		}
+		{
+			out.println("Block Code 2");
+		}
+		
+		Derp2(){
+			out.println("Constructor 2");
+		}
+	}
 	private static final PrintStream out = System.out;
 		
 }
