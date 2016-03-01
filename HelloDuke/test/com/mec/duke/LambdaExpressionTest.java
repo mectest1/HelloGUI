@@ -7,10 +7,15 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalField;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -25,7 +30,6 @@ import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.Ignore;
@@ -118,6 +122,7 @@ public class LambdaExpressionTest {
 		Supplier<Object> s3 = (Supplier<Object>) (s);	//<- ClassCastException
 	}
 	
+	@Ignore
 	@Test
 	public void testPredicateComposition(){
 		ToIntFunction<Integer> f = x -> x + 1;	//<- not composition ability for ToIntFunction
@@ -146,6 +151,27 @@ public class LambdaExpressionTest {
 //		BinaryOperator<String> headBodyFooter = addHeader.andThen(s -> addBody.apply(s, ""));
 		
 		Consumer<String> println = out::println;
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testCollectionFactory(){
+		Map<String, Supplier<Collection<? extends Object>>> f = new HashMap<>();
+		f.put("list", ArrayList::new);
+		f.put("set", HashSet::new);
+		f.put("treeSet", TreeSet::new);
+		
+		List<Object> l = (List<Object>)f.get("list").get();
+		l.add("what");
+		l.forEach(out::println);
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testLambdaStackTrace(){
+		Stream.of((String)null).forEach(s -> out.println(s.length())); //test for StackTrace through lambda expression
 	}
 	
 	
@@ -204,6 +230,46 @@ public class LambdaExpressionTest {
 	}
 	
 	int instVariable = 0;
+	
+	
+	
+	
+	@Test
+	public void testDefaultMethods(){
+		new C().hello();	//<- default method from B:
+		new C2().hello();
+	}
+	
+	static interface A{
+		default void hello(){
+			out.println("Hello from A");
+		}
+	}
+	
+	static interface B extends A{
+		default void hello(){
+			out.println("Hello from B");
+		}
+	}
+	
+	static class C implements B, A{
+		
+	}
+	
+	static class D implements A{
+		
+	}
+	
+	
+	static class C2 extends D implements A, B{
+		
+	}
+	
+	
+	
+	
+	
+	
 	static final PrintStream out = System.out;
 }
 

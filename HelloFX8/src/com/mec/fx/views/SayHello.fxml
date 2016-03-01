@@ -4,10 +4,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1">
 	<Label fx:id="msgLbl" text="FXML is cool!" prefWidth="150"/>
+	<TextArea fx:id="thisInfo" promptText="What's this?" />
 	<Button fx:id="sayHelloBtn" text="Say Hello" onAction="sayHello()"/>
+	
 	<style>
 		-fx-padding: 10;
 		-fx-border-style: solid inside;
@@ -17,9 +20,12 @@
 		-fx-border-color: blue;
 	</style>
 	<fx:script>
+		var count = 0;
 		function sayHello(){
-			msgLbl.setText("Hello From FXML!");
+			msgLbl.setText("Hello From FXML!" + (++count));
+			thisInfo.setText(this);
 		}
+		
 	</fx:script>
 </VBox>
 

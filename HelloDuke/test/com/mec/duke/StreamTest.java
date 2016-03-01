@@ -21,11 +21,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntSupplier;
@@ -38,6 +41,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -1015,6 +1019,7 @@ public class StreamTest {
 	}
 	
 	
+	@Ignore
 	@Test
 	public void testSideEffectParallelSum(){
 		class Accumulator{
@@ -1032,6 +1037,196 @@ public class StreamTest {
 		});
 	}
 	
+	
+	
+	@Ignore
+	@Test
+	public void testSpliterator(){
+		int[] numbers = IntStream.rangeClosed(0, 100_000).toArray();
+		Spliterator<Integer> spliterator = Spliterators.spliterator(numbers, Spliterator.DISTINCT);
+		
+		
+		for(boolean next = true; next; next=spliterator.tryAdvance(out::println)){
+		}
+		
+		out.println("\n=================");
+		Spliterator<Integer> split2 = spliterator.trySplit();
+//		null == split2 ? out.println("Split2 is null") : out.println("Split2 is not null");
+		if(null != split2){
+			for(boolean next = true; next; next=split2.tryAdvance(out::println)){
+			};
+		}
+		
+		
+//		for(boolean next = true; !next; ){};
+		
+	}
+	
+	@Ignore
+	@Test
+	public void testWordsCount(){
+		out.printf("Words of sentence \n[%s]\n is %s\n"
+				, SENTENCE
+				, countWordsInteratively(SENTENCE)
+				);
+		
+		List<Character> chars = IntStream.range(0, SENTENCE.length()).mapToObj(SENTENCE::charAt).collect(Collectors.toList());
+		WordCounter counter = chars.stream()
+			.reduce(new WordCounter(0, true), WordCounter::count, WordCounter::combine);
+		out.printf("Counter through WordCounter: %s\n", counter.getCount());
+		
+		
+		//ERROR: Going from a sequential stream to a parallel one can lead to a wrong result
+		//if this result may be affected by the position where the stream is split
+		WordCounter counter2 = chars.parallelStream()
+				.reduce(new WordCounter(0, true), WordCounter::count, WordCounter::combine);
+		out.printf("Counter through WordCounter with parallelStream: %s\n", counter2.getCount());	//<- Derp, wrong result
+		
+		//
+		Stream<Character> chars3 = StreamSupport.stream(new WordCounterSpliterator(SENTENCE), true);	//<- Use correct Spliterator to implement parallelism
+		WordCounter counter3 = chars3.parallel()
+				.reduce(new WordCounter(0, true), WordCounter::count, WordCounter::combine);
+		out.printf("Counter throgh WordCounterSpliterator with parallelism: %s\n", counter3.getCount());
+		
+	}
+	
+	int countWordsInteratively(String s){
+		int counter = 0;
+		boolean lastSapce = true;
+		for(char ch : s.toCharArray()){
+			if(Character.isWhitespace(ch)){
+				lastSapce = true;
+			}else{
+				if(lastSapce){
+					++counter;
+				}
+				lastSapce = false;
+			}
+		}
+		return counter;
+	}
+	
+	//ref: https://it.wikipedia.org/wiki/Nel_mezzo_del_cammin_di_nostra_vita
+	static final String SENTENCE = " Nel mezzo del cammin di nostra   vita mi   ritrovai in una selva oscura chela dritta via era a smarrita ";
+	
+	static class WordCounterSpliterator implements Spliterator<Character>{
+		final String str;
+		int currentChar = 0;
+		
+		WordCounterSpliterator(String str){
+			this.str = str;
+		}
+
+		@Override
+		public boolean tryAdvance(Consumer<? super Character> action) {
+			action.accept(str.charAt(currentChar++));
+			return currentChar < str.length();
+		}
+
+		@Override
+		public Spliterator<Character> trySplit() {
+			int currentSize = str.length() - currentChar;
+			if(10 > currentSize){
+				return null;	//<- return null to signal that the String to be parsed is small enough to 
+								//be proceeded sequentially
+			}
+			for(int splitPos = currentSize / 2 + currentChar; 
+					splitPos < str.length(); 
+					++splitPos
+					){
+				if(Character.isWhitespace(str.charAt(splitPos))){	//<- split on the whitespace instead of middle of word
+					Spliterator<Character> spliterator = new WordCounterSpliterator(str.substring(currentChar, splitPos));
+					currentChar = splitPos;	//Set the current position of this to the split one,
+											//because the part before it will be managed by the new Spliterator
+					return spliterator;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public long estimateSize() {
+			return str.length() - currentChar;
+		}
+
+		@Override
+		public int characteristics() {
+			return Spliterator.ORDERED + Spliterator.SIZED + Spliterator.SUBSIZED + Spliterator.IMMUTABLE;
+		}
+	}
+	
+	static class WordCounter{
+		final int count;
+		final boolean lastSpace;
+		WordCounter(int counter, boolean lastSpace){
+			this.count = counter;
+			this.lastSpace = lastSpace;
+		}
+		
+		WordCounter count(Character c){
+			if(Character.isWhitespace(c)){
+				return lastSpace? this : new WordCounter(count, true);
+			}else{
+				return lastSpace ? new WordCounter(count + 1, false) : this;
+			}
+		}
+		
+		WordCounter combine(WordCounter wordCounter){
+			return new WordCounter(count + wordCounter.count, 
+					//Use only the sum of the counters, so you don't care abount lastSpace
+					wordCounter.lastSpace);	
+		}
+		
+		int getCount(){
+			return count;
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testPeekStream(){
+		Stream.of("one", "two", "three", "four")
+			.peek(s -> {out.printf("current value: %s\n", s);})	//"one", "two", "three", "four" are all printed out;
+			.filter(s -> s.length() > 3).peek(s -> out.printf("Filtered value: %s\n", s))	//<- only "three" and "four" are printed out;
+			.map(String::toUpperCase).peek(s -> out.printf("Uppercase value: %s\n", s))
+			.collect(Collectors.toList())
+			;
+	}
+	
+	/**
+	 * output:
+	 * <code><pre>
+		---------------
+		from stream: 0
+		after map: 17
+		---------------
+		from stream: 1
+		after map: 18
+		after filter: 18
+		after limit: 18
+		---------------
+		from stream: 2
+		after map: 19
+		---------------
+		from stream: 3
+		after map: 20
+		after filter: 20
+		after limit: 20
+		</pre></code>
+	 */
+	@Test
+	public void testPeek2(){	//<- Guess output of this method;
+		IntStream.range(0, 10)
+			.peek(x -> out.printf("---------------\nfrom stream: %s\n", x))
+			.map(x -> x + 17)
+			.peek(x -> out.printf("after map: %s\n", x))
+			.filter(x -> 0 == x % 2)
+			.peek(x -> out.printf("after filter: %s\n", x))
+			.limit(2)
+			.peek(x -> out.printf("after limit: %s\n", x))
+			.collect(ArrayList<Integer>::new, ArrayList<Integer>::add, (l, r)->l.addAll(r))
+		;
+	}
 	private static final PrintStream out = System.out;
 	
 	class FibonacciGenerator{

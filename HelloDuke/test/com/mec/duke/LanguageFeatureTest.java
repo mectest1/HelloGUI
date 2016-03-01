@@ -178,10 +178,22 @@ public class LanguageFeatureTest {
 	
 	@Ignore
 	@Test
-	public void testCodeBlock(){
-//		Derp d = new Derp();
+	public void testShadowVariables(){
+		int a = 10;
+		Runnable r1 = ()->{
+//			int a = 2;	//<- Compile error
+//			a = 2;		//<- Compile error 2
+		};
 		
-		Derp d2 = new Derp2();
+		Runnable r2 = new Runnable(){
+			int a = 10;				//<- Totally OK
+			@Override
+			public void run() {
+				int a = 10;			//<- Also OK;
+				//
+			}
+			
+		};
 	}
 	
 	

@@ -21,5 +21,5 @@ public class SayHelloFXML extends Application {
 		primaryStage.show();
 	}
 
-	static final String sayHello = "";
+//	static final String sayHello = "";
 }
