@@ -8,7 +8,8 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.fx.beans.SayHelloController" spacing="10">
 	<Label fx:id="msgLbl" text="FXML is cool!" prefWidth="150"/>
 	<Button fx:id="sayHelloBtn" text="Say Hello" onAction="#sayHello"/>
-	<TextArea fx:id="info" prefWidth="150" prefHeight="50"/>
+<!-- 	<TextArea fx:id="info" prefWidth="150" prefHeight="50"/> -->
+	<TextArea fx:id="info" prefColumnCount="50" prefRowCount="5"/>
 	<style>
 		-fx-padding: 10;
 		-fx-border-style: solid inside;
