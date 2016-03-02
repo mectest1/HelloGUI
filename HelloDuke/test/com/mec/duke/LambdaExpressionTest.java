@@ -233,11 +233,11 @@ public class LambdaExpressionTest {
 	
 	
 	
-	
+	@Ignore
 	@Test
 	public void testDefaultMethods(){
 		new C().hello();	//<- default method from B:
-		new C2().hello();
+		new CC().hello();
 	}
 	
 	static interface A{
@@ -261,12 +261,49 @@ public class LambdaExpressionTest {
 	}
 	
 	
-	static class C2 extends D implements A, B{
+	static class CC extends D implements A, B{
 		
 	}
+	//--------------------------
+	static interface A2{
+		default void hello(){
+			out.println("Hello from A2");
+		}
+	}
 	
+	static interface B2 extends A2{
+		void hello();
+	}
 	
+	static class C2 implements B2{	//C2 cannot invoke A2.hello(), since it has been override by B2
+
+		@Override
+		public void hello() {
+		}
+	}
 	
+	//----------------------------------------
+	static interface A3{
+		default void hello(){
+			out.println("Hello, A3");
+		}
+	}
+	
+	static abstract class B3 implements A3{
+//		default void derp(){			//default methods are only allowed in interfaces
+//			
+//		}
+		
+		public abstract void hello();
+	}
+	
+	static class C3 extends B3{
+
+		@Override
+		public void hello() {		//<- must implement abstract method from B3 here;
+		}
+		
+	}
 	
 	
 	
