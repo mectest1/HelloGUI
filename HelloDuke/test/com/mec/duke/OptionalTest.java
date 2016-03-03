@@ -1,10 +1,14 @@
 package com.mec.duke;
 
 import java.io.PrintStream;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.mec.duke.util.OptionalUtil;
 
 public class OptionalTest {
 
@@ -59,6 +63,7 @@ public class OptionalTest {
 	}
 	
 	
+	@Ignore
 	@Test
 	public void testOptionalFilter(){
 		Optional<String> p = Optional.of("Derp");
@@ -66,6 +71,20 @@ public class OptionalTest {
 				
 	}
 	
+	@Test
+	public void testExtractDataFromProperties(){
+		Properties props = new Properties();
+		String name = "";
+		//
+		Objects.requireNonNull(props);
+		
+		//Read value from properties and convert it to integer;
+		//Return this int value when it is > 0, otherwise return 0;
+		int val = Optional.ofNullable(props.getProperty(name))
+					.flatMap(OptionalUtil::strToInt)
+					.filter(i -> 0 < i)
+					.orElse(0);
+	}
 	//--------------------------------
 	static class Person{
 		Optional<Car> car;
