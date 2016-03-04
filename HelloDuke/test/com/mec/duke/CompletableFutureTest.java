@@ -3,18 +3,25 @@ package com.mec.duke;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.mec.duke.CompletableFutureTest.Discount.Code;
 
 public class CompletableFutureTest {
 
@@ -129,6 +136,7 @@ public class CompletableFutureTest {
 		});
 	}
 	
+	@Ignore
 	@Test
 	public void testCustomExecutor(){
 //		final Executor executor = Executors.newFixedThreadPool(
@@ -182,6 +190,183 @@ public class CompletableFutureTest {
 		});
 	}
 	
+	//-------------------------------------------------------------------------------
+	@Ignore
+	@Test
+	public void testGetPrices2(){
+		final String product = "myPhone27S";
+		checkDuration(() -> {
+			out.println(
+					shops2().stream().map(shop -> shop.getPrice2(product))
+					.map(Quote::parse)
+					.map(Discount::applyDiscount)
+					.collect(Collectors.toList())
+					);
+		});
+		
+		
+		checkDuration(() -> {
+			out.println(
+					shops2().parallelStream()
+					.map(shop -> shop.getPrice2(product))
+					.map(Quote::parse)
+					.map(Discount::applyDiscount)
+					.collect(Collectors.toList())
+					);
+		});
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testCompositeFuture(){
+		final String product = "myPhone27S";
+		final Function<Integer, Executor> executorSupplier = size -> 
+		Executors.newFixedThreadPool(
+			Math.min(size, 100),	//or Integer.max()
+			r -> {
+				Thread t = new Thread(r);
+				t.setDaemon(true);
+				return t;
+		});
+		
+		final Executor executor = executorSupplier.apply(shops2().size());
+		
+		checkDuration(()->{
+			List<CompletableFuture<String>> priceFutures = 
+					shops2().stream()
+					.map(shop -> CompletableFuture.supplyAsync(() -> shop.getPrice2(product), executor))
+					.map(future -> future.thenApply(Quote::parse))
+					.map(future -> future.thenCompose(quote -> 	//<- compose: kinda like Stream.flatMap
+						CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor)))
+//					.map(future -> future.thenApply(quote -> 
+//						CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor)))
+						.collect(Collectors.toList());
+			out.println(priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+		});
+					
+	}
+	
+	@Ignore
+	@Test
+	public void testCombineFutures(){
+		final String product = "myPhone27S";
+		
+		DoubleSupplier getRate = () -> {
+			delay();
+			return Math.random();
+		};
+		
+		
+		Shop shop = shops().get(0);
+		
+		checkDuration(() -> {	//The second CompletableFuture dependes on the first one
+			CompletableFuture<Double> futurePrice = CompletableFuture.supplyAsync(() -> shop.getPrice(product))
+					.thenCompose(price -> 
+						CompletableFuture.supplyAsync(() -> 
+							price * getRate.getAsDouble()
+						)
+					);
+			out.println(futurePrice.join());
+		});
+		
+		
+		checkDuration(()->{	//The two CompletableFutures are independent here;
+			CompletableFuture<Double> futurePrice = CompletableFuture.supplyAsync(() -> shop.getPrice(product))
+					.thenCombine(CompletableFuture.supplyAsync(() -> getRate.getAsDouble()), 
+							(price, rate) -> price * rate
+						)
+					;
+//			out.println(futurePrice.get());	//<- unhandled exception
+			out.println(futurePrice.join());
+		});
+		
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testCombineFuturesInJDK7(){
+		final String product = "myPhone27S";
+		
+		DoubleSupplier getRate = () -> {
+			delay();
+			return Math.random();
+		};
+		ExecutorService executor = Executors.newCachedThreadPool();
+		
+		Shop shop = shops().get(0);
+		
+		checkDuration(() -> {
+			final Future<Double> futureRate = executor.submit(new Callable<Double>(){
+
+				@Override
+				public Double call() {
+					return getRate.getAsDouble();
+				}
+				
+			});
+			
+			final Future<Double> futurePriceInUSD = executor.submit(new Callable<Double>(){
+
+				@Override
+				public Double call() throws Exception{
+					double price = shop.getPrice(product);
+					return price * futureRate.get();
+				}
+				
+			});
+			
+			try {
+				out.println("Executed in Java 7 grammar");
+				out.println(futurePriceInUSD.get());
+			} catch (Exception e) {
+				e.printStackTrace(out);
+			}
+		});
+	}
+	
+	@Test
+	public void testOnComplete(){
+		final String product = "myPhone27S";
+		final Function<Integer, Executor> executorSupplier = size -> 
+		Executors.newFixedThreadPool(
+			Math.min(size, 100),	//or Integer.max()
+			r -> {
+				Thread t = new Thread(r);
+				t.setDaemon(true);
+				return t;
+		});
+		
+		final Executor executor = executorSupplier.apply(shops2().size());
+		setDelayType(DelayType.RANDOM);
+		checkDuration(() -> {
+			
+			Stream<CompletableFuture<String>> priceFutures = shops2().stream()
+					.map(shop -> CompletableFuture.supplyAsync(() -> shop.getPrice2(product), executor))
+					.map(future -> future.thenApply(Quote::parse))
+					.map(future -> future.thenCompose(quote -> 
+					CompletableFuture.supplyAsync(
+							() -> Discount.applyDiscount(quote)
+							, executor)
+							))
+					;
+			
+			//		CompletableFuture[] futures = priceFutures.toArray(size -> new CompletableFuture[size]);
+			long start = System.nanoTime();
+			@SuppressWarnings("unchecked")
+			CompletableFuture<Void>[] futures = priceFutures
+//			.map(f -> f.thenAccept(out::println))	//<----Invoked when the CompletableFuture finishes;
+			.map(f -> f.thenAccept(s -> {
+				out.printf("%s (done in %s msecs)\n\n", s, (System.nanoTime() - start ) /1_000_000);
+			}))	//<----Invoked when the CompletableFuture finishes;
+			.toArray(size -> new CompletableFuture[size]);
+			CompletableFuture.allOf(futures).join();	//<- wait all tasks to complete
+//			CompletableFuture.anyOf(futures).join();	//<- wait for the first one to complete
+		});
+		
+		setDelayType(DelayType.NORMAL);
+	}
 	
 	
 	static void checkDuration(Runnable runnable){
@@ -212,6 +397,59 @@ public class CompletableFutureTest {
 	}
 	
 	//---------------------
+	static class Quote{
+		final String shopName;
+		final double price;
+		final Discount.Code discountCode;
+		public Quote(String shopName, double price, Code discountCode) {
+			super();
+			this.shopName = shopName;
+			this.price = price;
+			this.discountCode = discountCode;
+		}
+		static Quote parse(String s){
+			Objects.requireNonNull(s);
+			String[] split = s.split(":");
+			String shopName = split[0];
+			double price = Double.parseDouble(split[1]);
+			Discount.Code discountCode = Discount.Code.valueOf(split[2]);
+			return new Quote(shopName, price, discountCode);
+		}
+		public final String getShopName() {
+			return shopName;
+		}
+		public final double getPrice() {
+			return price;
+		}
+		public final Discount.Code getDiscountCode() {
+			return discountCode;
+		}
+		
+		//
+	}
+	static class Discount{
+		enum Code{
+			NONE(0)
+			,SILVER(5)
+			,GOLD(10)
+			,PLATINUM(15)
+			,DIAMOND(20)
+			;
+			private final int percentage;
+			private Code(int percentage){
+				this.percentage = percentage;
+			}
+		}
+		public static String applyDiscount(Quote quote){
+			return String.format("%s price is %s", quote.getShopName(), 
+					apply(quote.getPrice(), quote.getDiscountCode())
+					);
+		}
+		static double apply(double price, Code code){
+			delay();	//Simulate a delay in the Discount service response;
+			return price * (100 - code.percentage)/100;
+		}
+	}
 	static class Shop{
 		String name;
 		Shop(String name){
@@ -266,19 +504,62 @@ public class CompletableFutureTest {
 			return rand.nextDouble() * product.charAt(0) + product.charAt(1);
 		}
 		
+		
+		//---------------
+		String getPrice2(String product){
+			double price = calculatePrice(product);
+			Discount.Code code = Discount.Code.values()[rand.nextInt(Discount.Code.values().length)];
+			return String.format("%s:%.2f:%s", name, price, code);
+		}
+		
+		
+		
 		static final Random rand = new Random();
 		
-		static void delay(){
+		
+	}
+	static void delay(){
+//		try{
+//			Thread.sleep(1000L);
+//		}catch(InterruptedException e){
+//			throw new RuntimeException();
+//		}
+		delayType.delay();
+	}
+	
+	
+	void setDelayType(DelayType delayType){
+		this.delayType = Optional.ofNullable(delayType).orElse(DelayType.NORMAL);
+	}
+	static DelayType delayType = DelayType.NORMAL;
+	static enum DelayType{
+		NORMAL(() -> {
 			try{
 				Thread.sleep(1000L);
 			}catch(InterruptedException e){
 				throw new RuntimeException();
 			}
+		})
+		,RANDOM(() -> {
+			try{
+				Thread.sleep(500 + rand.nextInt(2000));
+			}catch(Exception e){
+				e.printStackTrace(out);
+			}
+		})
+		;
+		
+		Runnable run;
+		private DelayType(Runnable run){
+			this.run = run;
+		}
+		
+		void delay(){
+			run.run();
 		}
 	}
 	
-	
-	
+	static final Random rand = new Random();
 	private static final PrintStream out = System.out;
 	
 }
