@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.Ignore;
@@ -73,6 +76,12 @@ public class CompletableFutureTest {
 				).collect(Collectors.toList());
 			out.println(prices);
 		});
+		checkDuration(()->{
+			List<String> prices = shops2().stream().map(shop -> 
+			String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))
+					).collect(Collectors.toList());
+			out.println(prices);
+		});
 	}
 	
 	@Ignore
@@ -82,24 +91,94 @@ public class CompletableFutureTest {
 		checkDuration(()->{
 			List<String> prices = shops().parallelStream().map(shop -> 	//<- Use parallel stream instead of plain stream
 				String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))
-				).collect(Collectors.toList());
+				).collect(Collectors.toList()); //<- costs 1028 msecs;
+			out.println(prices);
+		});
+		checkDuration(()->{
+			List<String> prices = shops2().parallelStream().map(shop -> 	//<- Use parallel stream instead of plain stream
+			String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))
+					).collect(Collectors.toList()); //<- cost 2002 msecs, 100% time increase for only 1 shop, LOL;
 			out.println(prices);
 		});
 	}
 	
 	
+	@Ignore
 	@Test
 	public void testFindPricessWithCompletableFutureStream(){
 		final String product = "myPhone27S";
 		checkDuration(()->{
 			List<CompletableFuture<String>> priceFutures = shops().stream().map(shop -> CompletableFuture.supplyAsync(() -> 
 				String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))
-				)).collect(Collectors.toList());
+				)).collect(Collectors.toList()); //<- Collect these ComputableFuture into List first;
 			
 			out.println(priceFutures.stream()
 //					.map(CompletableFuture<String>::get)	//<- unhandled exception
 					.map(CompletableFuture::join)
 					.collect(Collectors.toList()));
+		});
+		checkDuration(()->{
+			List<CompletableFuture<String>> priceFutures = shops2().stream().map(shop -> CompletableFuture.supplyAsync(() -> 
+			String.format("%s price is %.2f", shop.getName(), shop.getPrice(product))
+					)).collect(Collectors.toList());
+			
+			out.println(priceFutures.stream()
+//					.map(CompletableFuture<String>::get)	//<- unhandled exception
+					.map(CompletableFuture::join)
+					.collect(Collectors.toList()));
+		});
+	}
+	
+	@Test
+	public void testCustomExecutor(){
+//		final Executor executor = Executors.newFixedThreadPool(
+//				Math.min(shops().size(), 100),
+//				r -> {
+//					Thread t = new Thread(r);
+//					t.setDaemon(true);
+//					return t;
+//				});
+		final Function<Integer, Executor> executorSupplier = size -> 
+				Executors.newFixedThreadPool(
+					Math.min(size, 100),	//or Integer.max()
+					r -> {
+						Thread t = new Thread(r);
+						t.setDaemon(true);
+						return t;
+				});
+				
+		final Executor executor = executorSupplier.apply(shops().size());
+		
+		final String product = "myPhone27S";
+		checkDuration(() -> {
+			List<CompletableFuture<String>> futures = shops().stream()
+				.map(shop -> CompletableFuture.supplyAsync(
+					() -> String.format("%s price is %s", shop.getName(), shop.getPrice(product))
+					, executor))
+				.collect(Collectors.toList());
+			
+			out.println(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+		});
+		checkDuration(() -> {
+			List<CompletableFuture<String>> futures = shops2().stream()
+					.map(shop -> CompletableFuture.supplyAsync(
+							() -> String.format("%s price is %s", shop.getName(), shop.getPrice(product))
+							, executor))	//<-----------------executor with awkward thread pool size;
+					.collect(Collectors.toList());
+			
+			out.println(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+		});
+		
+		//--------------------------------------------------------
+		final Executor executor2 = executorSupplier.apply(shops2().size());
+		checkDuration(() -> {
+			List<CompletableFuture<String>> futures = shops2().stream()
+					.map(shop -> CompletableFuture.supplyAsync(
+							() -> String.format("%s price is %s", shop.getName(), shop.getPrice(product))
+							, executor2))
+					.collect(Collectors.toList());
+			
+			out.println(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 		});
 	}
 	
@@ -114,11 +193,21 @@ public class CompletableFutureTest {
 		out.printf("Done in %s msecs\n", duration);
 	}
 	
-	static List<Shop> shops(){
+	static List<Shop> shops(){	//<- Note: number of shops coplies with number of CPU cores
 		return Arrays.asList(new Shop("BestPrice")
 				, new Shop("LetsSaveBig")
 				, new Shop("MyFavoriteShop")
 				, new Shop("BuyitAll")
+				);
+	}
+	
+	static List<Shop> shops2(){
+		return Arrays.asList(new Shop("BestPrice")
+				, new Shop("LetsSaveBig")
+				, new Shop("MyFavoriteShop")
+				, new Shop("BuyitAll")
+				, new Shop("AmazonIsHere")
+//				, new Shop("WhoIsCallingEBay")
 				);
 	}
 	
