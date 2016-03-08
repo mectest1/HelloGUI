@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1">
+	<Label text = "List of Fruits"/>
+	<ComboBox>
+		<items>
+			<FXCollections fx:factory="observableArrayList">
+				<String fx:value="Apple" />
+				<String fx:value="Banana" />
+				<String fx:value="Grape"/>
+				<String fx:value="Orange"/>
+			</FXCollections>
+		</items>
+		<value>
+			<String fx:value="Orange"/>
+		</value>
+	</ComboBox>
+</VBox>
+
