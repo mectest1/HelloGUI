@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language JavaScript?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Button?>
+
+<Scene xmlns:fx="http://javafx.com/fxml/1">
+	<root>
+		<VBox>
+			<fx:define>
+				<Insets fx:id="margin" top="5.0" right="5.0" bottom="5.0" left="5.0"/>
+				<ToggleGroup fx:id="genderGroup"/>
+			</fx:define>
+			<fx:script>
+				function closeScene(){
+					var scene = closeBtn.getScene();
+					if(scene){
+						scene.getWindow().hide();
+					}
+				}
+			</fx:script>
+			<Label text="Gender" VBox.margin="$margin" />
+			<RadioButton text="Male" toggleGroup="$genderGroup" VBox.margin="$margin"/>
+			<RadioButton text="Female" toggleGroup="$genderGroup" VBox.margin="$margin"/>
+			<RadioButton text="Unknown" toggleGroup="$genderGroup" selected="true" VBox.margin="$margin"/>
+			<Button text="Close" fx:id="closeBtn" VBox.margin="$margin" onAction="closeScene()"/>
+		</VBox>
+	</root>
+</Scene>
+
