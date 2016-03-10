@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language JavaScript?>
+<?import javafx.scene.control.Button?>
+
+<Button xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.mec.fx.beans.CloseBtnController"	
+	fx:id="closeBtn"
+	onAction="closeWindow()"
+	text="Close"
+>
+	<fx:script>
+		function closeWindow(){
+			var scene = closeBtn.getScene();
+			if(null != scene){
+				//scene.hide();	//
+				scene.getWindow().hide();
+			}
+		}
+	</fx:script>
+</Button>
+

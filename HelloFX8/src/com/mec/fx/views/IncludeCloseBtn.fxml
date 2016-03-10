@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.mec.fx.beans.IncludeBtnController"
+	spacing="5"
+>
+	<padding>
+		<Insets top="5" bottom="5" right="5" left="5"/>
+	</padding>
+	<style>
+		-fx-background-color: lightblue;
+		-fx-border-color: blue;
+		-fx-border-radius: 15px;
+		-fx-border-style: solid;
+		-fx-border-width: 1px;
+	</style>
+	<children>
+		<Label text="Testing: FX:Include"/>
+		<!-- <fx:include source="CloseBtn.fxml" fx:id="includedCloseBtn" text="%IncludeCloseBtn.closeBtn.text" resources="META-INF.com.mec.fx.views.ViewBundles_zh"/> -->
+		<fx:include source="CloseBtn.fxml" fx:id="includedCloseBtn" text="Hide"/>
+	</children>
+</VBox>
+

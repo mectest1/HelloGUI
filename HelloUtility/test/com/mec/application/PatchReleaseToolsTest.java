@@ -46,6 +46,7 @@ public class PatchReleaseToolsTest {
 		String[] packagedFiles = new String[]{
 //				"com/mec/resources/"
 				 "/com/mec/resources/Msg.java"
+//				,"/com/mec/resources/derp.lbi"
 //				,"com/mec/resources/"
 //				,"com/mec/resources/"
 		};
