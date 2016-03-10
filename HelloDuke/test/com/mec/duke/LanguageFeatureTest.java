@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -200,6 +202,7 @@ public class LanguageFeatureTest {
 	public void testArrayConstructor(){
 		int[] ints = {1, 2, 3, 4, 5};	//<-
 		Object[] objs = {"der", 1};		//<--
+		List[] lists = {new ArrayList<Object>(), new LinkedList<Object>(), new Vector<Object>()};
 	}
 	
 	
