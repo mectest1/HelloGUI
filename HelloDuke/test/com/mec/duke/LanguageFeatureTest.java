@@ -196,6 +196,12 @@ public class LanguageFeatureTest {
 		};
 	}
 	
+	@Test
+	public void testArrayConstructor(){
+		int[] ints = {1, 2, 3, 4, 5};	//<-
+		Object[] objs = {"der", 1};		//<--
+	}
+	
 	
 	static class Derp{
 		static{
