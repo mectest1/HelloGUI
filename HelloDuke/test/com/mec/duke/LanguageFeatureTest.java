@@ -203,6 +203,7 @@ public class LanguageFeatureTest {
 		int[] ints = {1, 2, 3, 4, 5};	//<-
 		Object[] objs = {"der", 1};		//<--
 		List[] lists = {new ArrayList<Object>(), new LinkedList<Object>(), new Vector<Object>()};
+//		SuppressWarnings[] annotations = {@SuppressWarnings("what"), @SuppressWarnings("is")};
 	}
 	
 	
