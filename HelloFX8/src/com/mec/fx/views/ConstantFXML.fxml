@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.Integer?>
+<?import java.lang.Long?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.TextField?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1">
+	<fx:define>
+		<Integer fx:constant = "MAX_VALUE" fx:id="minInt"/>
+	</fx:define>
+	<alignment><Pos fx:constant="CENTER"/></alignment>
+	<TextField text="$minInt"/>
+	
+	<TextField>
+		<!-- <text><Long fx:constant="MIN_VALUE"/></text>  -->
+		<text>10000</text>
+	</TextField>
+	
+</VBox>
+

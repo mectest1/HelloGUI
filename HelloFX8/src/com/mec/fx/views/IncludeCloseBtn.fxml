@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="com.mec.fx.beans.IncludeBtnController"
@@ -18,10 +19,12 @@
 		-fx-border-style: solid;
 		-fx-border-width: 1px;
 	</style>
+	<fx:script source="/META-INF/resources/js/FXCommons.js"/>
 	<children>
 		<Label text="Testing: FX:Include"/>
 		<!-- <fx:include source="CloseBtn.fxml" fx:id="includedCloseBtn" text="%IncludeCloseBtn.closeBtn.text" resources="META-INF.com.mec.fx.views.ViewBundles_zh"/> -->
 		<fx:include source="CloseBtn.fxml" fx:id="includedCloseBtn" text="Hide"/>
+		<!-- <Button text="Close Scene Through Another Method" onAction="closeScene(this)"/>	// cannot reference function in another JS file, but why? -->
 	</children>
 </VBox>
 
