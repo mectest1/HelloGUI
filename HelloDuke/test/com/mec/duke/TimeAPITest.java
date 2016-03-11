@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.stream.Stream;
 
 import org.junit.Ignore;
@@ -24,6 +25,7 @@ public class TimeAPITest {
 			}
 		});
 	}
+	@Ignore
 	@Test
 	public void testTimeAPIWithFormatterName() {
 //		LocalTime now = LocalTime.now();
@@ -37,6 +39,17 @@ public class TimeAPITest {
 		});
 	}
 	
+	@Test
+	public void testOldCalendar(){
+		Calendar now = Calendar.getInstance();
+		
+		now.set(Calendar.MONTH, Calendar.FEBRUARY);	//29
+		out.println(now.getActualMaximum(Calendar.DAY_OF_MONTH));
+		now.set(Calendar.MONTH, Calendar.APRIL);	//30
+		out.println(now.getActualMaximum(Calendar.DAY_OF_MONTH));
+		now.set(Calendar.MONTH, Calendar.MARCH);	//31
+		out.println(now.getActualMaximum(Calendar.DAY_OF_MONTH));
+	}
 	
 	
 	

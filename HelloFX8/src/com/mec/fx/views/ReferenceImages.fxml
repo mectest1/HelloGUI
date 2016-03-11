@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1">
+	<fx:define>
+		<Image fx:id="myImg" url="/META-INF/resources/images/blue_rounded_rectangle.png"/>
+	</fx:define>
+	<ImageView>
+		<image>
+			<fx:reference source="myImg"/>
+		</image>
+	</ImageView>
+	<ImageView image="$myImg"/>
+</VBox>
+

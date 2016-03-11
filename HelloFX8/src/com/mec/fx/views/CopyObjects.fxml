@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<!-- Seems that static class cannot be be recognized by FXMLLoader? -->
+<!-- <?import com.mec.fx.beans.ItemBuilder.Item?> -->
+<?import com.mec.fx.beans.Item?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1">
+	<fx:define>
+		<Item name = "Kishori" id = "100" fx:id="myItem"/>
+	</fx:define>
+	<!-- error: it's not binding expression~ -->
+<!-- 	<ComboBox value="$myItem"> -->
+	<ComboBox value="$myItem">
+		<items>
+			<FXCollections fx:factory="observableArrayList">
+				<fx:reference source="myItem"/>
+				<fx:copy source="myItem"/>
+				<fx:copy source="myItem"/>
+				<fx:copy source="myItem"/>
+				<fx:copy source="myItem"/>
+			</FXCollections>
+		</items>
+	</ComboBox>
+</VBox>
+

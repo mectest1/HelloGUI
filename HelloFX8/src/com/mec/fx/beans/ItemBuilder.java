@@ -1,10 +1,7 @@
 package com.mec.fx.beans;
 
 import java.util.AbstractMap;
-import java.util.Map.Entry;
 import java.util.Set;
-
-import com.mec.fx.beans.ItemBuilder.Item;
 
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.util.Builder;
@@ -80,32 +77,6 @@ public class ItemBuilder implements Builder<Item>{
 		}
 		
 		
-	}
-	
-	public static class Item{
-		long id;
-		String name;
-		public Item(long id, String name) {
-			super();
-			this.id = id;
-			this.name = name;
-		}
-		public long getId() {
-			return id;
-		}
-		public void setId(long id) {
-			this.id = id;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		@Override
-		public String toString() {
-			return "Item [id=" + id + ", name=" + name + "]";
-		}
 	}
 	
 }

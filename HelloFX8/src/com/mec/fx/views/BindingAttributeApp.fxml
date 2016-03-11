@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1">
+	<TextField fx:id="mainText"/>
+	<TextField fx:id="mirrorText" text="${mainText.text}" disable="true"/>
+</VBox>
+
