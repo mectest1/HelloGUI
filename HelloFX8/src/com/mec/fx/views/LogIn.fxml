@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="GridPane">
+	<Label text="User Id:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+	<TextField fx:id="userId" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+	<Label text="Password:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+	<PasswordField fx:id="pwd" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+	<Button fx:id="okBtn" text="OK" onAction="#okClicked" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+	<Button fx:id="cancelBtn" text="Cancel" onAction="#cancelClicked" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+</fx:root>
+

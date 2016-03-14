@@ -33,7 +33,7 @@ public class TableViewCellFactoryApp extends Application {
 				protected void updateItem(LocalDate item, boolean empty) {
 					super.updateItem(item, empty);
 					
-					//Clearn the cell before populating it
+					//Clear the cell before populating it
 					this.setText(null);
 					this.setGraphic(null);
 					

@@ -98,6 +98,8 @@ public class TableViewAddDeleteRowsApp extends Application {
 		for(int i = selectedIndices.length - 1; 0 <= i; --i){
 			tsm.clearSelection(selectedIndices[i]);
 //			table.getItems().remove(selectedIndices[i]);	//<- this will not work as you expected
+														//the ObservableList.remove() method is overloaded with remove(Object) and remove(int)
+														//Thus remove(Integer) will result into remove(Object) being invoked;
 			table.getItems().remove(selectedIndices[i].intValue());
 		}
 	}

@@ -8,6 +8,7 @@ import com.mec.resources.Msg;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
@@ -84,6 +85,7 @@ public class TableViewEditingApp extends Application {
 			Person p = cellData.getValue();
 			Boolean v = Person.AgeCategory.BABY == p.getAgeCategory();
 			return new ReadOnlyBooleanWrapper(v);
+//			return new SimpleBooleanProperty(v);
 		});
 		
 		babyCol.setCellFactory(CheckBoxTableCell.forTableColumn(babyCol));
