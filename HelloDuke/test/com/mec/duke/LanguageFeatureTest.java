@@ -232,6 +232,20 @@ public class LanguageFeatureTest {
 		Derp2(){
 			out.println("Constructor 2");
 		}
+		static void doItStatically(){
+			
+		}
+		
+		void doIt(){
+			
+		}
+	}
+	
+	static class Derp3 extends Derp2{
+//		@Override
+//		static void doIt(){	//<- compilation error
+//			
+//		}
 	}
 	private static final PrintStream out = System.out;
 		
