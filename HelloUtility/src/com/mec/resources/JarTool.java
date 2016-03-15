@@ -362,6 +362,14 @@ public class JarTool {
 //			if(retval.exists()){
 //				break;
 //			}
+			/*
+			 * INPUT:
+			 * parentDir: E:\foo\bar\
+			 * fileCandidate: /
+			 * 
+			 * OUTPUT:
+			 * retval: E:/		//interesting, huh? 
+			 */
 			retval = parentDir.resolve(fileCandidate);
 			if(Files.exists(retval)){
 				break;

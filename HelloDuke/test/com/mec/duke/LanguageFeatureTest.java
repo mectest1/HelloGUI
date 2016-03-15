@@ -2,6 +2,8 @@ package com.mec.duke;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -198,6 +200,7 @@ public class LanguageFeatureTest {
 		};
 	}
 	
+	@Ignore
 	@Test
 	public void testArrayConstructor(){
 		int[] ints = {1, 2, 3, 4, 5};	//<-
@@ -206,6 +209,21 @@ public class LanguageFeatureTest {
 //		SuppressWarnings[] annotations = {@SuppressWarnings("what"), @SuppressWarnings("is")};
 	}
 	
+	@Ignore
+	@Test
+	public void testSynchronizeOnNull(){
+		Object what = null;
+//		synchronized(null){	//<- not a valid argument for the synchronized statement
+		synchronized(what){	//<- throws NullPointException
+			out.println("sunchronized on null successfully");
+		}
+	}
+	
+	@Test
+	public void testPathResolve() throws Exception{
+		Path cur = Paths.get(".");
+		out.println(cur.toRealPath());
+	}
 	
 	static class Derp{
 		static{

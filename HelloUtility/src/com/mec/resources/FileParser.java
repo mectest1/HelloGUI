@@ -69,7 +69,7 @@ public class FileParser {
 //			if(line.startsWith(JarTool.NIX_PATH)){
 //				line = line.substring(1);
 //			}
-			line = JarTool.trimLeadingSlash(line);
+			line = JarTool.trimLeadingSlash(line);	//line.trim()
 			int projectIndex = line.indexOf(JarTool.NIX_PATH);
 			String projectName = line.substring(0, projectIndex);
 			
@@ -103,7 +103,7 @@ public class FileParser {
 				line = normalizeModifyListLine(line);
 			}
 			if(null != line){
-				retval.add(line);
+				retval.add(line.trim());	//<- trim modify file;
 			}
 		}
 		
