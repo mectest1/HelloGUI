@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	>
+	<!-- open -->
+	<polyline points="200,60 240,230 310,230 350,60"
+		fill="lightcyan" fill-opacity=".7" stroke="darkviolet"
+		stroke-width="25" stroke-linecap="round" stroke-opacity=".2"/>
+	
+	<!-- close -->
+	<polygon points="100,50 115,120 150,150 115,180 100,250 85,180 50,150 85,120"
+		fill="darkorange" fill-opacity=".5" stroke="papayawhip"
+		stroke-width="20" stroke-opacity=".7" stroke-linejoin="miter"/>
+</svg>
