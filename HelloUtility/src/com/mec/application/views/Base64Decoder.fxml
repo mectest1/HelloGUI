@@ -8,6 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.BaseCodeDecoderController">
@@ -55,6 +56,8 @@
             <items>
               <MenuItem mnemonicParsing="false" text="Base 64 -&gt; String (UTF-8)" onAction="#onExtraBase64ToStringUTF8"/>
               <MenuItem mnemonicParsing="false" text="Base 64 -&gt; String" onAction="#onExtraBase64ToString"/>
+              <SeparatorMenuItem />
+              <MenuItem mnemonicParsing="false" text="Decode OpenWin_Para" onAction="#onExtraDecodeOpenWinPara"/>
             </items>
           </Menu>
           <Menu disable="true" mnemonicParsing="false" text="Help">
