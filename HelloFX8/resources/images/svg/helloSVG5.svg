@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	>
+	<circle r="25%" cx="30%" cy="50%" fill="lightgreen" stroke="#C60" stroke-width="25"/>
+	<circle r="25%" cx="50%" cy="50%" fill="none" stroke="#E60" stroke-width="25"/>
+</svg>
