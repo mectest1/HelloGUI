@@ -101,13 +101,13 @@ public class BaseCodeDecoderController {
 
 	@FXML
 	private void initialize(){
-		encodedText.setPromptText(Msg.get(this, "encodedText.prompt"));
-		decodedText.setPromptText(Msg.get(this, "decodedText.prompt"));
-		decodeGzippedButton.setText(Msg.get(this, "decodeGzippedButton.label"));
-		decodeBase64Button.setText(Msg.get(this, "decodeBase64Button.label"));
-		encodeGzippedButton.setText(Msg.get(this, "encodeGzippedButton.label"));
-		encodeBase64Button.setText(Msg.get(this, "encodeBase64Button.label"));
-		switchButton.setText(Msg.get(this, "switchButton.label"));
+//		encodedText.setPromptText(Msg.get(this, "encodedText.prompt"));
+//		decodedText.setPromptText(Msg.get(this, "decodedText.prompt"));
+//		decodeGzippedButton.setText(Msg.get(this, "decodeGzippedButton.label"));
+//		decodeBase64Button.setText(Msg.get(this, "decodeBase64Button.label"));
+//		encodeGzippedButton.setText(Msg.get(this, "encodeGzippedButton.label"));
+//		encodeBase64Button.setText(Msg.get(this, "encodeBase64Button.label"));
+//		switchButton.setText(Msg.get(this, "switchButton.label"));
 //		clearButton.setText(Msg.get(this, "clearButton.label"));
 		
 		decodeGzippedButton.disableProperty().bind(encodedText.textProperty().isEmpty());
