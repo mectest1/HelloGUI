@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd" d="M70, 140 L150, 0, 200, 100 L40, 100, 100, 0 L 170, 140 70,140"
+		fill="navy"
+		/>
+	<path fill-rule="evenodd" d="M70, 140 Q150, 0, 200, 100 Q40, 100, 100, 0 Q 170, 140 70,140"
+		fill="red" fill-opacity=".8"
+		/>
+		
+	<path fill="none" stroke="lime" stroke-width="2" stroke-opacity=".8"
+		d="M70, 140 C17.5, 140 150,0 200, 100 C 220, 140 40,100 100,0 
+			C127,-47 170,140 70,140
+		"/>
+</svg>

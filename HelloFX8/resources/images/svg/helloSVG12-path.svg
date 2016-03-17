@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	>
+	<path stroke="black" d="m 50 50 l 150 150"/>
+	<path stroke="black" d="M 50 50 150 150" transform="translate(0, 50)"/>
+	<path d="m 150 50 l 250 150 350 100"/>
+	<path fill="orange" d="M 150 50 L 250 150 350 100" transform="translate(50, 0)" fill-opacity=".6"/>
+	<path fill="lightgreen" d="M 150 50 L 250 150 350 100" transform="translate(100, 0)" fill-opacity=".6"/>
+	
+	
+	<path fill="darkblue" d="M 70 290 L 150 150 200,250 40,250 100,150 170,290" transform="translate(150, 0)" fill-opacity=".6" fill-rule="nonzero"/>
+	<path fill="crimson" d="M 70 290 L 150 150 200,250 40,250 100,150 170,290" transform="translate(250, 0)" fill-opacity=".6" fill-rule="evenodd"/>
+	
+	<!--  -->
+	<path d="M 100, 350 300,100 500,350" fill="none" stroke="maroon" stroke-opacity=".6" stroke-width="20" transform="translate(300, 0)"/>
+	<path d="M 250, 320, 250,  220, 350 220, 350, 320" fill="none" stroke="olive" stroke-opacity=".6" stroke-width="20" transform="translate(300, 0)"/>
+	<path d="M 100, 350 300,100 500,350z" fill="none" stroke="lime" stroke-opacity=".6" stroke-width="20" transform="translate(350, 50)"/>
+	<path d="M 250, 320, 250,  220, 350 220, 350, 320z" fill="aqua" stroke="olive" stroke-opacity=".6" stroke-width="20" transform="translate(350, 50)"/>
+	
+	<path d="M 100, 350 300,100 500,350z M 250, 320, 250,  220, 350 220, 350, 320Z" stroke="maroon" stroke-opacity=".6" stroke-width="20" 
+		fill-opacity=".6" fill="teal" fill-rule="evenodd"
+		transform="translate(450, -50)"/>
+</svg>

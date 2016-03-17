@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+	<path d="M0 0L200, 400, 400, 0" fill="none" stroke-width="2" stroke="fuchsia"/> 
+	
+	<path d="M100, 200L200, 400 300, 200"  fill="none" stroke-width="5" stroke="red" stroke-opacity=".5"/>
+	<path d="M100, 200Q200, 400 300, 200"  fill="none" stroke-width="5" stroke="blue" stroke-opacity=".5"/>
+</svg>
