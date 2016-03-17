@@ -96,7 +96,7 @@
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
                <children>
                		<!-- style="-fx-shape: 'M0, 50 Q50, 0 100, 50Q50, 100 0, 50'" -->
-                  <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onClearLog" HBox.hgrow="SOMETIMES">
+                  <Button mnemonicParsing="false" onAction="#onClearLog" HBox.hgrow="SOMETIMES" text="%btn.clearLog">
                      <tooltip>
                         <Tooltip text="%btn.clearLog" />
                      </tooltip></Button>

@@ -22,7 +22,7 @@
             <Insets />
          </GridPane.margin>
          <tabs>
-            <Tab closable="false" text="Incremental Package">
+            <Tab closable="false" text="%tab.increPatch">
                <content>
                   <GridPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="650.0">
                     <columnConstraints>
@@ -37,33 +37,30 @@
                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="EE ID" />
+                        <Label text="%lbl.eeID" />
 <!--                         <Label text="Workspace Directory" GridPane.rowIndex="1" /> -->
-                        <Label text="%label.wsDir" GridPane.rowIndex="1" />
-                        <Label text="Patch Release Directory" GridPane.rowIndex="3" />
-                        <Label text="Modify List (README)" GridPane.rowIndex="2" />
+                        <Label text="%lbl.wsDir" GridPane.rowIndex="1" />
+                        <Label text="%lbl.relDir" GridPane.rowIndex="3" />
+                        <Label text="%modifyList.lbl" GridPane.rowIndex="2" />
                         <TextArea fx:id="modifyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                        	promptText="e.g. EximBillWeb/JavaSource/com/cs/eximweb/utility/img/ImageProcess.java"
-                        	>
+                        	promptText="%modifyList.prompt">
                         	<tooltip>
-                        		<Tooltip text="Modify List Content, which will be output as README"/>
+                        		<Tooltip text="%modifyList.tooltip"/>
                         	</tooltip>
                         </TextArea>
                         <TextField fx:id="patchReleaseDirectory" GridPane.columnIndex="1" GridPane.rowIndex="3"
-                        	promptText="e.g. EximBillWeb/JavaSource/com/cs/eximweb/utility/img/ImageProcess.java"
-                        	>
-                        	<tooltip><Tooltip text="Patch Release Directory"/></tooltip>
+                        	promptText="%patchRelDir.prompt">
+                        	<tooltip><Tooltip text="%patchRelDir.tooltip"/></tooltip>
                         </TextField>
                         <TextField fx:id="workSpaceDirectory" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                        	promptText="e.g. E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307"
-                        	>
-                        	<tooltip><Tooltip text="Workspace Directory"/></tooltip>
+                        	promptText="%wsDir.prompt">
+                        	<tooltip><Tooltip text="%wsDir.tooltip"/></tooltip>
                         </TextField>
-                        <TextField disable="true" prefWidth="447.0" promptText="Input EE-ID into Modfiy List as comment (starts with --)" GridPane.columnIndex="1" />
+                        <TextField disable="true" prefWidth="447.0" promptText="%eeID.text" GridPane.columnIndex="1" />
                         <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <children>
-                              <Button fx:id="startPatch" mnemonicParsing="false" onAction="#onStartPatch" text="Try Patch" />
-                              <Button fx:id="clearLogBtn" mnemonicParsing="false" onAction="#onClearLog" text="Clear Log" />
+                              <Button fx:id="startPatch" mnemonicParsing="false" onAction="#onStartPatch" text="%btn.patch" />
+                              <Button fx:id="clearLogBtn" mnemonicParsing="false" onAction="#onClearLog" text="%btn.clearLog" />
                            </children>
                            <padding>
                               <Insets top="5.0" />
@@ -75,6 +72,6 @@
             </Tab>
          </tabs>
       </TabPane>
-      <TextArea fx:id="logMsg" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" promptText="Log Message" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <TextArea fx:id="logMsg" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" promptText="%logMsg.prompt" GridPane.columnSpan="2" GridPane.rowIndex="1" />
    </children>
 </GridPane>
