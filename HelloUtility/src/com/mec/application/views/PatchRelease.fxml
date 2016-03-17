@@ -38,7 +38,8 @@
                     </rowConstraints>
                      <children>
                         <Label text="EE ID" />
-                        <Label text="Workspace Directory" GridPane.rowIndex="1" />
+<!--                         <Label text="Workspace Directory" GridPane.rowIndex="1" /> -->
+                        <Label text="%label.wsDir" GridPane.rowIndex="1" />
                         <Label text="Patch Release Directory" GridPane.rowIndex="3" />
                         <Label text="Modify List (README)" GridPane.rowIndex="2" />
                         <TextArea fx:id="modifyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"

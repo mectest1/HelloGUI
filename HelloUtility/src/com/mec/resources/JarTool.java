@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.jar.JarOutputStream;
 import java.util.regex.Pattern;
@@ -417,6 +418,17 @@ public class JarTool {
 //		if(line.startsWith(trimmedStr)){
 		while(line.startsWith(trimmedStr)){
 			line = line.substring(trimmedStr.length());
+		}
+		return line;
+	}
+	
+	public static String trimTrailing(String line, String trimmedStr){
+		if(null == line || line.isEmpty() || null ==trimmedStr || trimmedStr.isEmpty()){
+			return line;
+		}
+		//
+		while(line.endsWith(trimmedStr)){
+			line = line.substring(0, line.length() - trimmedStr.length());
 		}
 		return line;
 	}

@@ -1,14 +1,20 @@
 package com.mec.resources;
 
-import java.awt.TextField;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -21,18 +27,39 @@ public class ViewFactory {
 		ViewFactory.logger = logger;
 	}
 	
+	public static <T> T loadView(String viewURL){
+		LoadViewResult<T, ?> loadResult = loadViewDeluxe(viewURL);
+		return (T) loadResult.getViewRoot();
+	}
+	
 	@SuppressWarnings("unchecked")
-	private static <T> T loadView(String viewURL){
-		T retval = null;
+	public static <V, C> LoadViewResult<V, C> loadViewDeluxe(String viewURL){
+		V retval = null;
+		C controller = null;
 		try {
-			retval = (T) FXMLLoader.load(ViewFactory.class.getResource(viewURL));
+			URL view = ViewFactory.class.getResource(viewURL);
+			Objects.requireNonNull(view);
+//			retval = (T) FXMLLoader.load(ViewFactory.class.getResource(viewURL));
+//			ResourceBundle viewBundle = ResourceBundle.getBundle(Msg.get(ViewFactory.class, "viewMessages"));
+//			Objects.requireNonNull(viewBundle);
+			String bundleBase = JarTool.trimLeadingSlash(JarTool.trimTrailing(viewURL, FXML_SUFFIX));
+			ResourceBundle viewBundle;
+			try {
+				viewBundle = ResourceBundle.getBundle(bundleBase);
+				FXMLLoader loader = new FXMLLoader(view, viewBundle);
+				retval = loader.load();
+				controller = loader.getController();
+			} catch (MissingResourceException e) {
+				retval = (V) FXMLLoader.load(view);
+			}
 		} catch (Exception e) {
 //			e.printStackTrace();
 //			retval =  null;
 //			e.printStackTrace(out);
 			log(e);
 		}
-		return retval;
+//		return retval;
+		return new LoadViewResult<>(retval, controller);
 	}
 	
 	private static Stage newStage(Parent sceneRoot, String stageTitle){
@@ -94,6 +121,42 @@ public class ViewFactory {
 			logger.log(e);
 		}
 	}
+	
+	public static void onClickedViewMenuItem(ActionEvent event){
+		MenuItem menuItem = (MenuItem) event.getTarget();
+		@SuppressWarnings("unchecked")
+		HashMap<String, String> userData = (HashMap<String, String>) menuItem.getUserData();
+		String view = userData.get(FXML_ATTR_KEY_VIEW);
+		String title = userData.get(FXML_ATTR_KEY_TITLE);
+		ViewFactory.showNewStage(view, title);
+	}
+	
+	
+	
+	public static class LoadViewResult<ViewRoot, Controller>{
+		ViewRoot viewRoot;
+		Controller controller;
+		public LoadViewResult(ViewRoot viewRoot, Controller controller) {
+			super();
+			this.viewRoot = viewRoot;
+			this.controller = controller;
+		}
+		public ViewRoot getViewRoot() {
+			return viewRoot;
+		}
+		public void setViewRoot(ViewRoot viewRoot) {
+			this.viewRoot = viewRoot;
+		}
+		public Controller getController() {
+			return controller;
+		}
+		public void setController(Controller controller) {
+			this.controller = controller;
+		}
+	}
 //	private static PrintWriter out;
 	private static MsgLogger logger;
+	private static final String FXML_SUFFIX = Msg.get(ViewFactory.class, "fxml.suffix");
+	public static final String FXML_ATTR_KEY_VIEW = Msg.get(ViewFactory.class, "fxml.attrKey.view");
+	public static final String FXML_ATTR_KEY_TITLE = Msg.get(ViewFactory.class, "fxml.attrKey.title");
 }

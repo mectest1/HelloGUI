@@ -13,33 +13,66 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import java.util.HashMap?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.RootPaneController">
+	
+	<center>
+		<Label text="%lbl.welcome"/>
+	</center>
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
             <MenuBar>
               <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu mnemonicParsing="false" text="%menu.file">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#onExit" text="Close" />
+                    <MenuItem mnemonicParsing="false" onAction="#onExit" text="%menu.file.exit" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu mnemonicParsing="false" text="%menu.edit">
                   <items>
-                    <MenuItem disable="true" mnemonicParsing="false" text="Delete" />
+                    <MenuItem disable="true" mnemonicParsing="false" text="%menu.edit.delete" />
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="View">
+                  <Menu mnemonicParsing="false" text="%menu.view">
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#onBase64Decoder" text="Base64 [De|En]coder" />
-                      <MenuItem mnemonicParsing="false" onAction="#onPatchRelease" text="Patch Release Manager" />
-                      <MenuItem disable="true" mnemonicParsing="false" onAction="#onFileManager" text="File Manager" />
+<!--                       <MenuItem mnemonicParsing="false" onAction="#onBase64Decoder" text="%menu.view.decoder"> -->
+                      <MenuItem mnemonicParsing="false" onAction="#viewMenuItemClicked" text="%menu.view.decoder">
+<!--                       	<fx:define> -->
+<!-- 							<String fx:id="decoderURL" value="%view.decoder.url"/> -->
+<!-- 						</fx:define> -->
+                      	<userData>
+<!--                       		<FXCollections fx:factory="observableMap"> -->
+                      			
+<!--                       		</FXCollections> -->
+							<HashMap view="%view.decoder.url" title="%view.decoder.title"/>
+                      	</userData>
+                      </MenuItem>
+<!--                       <MenuItem mnemonicParsing="false" onAction="#onPatchRelease" text="%menu.view.patchManager"> -->
+                      <MenuItem mnemonicParsing="false" onAction="#viewMenuItemClicked" text="%menu.view.patchManager">
+                      	<userData>
+<!--                       		<HashMap> -->
+<!--                       			<view>%view.patchRelease.url</view> -->	<!-- Note: resource cannot be referenced here -->
+<!--                       			<title>%view.patchRelease.title</title> -->
+<!--                       		</HashMap> -->
+							<HashMap view="%view.pr.url" title="%view.pr.title"/>
+                      	</userData>
+                      </MenuItem>
+<!--                       <MenuItem disable="true" mnemonicParsing="false" onAction="#onFileManager" text="%menu.view.fileManager" /> -->
+                      <MenuItem mnemonicParsing="false" onAction="#viewMenuItemClicked" text="%menu.view.fileManager">
+                      		<userData>
+                      			<HashMap view="%view.fm.url" title="%view.fm.title"/>
+                      		</userData>
+                      </MenuItem>
                     </items>
                   </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu mnemonicParsing="false" text="%menu.help">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
+                    <MenuItem mnemonicParsing="false" onAction="#onAbout" text="%menu.help.about" />
                   </items>
                 </Menu>
               </menus>
@@ -57,13 +90,15 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextArea fx:id="logMsg" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+            <TextArea fx:id="logMsg" styleClass="log-msg" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" 
+            	style="-fx-background-color: none"
+            	/>
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
                <children>
                		<!-- style="-fx-shape: 'M0, 50 Q50, 0 100, 50Q50, 100 0, 50'" -->
                   <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onClearLog" HBox.hgrow="SOMETIMES">
                      <tooltip>
-                        <Tooltip text="Clear Log" />
+                        <Tooltip text="%btn.clearLog" />
                      </tooltip></Button>
                </children>
                <opaqueInsets>

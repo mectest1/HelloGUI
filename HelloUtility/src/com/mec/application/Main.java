@@ -1,11 +1,11 @@
 package com.mec.application;
 	
 import com.mec.resources.Msg;
+import com.mec.resources.ViewFactory;
+import com.mec.resources.ViewFactory.LoadViewResult;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -17,15 +17,18 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 //			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("RootPane.fxml"));
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(Msg.get(this, "rootPane")));
-			BorderPane root = (BorderPane)loader.load();
-			RootPaneController rootController = (RootPaneController)loader.getController();
+//			FXMLLoader loader = new FXMLLoader(getClass().getResource(Msg.get(this, "rootPane")));
+//			BorderPane root = (BorderPane)loader.load();
+//			RootPaneController rootController = (RootPaneController)loader.getController();
+//			
+//			Label hello = new Label(Msg.get(this, "hello"));
+//			root.setCenter(hello);
 			
-			Label hello = new Label(Msg.get(this, "hello"));
-			root.setCenter(hello);
-			
+			LoadViewResult<BorderPane, RootPaneController> loadResult = ViewFactory.loadViewDeluxe(Msg.get(this, "rootPane"));
+			BorderPane root = loadResult.getViewRoot();
+			RootPaneController rootController = loadResult.getController();
 			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource(Msg.get(this, "rootStyle")).toExternalForm());
+//			scene.getStylesheets().add(getClass().getResource(Msg.get(this, "rootStyle")).toExternalForm());
 			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle(Msg.get(this, "title"));
