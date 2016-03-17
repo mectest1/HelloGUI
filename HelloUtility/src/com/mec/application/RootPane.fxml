@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.RootPaneController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.RootPaneController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -26,7 +34,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#onBase64Decoder" text="Base64 [De|En]coder" />
                       <MenuItem mnemonicParsing="false" onAction="#onPatchRelease" text="Patch Release Manager" />
-                      <MenuItem mnemonicParsing="false" onAction="#onFileManager" text="File Manager" disable="true"/>
+                      <MenuItem disable="true" mnemonicParsing="false" onAction="#onFileManager" text="File Manager" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -52,7 +60,11 @@
             <TextArea fx:id="logMsg" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onClearLog" text="Clear Log" />
+               		<!-- style="-fx-shape: 'M0, 50 Q50, 0 100, 50Q50, 100 0, 50'" -->
+                  <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onClearLog" HBox.hgrow="SOMETIMES">
+                     <tooltip>
+                        <Tooltip text="Clear Log" />
+                     </tooltip></Button>
                </children>
                <opaqueInsets>
                   <Insets />

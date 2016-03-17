@@ -5,6 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Tooltip?>
 
 <GridPane prefHeight="550.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.PatchReleaseController">
    <columnConstraints>
@@ -40,9 +41,23 @@
                         <Label text="Workspace Directory" GridPane.rowIndex="1" />
                         <Label text="Patch Release Directory" GridPane.rowIndex="3" />
                         <Label text="Modify List (README)" GridPane.rowIndex="2" />
-                        <TextArea fx:id="modifyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="patchReleaseDirectory" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="workSpaceDirectory" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextArea fx:id="modifyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                        	promptText="e.g. EximBillWeb/JavaSource/com/cs/eximweb/utility/img/ImageProcess.java"
+                        	>
+                        	<tooltip>
+                        		<Tooltip text="Modify List Content, which will be output as README"/>
+                        	</tooltip>
+                        </TextArea>
+                        <TextField fx:id="patchReleaseDirectory" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                        	promptText="e.g. EximBillWeb/JavaSource/com/cs/eximweb/utility/img/ImageProcess.java"
+                        	>
+                        	<tooltip><Tooltip text="Patch Release Directory"/></tooltip>
+                        </TextField>
+                        <TextField fx:id="workSpaceDirectory" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                        	promptText="e.g. E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307"
+                        	>
+                        	<tooltip><Tooltip text="Workspace Directory"/></tooltip>
+                        </TextField>
                         <TextField disable="true" prefWidth="447.0" promptText="Input EE-ID into Modfiy List as comment (starts with --)" GridPane.columnIndex="1" />
                         <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <children>
