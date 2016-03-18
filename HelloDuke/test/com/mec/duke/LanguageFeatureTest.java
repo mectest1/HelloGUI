@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -324,7 +325,7 @@ public class LanguageFeatureTest {
 	}
 	
 
-	
+	@Ignore
 	@Test
 	public void testEnumInClass(){
 		Navi.Direction d = Navi.Direction.NORTH;
@@ -335,10 +336,98 @@ public class LanguageFeatureTest {
 	}
 	
 	static class Navi{
-		enum Direction{NORTH, SOUTH, EAST, WEST;}	//<- no need to be declared as static --
+		enum Direction{NORTH, SOUTH, EAST, WEST;
+			
+			Direction(){	//only allowable modifier (if there is any) for enum is "private";
+				
+			}
+		}
+		
+		
+		//<- no need to be declared as static --
 							//enums are static automatically;
 	}
 	
+	@Ignore
+	@Test
+	public void testConflictMethods(){
+//		interface i{	// Interface, as well as enum(since they're basically the same) can only be defined in top-level class or static context
+//			
+//		}
+		
+//		class Derp implements I1, I2{
+//
+//			@Override
+//			public void doIt() {	//<-- The return type is in-compatible wiht I3.doIt();
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//		}
+	}
+	interface I1{
+		void doIt();
+	}
+	
+	interface I2{
+		int doIt();
+	}
+	
+	//====================================================================
+	@Ignore
+	@Test
+	public void testStaticMethods(){
+	
+	}
+	
+	static class A3{
+		static void doIt(){
+			derp();
+		}
+		
+		private static void derp(){
+			
+		}
+	}
+	
+	static class B3 extends A3{
+//		static int doIt(){	//<- return type is incompatible with A3.doIt();
+//			
+//		}
+		
+		static int derp(){	//<- it's OK;
+			return 0;
+		}
+	}
+	//====================================================================
+	
+	@Test
+	public void testTreeSet(){
+		class Drink implements Comparable<Drink>{
+			String name;
+
+			public Drink(String name) {
+				super();
+				this.name = name;
+			}
+
+			@Override
+			public int compareTo(Drink o) {
+				return 0;
+			}
+
+			@Override
+			public String toString() {
+				return "Drink [name=" + name + "]";
+			}
+		}
+		
+		TreeSet<Drink> drinks = new TreeSet<Drink>(); //<- TreeSet: backed by keys in TreeMap;
+		drinks.add(new Drink("Coffee"));
+		drinks.add(new Drink("Tea"));
+		out.println(drinks);	//result:[Drink [name=Coffee]]
+
+	}
 	
 	static interface DeclareStuff{
 		public static final int EASY = 3;
