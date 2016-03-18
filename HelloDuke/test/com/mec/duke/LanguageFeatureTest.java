@@ -141,7 +141,7 @@ public class LanguageFeatureTest {
 	
 	
 
-//	@Ignore
+	@Ignore
 	@Test
 	public void testGenerics(){
 //		List<? super ? extends Object> derp  = new ArrayList<>();	//<- derp, this fails;
@@ -219,10 +219,130 @@ public class LanguageFeatureTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testPathResolve() throws Exception{
 		Path cur = Paths.get(".");
 		out.println(cur.toRealPath());
+		
+		
+		Integer i = 0;
+		increment(i);
+		out.println(i);	//it's 0 or 1?
+						/**
+						 * Note: 
+							1, Java is pass by value, not by reference;
+								(Although normal objects values are references themselves)
+							2, Integers are immutable 
+								
+						 */
+						
+									
+		
+						
+	}
+	
+	
+	@Ignore
+	@Test
+	public void testExceptionsInThreads(){
+		IntStream.range(0, 5).forEach(i -> {
+			new Thread(){
+
+				@Override
+				public void run() {
+					RuntimeException e = new RuntimeException("derp" + i);
+					e.printStackTrace(out);
+//					throw new RuntimeException("derp" + i);
+					throw e;
+				}
+				
+			}.start();
+		});
+	}
+	
+	//Question 83 (modified)
+	@Ignore
+	@Test
+	public void testIntegerIncrement(){
+		 class TestDeclare implements DeclareStuff{
+		 	int x = 5;
+			@Override
+			public void doStuff(int s) {
+				s += EASY + ++s;
+				out.printf("s %s\n", s);
+			}
+		 }
+		 int x = 5;
+		 new TestDeclare().doStuff(++x);	//<- Q: why is the result "s 16" instead of "s 17"?
+		 					//Possible answer: from VM's perspective of view: 
+		 					/*
+		 					 * expression: 
+		 					 * s += EASY + ++s 
+		 					 * can be rewritten to:
+		 					 * 	s = s + EASY + (++s)
+		 					 * 
+		 					 * Thus to evaluate this expression, 
+		 					 * variable_s = value_of_s + value_of_EASY + value_of_++s
+		 					 * 
+		 					 * results into
+		 					 * 
+		 					 * variable_s = 6 + 3 + 7
+		 					 * 
+		 					 * Thus variable_s now holds value of 16 (instead of 17) -> 
+		 					 * since the value stack is pushed one by one from left to right for the addition expression;
+		 					 */
+		 					//
+	}
+	
+	@Ignore
+	@Test
+	public void testRecursiveExtend(){
+		out.println(new B2());	//<-----StackOverflowError
+	}
+	
+	class A2{
+		A2(){
+			new B2(); //<- LOL, still available
+		}
+	}
+	class B2 extends A2{
+		
+	}
+	
+	//Question 118
+	enum Element{
+		EARTH, WIND,
+		FIRE{	//<- override method on the fly
+			public String info(){
+				return "Hot";
+			}
+		};
+		public String info(){
+			return "element";
+		}
+	}
+	
+
+	
+	@Test
+	public void testEnumInClass(){
+		Navi.Direction d = Navi.Direction.NORTH;
+		
+		abstract class Z{
+			
+		}
+	}
+	
+	static class Navi{
+		enum Direction{NORTH, SOUTH, EAST, WEST;}	//<- no need to be declared as static --
+							//enums are static automatically;
+	}
+	
+	
+	static interface DeclareStuff{
+		public static final int EASY = 3;
+		void doStuff(int t);
 	}
 	
 	static class Derp{
@@ -265,6 +385,81 @@ public class LanguageFeatureTest {
 //			
 //		}
 	}
+	
+	static class Derp5{
+		Derp5(String name){
+			
+		}
+	}
+	
+	static class Derp6 extends Derp5{
+		Derp6(){
+			super("derp6");
+		}
+	}
+	
+	static class Derp7{
+		static interface Foo{
+			int bar();
+		}
+		
+		class A implements Foo{
+
+			@Override
+			public int bar() {
+				return 0;
+			}
+			
+		}
+		
+		void foobar(Foo foo){
+			out.println(foo.bar());
+		}
+		
+		void testFoo(){
+			class A implements Foo{	//<- The Type A is hiding the type Derp7.A;
+
+				@Override
+				public int bar() {
+					return 2;
+				}
+				
+			}
+			
+			foobar(new A());
+		}
+		
+	}
+	
+	static class Derp8{
+		static final int[] a1 = {1, 2};
+//		static final int[] a2 = new int[2]{1, 2};//cannot define array dimensions when array initializer is provided
+		static final int[] a3 = new int[]{1, 2};
+//		static final int[] a4 = new int[];//variable must provide either dimension expressions or an array initializer;
+		static final int[] a5 = new int[2]; static{a5[0]=1; a5[1]=2;
+						a5[3]=3;	//<- derp ~.~
+						}
+		
+		
+	}
+	
+	static Integer increment(Integer i){
+		return i++;
+	}
+	
+	static class Derp9{
+		int a;
+	}
+	
+	static class Derp10 extends Derp9{
+//		int a;
+		{
+			this.a = 0;	//<- still can be referenced;
+			a = 0;
+			super.a = 0;
+		}
+	}
+	
 	private static final PrintStream out = System.out;
 		
 }
