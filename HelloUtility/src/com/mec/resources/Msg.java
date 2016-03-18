@@ -76,23 +76,19 @@ public class Msg {
 		return get(obj.getClass(), tag);
 	}
 	
-	public static <R> R get(Class<?> clazz, String tag, Function<String, R> converter, R defaultValue){
+//	public static <R> R get(Class<?> clazz, String tag, Function<String, R> converter, R defaultValue){
+	public static <R> Optional<R> get(Class<?> clazz, String tag, Function<String, R> converter){
 		if(null == converter){
-			return defaultValue;
+			return Optional.empty();
 		}
 		String strval = get(clazz, tag);
-		R retval;
+		R retval = null;
 		try {
 			retval = converter.apply(strval);
 		} catch (Exception e) {
 //			e.printStackTrace();
-			retval = null;
 		}
-		if(null != retval){
-			return retval;
-		}else{
-			return defaultValue;
-		}
+		return Optional.ofNullable(retval);
 	}
 	
 	/**
@@ -114,7 +110,8 @@ public class Msg {
 	 * @return
 	 */
 	public static <R> R get(Object obj, String tag, Function<String, R> converter, R defaultValue){
-		return get(obj.getClass(), tag, converter, defaultValue);
+//		return get(obj.getClass(), tag, converter, defaultValue);
+		return get(obj.getClass(), tag, converter).orElse(defaultValue);
 	}
 	
 	/**
