@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+	<path stroke="red" stroke-width="6" fill="royalblue"
+		stroke-linecap="round"
+		d="M50, 100
+		A 100,50 0 0 1 250,100
+		A 80,40 0 0 1 90,100
+		A 60,30 0 0 1 210,100
+		A 40,20 0 0 1 130,100
+		A 20,10 0 0 1 170,100
+		" 
+	
+	/>
+</svg>

@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg">
-	
+	<path stroke-width="2" stroke="maroon" fill="pink"
+		d="M0,200 C 50, 200 100, 100 150, 200 
+			C 200, 300 250, 200 300, 200"
+	/>
+	<path stroke-width="2" stroke="blue" fill="aqua"
+		d="M 0, 200 C 50, 200 100,300 150, 200
+			C200, 100 250, 200 300,200"
+	/>
+	<path stroke-width="2" stroke="teal" 
+		d="M100, 100 L200, 300"
+	/>
+	<path stroke-width="2" stroke="red" 
+		d="M100, 300 L200, 100"
+	/>
 </svg>
