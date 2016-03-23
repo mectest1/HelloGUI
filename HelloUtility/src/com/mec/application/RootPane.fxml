@@ -68,6 +68,11 @@
                       			<HashMap view="%view.fm.url" title="%view.fm.title"/>
                       		</userData>
                       </MenuItem>
+                      <MenuItem mnemonicParsing="false" onAction="#viewMenuItemClicked" text="%menu.view.logViewer" disable="true">
+                      		<userData>
+                      			<HashMap view="%view.logView.url" title="%view.logView.title"/>
+                      		</userData>
+                      </MenuItem>
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="%menu.help">
