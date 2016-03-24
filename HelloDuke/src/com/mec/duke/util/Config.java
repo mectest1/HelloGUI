@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
@@ -17,9 +17,22 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
-
 /**
  * Configuration Factory
+ * <p>
+ * Structure of the configurations will look like this (with default policies):
+ * <code>${configDir}/${componentConfigDir}/tag.xml</code>
+ * <br/>
+ * </p>
+ * <p>
+ * e.g.
+ * <code>Config.config(Config.class).save("foo", barObject)</code> will generate the following file: 
+ * <strong>./data/com.mec.resources.Config/foo.xml</strong>
+ * </p>
+ * <p>
+ * The generated configuration XML file can later be loaded with
+ * <code>Config.config(Config.class).load("foo", BarObject.class)</code>, which may be empty.
+ * </p>
  * @author MEC
  *
  */
@@ -30,11 +43,18 @@ public class Config {
 		createIfNotExists(configDir, Files::createDirectory);
 	}
 	
-	private Path getDataPath(Object obj, String tag){
-		return getDataPath(obj.getClass(), tag);
+	private Config(Path componentConfigDir){
+		this();
+		this.componentConfigDir = configDir.resolve(componentConfigDir);
 	}
+	private Config(String componentConfigDirStr){
+		this(Paths.get(componentConfigDirStr));
+	}
+	
+	//---------------------------------------------------------
+	@Deprecated
 	@SuppressWarnings("unchecked")
-	public <T> Optional<T> loadConfig(Object obj, String tag, Class<? extends T> configObjClass){
+	private <T> Optional<T> loadConfig(Object obj, String tag, Class<? extends T> configObjClass){
 		
 		return loadConfig(obj.getClass(), tag, (Class<? extends T>) configObjClass);
 	}
@@ -43,11 +63,13 @@ public class Config {
 	 * @param tag tag.xml to be saved
 	 * @param configObj configuration object to be saved
 	 */
-	public <T> void saveConfig(Object objClassAsPath, String tag, T configObj){
+	@Deprecated
+	private <T> void saveConfig(Object objClassAsPath, String tag, T configObj){
 		saveConfig(objClassAsPath.getClass(), tag, configObj);
 	}
 	
-	public void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
+	//----------------------------------------------------------
+	private void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
 		if(!Files.exists(path)){
 			try {
 //				Files.createDirectories(path);
@@ -57,19 +79,39 @@ public class Config {
 			}
 		}
 	}
-	//----------------------------------------------------------
+	
+
+	@Deprecated
+	private Path getDataPath(Object obj, String tag){
+		return getDataPath(obj.getClass(), tag);
+	}
+	
+	@Deprecated
 	private Path getDataPath(Class<?> clazz, String tag){
-		Path componentConfigDir = configDir.resolve(clazz.getName());
-		createIfNotExists(componentConfigDir, Files::createDirectories);
+		return getDataPath(clazz.getName(), tag);
+	}
+	
+	@Deprecated
+	private Path getDataPath(String componentConfigDirStr, String tag){
+		Path fullConfigPath = configDir.resolve(componentConfigDirStr);
+		return getConfigWithFullPath(fullConfigPath, tag);
+	}
+	private Path getConfigWithFullPath(Path fullConfigPath, String tag){
+		createIfNotExists(fullConfigPath, Files::createDirectories);
 		
-		Path retval = componentConfigDir.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
+		Path retval = fullConfigPath.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
 		createIfNotExists(retval, Files::createFile);
 		return retval;
+	}
+	private Path getDataPath(String tag){
+//		Path fullConfigPath = configDir.resolve(componentConfigDir);
+		return getConfigWithFullPath(componentConfigDir, tag);
 	}
 	
 	
 	//------------------------------------------------------------
-	public <T> Optional<T> loadConfig(Class<?> clazz, String tag, Class<? extends T> configObjClass){
+	@Deprecated
+	private <T> Optional<T> loadConfig(Class<?> clazz, String tag, Class<? extends T> configObjClass){
 //		Path xmlFile = getDataPath(clazz, tag);
 		Optional<T> retval;
 		try {
@@ -92,7 +134,8 @@ public class Config {
 	 * @param tag configuration object will be saved into tag.xml
 	 * @param configObj configuration object to be saved
 	 */
-	public <T> void saveConfig(Class<?> clazz, String tag, T configObj){
+	@Deprecated
+	private <T> void saveConfig(Class<?> clazz, String tag, T configObj){
 		Path xmlFile = getDataPath(clazz, tag);
 		try {
 			BeanMarshal.saveToXML(configObj, xmlFile);
@@ -101,39 +144,116 @@ public class Config {
 		}
 	}
 	
+	public <T> Optional<T> load(String tag, Class<? extends T> configObjClass){
+		Optional<T> retval;
+		try {
+			Path xmlFile = componentConfigDir.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
+			if(!(Files.exists(componentConfigDir) && Files.exists(xmlFile))){
+				throw new FileNotFoundException(xmlFile.normalize().toString());
+			}
+			retval = Optional.of(BeanMarshal.loadFromXML(configObjClass, xmlFile));
+		} catch (JAXBException | FileNotFoundException e) {
+			logger.log(e);
+			retval = Optional.empty();
+		}
+		return retval;
+	}
 	
+	public <T> void save(String tag, T configObj){
+		Path xmlFile = getDataPath(tag);
+		try {
+			BeanMarshal.saveToXML(configObj, xmlFile);
+		} catch (JAXBException e) {
+			logger.log(e);
+		}
+	}
+	
+	//------------------------------------------------
 	/**
 	 * The one and only getInstance() method;
-	 * @return
+	 * @return 
 	 */
-	public static Config inst(){
+	static Config inst(){
 		return instance;
 	}
+	
+	/**
+	 * @param componentConfigDir directory name for each stand alone component that wants to store configurations;
+	 * @return a new {@link Config} instance, or an existing one with the same <code>componentConfigDir</code>
+	 */
+	public static Config config(String componentConfigDir){
+		return instances.computeIfAbsent(componentConfigDir, Config::new);
+	}
+	/**
+	 * @param clazz clazz.name will be used as <code>componentConfigDir</code>
+	 * @return a new {@link Config} instance or existing one;
+	 */
+	public static Config config(Class<?> clazz){
+		Objects.requireNonNull(clazz);
+		return config(clazz.getName());
+	}
+	/**
+	 * @param obj obj.class.name will be used as <code>componentConfigDir</code>
+	 * @return a new {@link Config} instance or existing one;
+	 */
+	public static Config config(Object obj){
+		Objects.requireNonNull(obj);
+		return config(obj.getClass().getName());
+	}
+	//------------------------------------------------
 	
 	//---------------------------------------
 	public void setLogger(MsgLogger logger) {
 		this.logger = logger;
 	}
 
+	/**
+	 * Parent directory for all configuration files;
+	 */
 	private Path configDir;
+	/**
+	 * Path of parent directory for component-specific configurations, will be resolved relative to <code>configDir</code> when new {@link Config} instance is created.
+	 */
+	private Path componentConfigDir;
 //	private static Path configDir = Paths.get(Msg.get(Config.class, "data.path"));
 //	static{
 //		createIfNotExists(configDir, Files::createDirectories);
 //	}
-	private static final Config instance = new Config();
 	private MsgLogger logger = MsgLogger.defaultLogger();
+	private static final Config instance = new Config();
 	private static final String CONFIG_FILENAME_PATTERN = Msg.get(Config.class, "config.fileName.pattern");
 	private static interface CreatePathMethod{
 		Path create(Path p) throws IOException;
 	}
+	private static Map<String, Config> instances = new HashMap<>();
+	
+	/**
+	 * policy that specifies the behavior when config file already exists;
+	 * @author MEC
+	 *
+	 */
+	public enum ConfigExistedPolicy{
+		OVERRIDE	//default policy: overriding existing configuration file
+		,BACKUP_OLD
+		;
+	}
+	
+	
+	/**
+	 * Configuration directories generate policy
+	 * @author MEC
+	 *
+	 */
+	public enum DirectoryOrganizPolicy{
+		FLAT
+		,HIERARCHY
+		;
+		
+	}
 	
 	
 	
-	
-	
-	
-	
-	public static class BeanMarshal{
+	static class BeanMarshal{
 		
 		public static <T> void saveToXML(T obj, Path xmlFile) throws JAXBException, PropertyException{
 			Stream.of(obj, xmlFile).forEach(Objects::requireNonNull);

@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mec.duke.util.DateUtil;
+
 public class TimeAPITest {
 
 	@Ignore
@@ -39,6 +41,7 @@ public class TimeAPITest {
 		});
 	}
 	
+	@Ignore
 	@Test
 	public void testOldCalendar(){
 		Calendar now = Calendar.getInstance();
@@ -49,6 +52,11 @@ public class TimeAPITest {
 		out.println(now.getActualMaximum(Calendar.DAY_OF_MONTH));
 		now.set(Calendar.MONTH, Calendar.MARCH);	//31
 		out.println(now.getActualMaximum(Calendar.DAY_OF_MONTH));
+	}
+	
+	@Test
+	public void testPathNameFromTimestamp(){
+		out.println(DateUtil.getPathNameForNow());
 	}
 	
 	
