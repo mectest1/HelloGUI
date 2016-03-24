@@ -11,9 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mec.application.beans.PatchReleaseConfigBean;
-import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeanListCell;
+import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeanFavoriteCell;
+import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeanHistoryCell;
 import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeans;
 import com.mec.resources.Config;
 import com.mec.resources.FileParser;
@@ -95,13 +97,22 @@ public class PatchReleaseController implements MsgLogger{
 //				}
 //			};
 //		favList.setCellFactory(favCellFactory);
-		favList.setCellFactory(l -> new PatchReleaseConfigBeanListCell());
+		favList.setCellFactory(l -> new PatchReleaseConfigBeanFavoriteCell());
 		PatchReleaseConfigBeans favConfigList = Config.config(this).load(Msg.get(this, "config.favorites"), PatchReleaseConfigBeans.class)
 				.orElseGet(PatchReleaseConfigBeans::new);
 		favList.getItems().addAll(favConfigList.getConfigs());
+		
+		historyList.setCellFactory(l -> new PatchReleaseConfigBeanHistoryCell());
+		PatchReleaseConfigBeans historyConfigList = Config.config(this).load(Msg.get(this, "config.history"), PatchReleaseConfigBeans.class)
+				.orElseGet(PatchReleaseConfigBeans::new);
+		historyList.getItems().addAll(historyConfigList.getConfigs());
 		favList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(favList));
+//		Stream.of(favList, historyList).forEach(list -> list.getSelectionModel().selectedIndexProperty().addListener(onListItemSelected(list)));;
+		historyList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(historyList));
+		
 //		favList.setCellFactory(new PropertyValueFactory<>("name"));
 //		logMsg.getScene().getWindow().setOnCloseRequest(this::onWindowClosed);	//<-the windows is still uninitialized;
+		onClearLog();	//clear log on application start
 		Platform.runLater(() -> logMsg.getScene().getWindow().setOnCloseRequest(this::onWindowClosed));
 	}
 	
@@ -132,6 +143,9 @@ public class PatchReleaseController implements MsgLogger{
 			
 			relocateJars(patchReleaseDir);
 			writeReadMe(patchReleaseDir, modifyList);
+			
+			//
+			saveHistoryList();
 		}catch(Exception e){
 			log(e);
 		}
@@ -196,7 +210,7 @@ public class PatchReleaseController implements MsgLogger{
 		config.setWorkspaceDirectory(Paths.get(workSpaceDirectory.getText()));
 		config.setPatchReleaseDirectory(Paths.get(patchReleaseDirectory.getText()));
 		favList.refresh();
-		saveFavoriteList();
+		saveFavoriteListToFile();
 	}
 	@FXML
 	private void onFavoriteDeleteItem(ActionEvent evt){
@@ -210,6 +224,7 @@ public class PatchReleaseController implements MsgLogger{
 	private void onFavoriteNewItem(ActionEvent evt){
 //		String name = ViewFactory.inputText(DateUtil.getPathNameForNow(), "", "");
 		String name = configName.getText();
+		String modifyListStr = modifyList.getText();
 		Path workspaceDirectory = Paths.get(workSpaceDirectory.getText());
 		Path pathReleaseDirectory = Paths.get(patchReleaseDirectory.getText());
 		PatchReleaseConfigBean config = new PatchReleaseConfigBean(name, workspaceDirectory, pathReleaseDirectory);
@@ -217,18 +232,56 @@ public class PatchReleaseController implements MsgLogger{
 			favList.getItems().add(0, config);
 		}
 		favList.getSelectionModel().select(config);
-		saveFavoriteList();
+		saveFavoriteListToFile();
+//		if(null != modifyListStr){
+		modifyList.setText(modifyListStr);
+//		}
 	}
 	
 	private void onWindowClosed(WindowEvent evt){
-		saveFavoriteList();
+		Config.config(this).setLogger(MsgLogger.defaultLogger());
+		saveFavoriteListToFile();
+		saveHistoryListToFile();
 	}
 	
-	private void saveFavoriteList(){
+	private void saveFavoriteListToFile(){
 		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(favList.getItems());
 		Config.config(this).save(Msg.get(this, "config.favorites"), configs);
 	}
+	private void saveHistoryList(){
+		String name = configName.getText();
+		String modifyListStr = modifyList.getText();
+		Path workspaceDirectory = Paths.get(workSpaceDirectory.getText());
+		Path pathReleaseDirectory = Paths.get(patchReleaseDirectory.getText());
+		PatchReleaseConfigBean config = new PatchReleaseConfigBean(name, workspaceDirectory, pathReleaseDirectory);
+		config.setModifyList(modifyListStr);
+		historyList.getItems().add(0, config);
+	}
+	
+	private void saveHistoryListToFile(){
+		List<PatchReleaseConfigBean> historyRecords = historyList.getItems();
+		if(HISTORY_MAX < historyRecords.size()){
+			historyRecords = historyRecords.subList(0, HISTORY_MAX);
+		}
+		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(historyRecords);
+		Config.config(this).save(Msg.get(this, "config.history"), configs);
+	}
 
+//	private ChangeListener<? super Number> onListItemSelected(ListView<PatchReleaseConfigBean> listView){
+//		return (ob, oldVal, newVal) -> {
+////			ListView<PatchReleaseConfigBean> listView = (ListView<PatchReleaseConfigBean>) evt.getTarget();
+//			PatchReleaseConfigBean config = favList.getSelectionModel().getSelectedItem();
+//			if(null == config){
+//				return;
+//			}
+//			configName.setText(config.getName());
+//			workSpaceDirectory.setText(config.getWorkspaceDirectory().toString());
+//			patchReleaseDirectory.setText(config.getPatchReleaseDirectory().toString());
+//			if(historyList == listView){
+//				modifyList.setText(config.getModifyList());
+//			}
+//		};
+//	}
 	private ChangeListener<? super PatchReleaseConfigBean> onListItemSelected(ListView<PatchReleaseConfigBean> listView){
 		return (ob, oldVal, newVal) -> {
 //			ListView<PatchReleaseConfigBean> listView = (ListView<PatchReleaseConfigBean>) evt.getTarget();
@@ -239,7 +292,9 @@ public class PatchReleaseController implements MsgLogger{
 			configName.setText(config.getName());
 			workSpaceDirectory.setText(config.getWorkspaceDirectory().toString());
 			patchReleaseDirectory.setText(config.getPatchReleaseDirectory().toString());
-			modifyList.setText(config.getModifyList());
+			if(historyList == listView){
+				modifyList.setText(config.getModifyList());
+			}
 		};
 	}
 	
@@ -251,4 +306,5 @@ public class PatchReleaseController implements MsgLogger{
 //	private PatchReleaseConfigBeans favConfigList;
 	private JarTool jarTool = JarTool.newInstance(this);
 	private BooleanProperty fieldEmpty = new SimpleBooleanProperty();
+	private static final int HISTORY_MAX = Msg.get(PatchReleaseController.class, "history.maxItem", Integer::parseInt, 20);
 }

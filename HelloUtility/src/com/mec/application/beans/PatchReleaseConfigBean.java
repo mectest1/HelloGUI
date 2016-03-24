@@ -1,13 +1,18 @@
 package com.mec.application.beans;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.mec.resources.DateUtil;
+import com.mec.resources.Msg;
 
 import javafx.scene.control.ListCell;
 
@@ -132,7 +137,7 @@ public class PatchReleaseConfigBean {
 		}
 	}
 	
-	public static class PatchReleaseConfigBeanListCell extends ListCell<PatchReleaseConfigBean>{
+	public static class PatchReleaseConfigBeanFavoriteCell extends ListCell<PatchReleaseConfigBean>{
 		@Override
 		protected void updateItem(PatchReleaseConfigBean item, boolean empty) {
 			super.updateItem(item, empty);
@@ -143,4 +148,24 @@ public class PatchReleaseConfigBean {
 			}
 		}
 	}
+	public static class PatchReleaseConfigBeanHistoryCell extends ListCell<PatchReleaseConfigBean>{
+		@Override
+		protected void updateItem(PatchReleaseConfigBean item, boolean empty) {
+			super.updateItem(item, empty);
+			if(empty){
+				setText("");
+			}else{
+				String time = "";
+				LocalDateTime patchTime = item.getPatchTime();
+				if(LocalDate.now().isEqual(patchTime.toLocalDate())){
+					time = DateTimeFormatter.ISO_TIME.format(patchTime);
+				}else{
+					time = DateTimeFormatter.ISO_DATE_TIME.format(patchTime);
+				}
+				setText(String.format(HISTORY_ITEM_FORMAT, item.getName(), time));
+			}
+		}
+	}
+	
+	private static final String HISTORY_ITEM_FORMAT = Msg.get(PatchReleaseConfigBean.class, "history.item.format");
 }
