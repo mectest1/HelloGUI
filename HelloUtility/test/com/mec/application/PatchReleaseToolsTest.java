@@ -18,6 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mec.resources.FileParser;
@@ -28,6 +29,7 @@ public class PatchReleaseToolsTest {
 	public void tearDown() throws Exception {
 	}
 
+	@Ignore
 	@Test
 	public void testWriteJarFile() throws Exception{
 //		fail("Not yet implemented");

@@ -1,6 +1,8 @@
 package com.mec.resources;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.Objects;
@@ -12,13 +14,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ViewFactory {
 
@@ -109,6 +113,18 @@ public class ViewFactory {
 		
 		Optional<String> retval = textInput.showAndWait();
 		return retval;
+	}
+	
+	public static Optional<File> inputOpenFile(Window ownerWindow){
+		FileChooser fs = new FileChooser();
+		File file = fs.showOpenDialog(ownerWindow);
+		return Optional.ofNullable(file);
+	}
+	
+	public static Optional<File> inputSaveFile(Window ownerWindow){
+		FileChooser fs = new FileChooser();
+		File file = fs.showSaveDialog(ownerWindow);
+		return Optional.ofNullable(file);
 	}
 	
 	private static void log(Exception e){

@@ -1,4 +1,4 @@
-package com.mec.resources;
+package com.mec.duke.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +170,7 @@ public class Msg {
 		}
 	}
 	
-	private static final String MESSAGES = "com.mec.resources.MessagesBundle";
+	private static final String MESSAGES = "com.mec.duke.util.MessagesBundle";
 	private static ResourceBundle resources = ResourceBundle.getBundle(MESSAGES);
 	private static final String TAG_COMBINE_PATTERN = "%s.%s";
 	private static final GetCallerClassNameMethod getCaller = new SecurityManagerMethod();

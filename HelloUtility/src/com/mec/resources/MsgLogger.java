@@ -10,4 +10,5 @@ public interface MsgLogger {
 	static MsgLogger defaultLogger(){
 		return System.out::println; 
 	}
+	
 }

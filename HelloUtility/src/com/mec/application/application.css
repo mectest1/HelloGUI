@@ -2,10 +2,16 @@
 
 
 .log-msg{
-	-fx-background-color: white; /*not working, but why? */
+	/*-fx-background-color: blue;*/ 
+	/*Q:not working, but why? 
+	 *A: it's actually works fine. But TextArea in FX is not its counterpart in HTML, it has sub-structure here. */
 	/*
 	-fx-border-color: yellow;
 	-fx-border-width: 5px;
 	-fx-border-style: solid;
 	*/
+}
+
+.log-msg .content{
+	-fx-background-color: none;
 }
