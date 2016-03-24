@@ -149,11 +149,11 @@
                   </VBox>
             </content>
           </Tab>
-          <Tab closable="false" text="%tab.history.title">
+          <Tab disable="true" closable="false" text="%tab.history.title">
                <content>
                   <VBox>
                      <children>
-                        <ListView fx:id="historyList" disable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <ListView fx:id="historyList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                         	<placeholder>
                         		<Label text="%list.history.placeholder" />
                         	</placeholder>
