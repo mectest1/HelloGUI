@@ -1,77 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import java.util.HashMap?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane prefHeight="550.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.PatchReleaseController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="185.0" vgrow="SOMETIMES" />
-   </rowConstraints>
-   <children>
-      <TabPane>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-         <tabs>
-            <Tab closable="false" text="%tab.increPatch">
-               <content>
-                  <GridPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="650.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="150.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="494.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="250.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.application.views.PatchReleaseController">
+   <center>
+<!--       <GridPane prefHeight="550.0" prefWidth="650.0"> -->
+<!--          <columnConstraints> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" /> -->
+<!--             <ColumnConstraints /> -->
+<!--          </columnConstraints> -->
+<!--          <rowConstraints> -->
+<!--             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="200.0" vgrow="SOMETIMES" /> -->
+<!--          </rowConstraints> -->
+<!--          <children> -->
+            <TabPane prefHeight="550.0" prefWidth="650.0">
+               <tabs>
+                  <Tab closable="false" text="%tab.increPatch">
+                     <content>
+                     	<BorderPane>
+                     		<center>
+                     			<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="650.0">
+	                             <columnConstraints>
+	                               <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="150.0" />
+	                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="494.0" />
+	                             </columnConstraints>
+	                             <rowConstraints>
+	                               <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+	                               <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+	                                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="250.0" vgrow="SOMETIMES" />
+	                               <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+	                                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
+	                             </rowConstraints>
+	                              <children>
+	                                 <Label text="%lbl.eeID" />
+	         <!--                         <Label text="Workspace Directory" GridPane.rowIndex="1" /> -->
+	                                 <Label text="%lbl.wsDir" GridPane.rowIndex="1" />
+	                                 <Label text="%lbl.relDir" GridPane.rowIndex="3" />
+	                                 <Label text="%modifyList.lbl" GridPane.rowIndex="2" />
+	                                 <TextArea fx:id="modifyList" prefHeight="200.0" prefWidth="200.0" promptText="%modifyList.prompt" GridPane.columnIndex="1" GridPane.rowIndex="2">
+	                                 	<tooltip>
+	                                 		<Tooltip text="%modifyList.tooltip" />
+	                                 	</tooltip>
+	                                 </TextArea>
+	                                 <TextField fx:id="patchReleaseDirectory" promptText="%patchRelDir.prompt" GridPane.columnIndex="1" GridPane.rowIndex="3">
+	                                 	<tooltip>
+	                                       <Tooltip text="%patchRelDir.tooltip" />
+	                                    </tooltip>
+	                                 </TextField>
+	                                 <TextField fx:id="workSpaceDirectory" promptText="%wsDir.prompt" GridPane.columnIndex="1" GridPane.rowIndex="1">
+	                                 	<tooltip>
+	                                       <Tooltip text="%wsDir.tooltip" />
+	                                    </tooltip>
+	                                 </TextField>
+	                                 <HBox GridPane.columnIndex="1">
+	   	                              <TextField fx:id="configName" prefWidth="320.0" promptText="%configName.text">
+	   	                              	<tooltip>
+	   	                              		<Tooltip text="%configName.prompt" />
+	   	                              	</tooltip>
+	   	                              </TextField>
+	   	                              <TextField disable="true" prefWidth="400.0" promptText="%eeID.text" GridPane.columnIndex="1" />
+	                                 </HBox>
+	                                 <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+	                                    <children>
+	                                       <Button fx:id="startPatch" mnemonicParsing="false" onAction="#onStartPatch" text="%btn.patch" />
+	                                       <Button fx:id="clearLogBtn" mnemonicParsing="false" onAction="#onClearLog" text="%btn.clearLog" />
+	                                    </children>
+	                                    <padding>
+	                                       <Insets top="5.0" />
+	                                    </padding>
+	                                 </HBox>
+	                                 
+		                             <TextArea fx:id="logMsg" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="650.0" promptText="%logMsg.prompt" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+	                              </children>
+	                           </GridPane>
+                     		</center>
+                     		<bottom>
+                     		</bottom>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     	</BorderPane>
+                           
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+<!--          </children> -->
+<!--       </GridPane> -->
+   </center>
+   <left>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab closable="false" text="%tab.favorite.title">
+            <content>
+                  <VBox spacing="5.0">
                      <children>
-                        <Label text="%lbl.eeID" />
-<!--                         <Label text="Workspace Directory" GridPane.rowIndex="1" /> -->
-                        <Label text="%lbl.wsDir" GridPane.rowIndex="1" />
-                        <Label text="%lbl.relDir" GridPane.rowIndex="3" />
-                        <Label text="%modifyList.lbl" GridPane.rowIndex="2" />
-                        <TextArea fx:id="modifyList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                        	promptText="%modifyList.prompt">
-                        	<tooltip>
-                        		<Tooltip text="%modifyList.tooltip"/>
-                        	</tooltip>
-                        </TextArea>
-                        <TextField fx:id="patchReleaseDirectory" GridPane.columnIndex="1" GridPane.rowIndex="3"
-                        	promptText="%patchRelDir.prompt">
-                        	<tooltip><Tooltip text="%patchRelDir.tooltip"/></tooltip>
-                        </TextField>
-                        <TextField fx:id="workSpaceDirectory" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                        	promptText="%wsDir.prompt">
-                        	<tooltip><Tooltip text="%wsDir.tooltip"/></tooltip>
-                        </TextField>
-                        <TextField disable="true" prefWidth="447.0" promptText="%eeID.text" GridPane.columnIndex="1" />
-                        <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <ListView fx:id="favList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        	<placeholder>
+                        		<Label text="%list.favorite.placeholder" />
+                        	</placeholder>
+                        </ListView>
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0">
                            <children>
-                              <Button fx:id="startPatch" mnemonicParsing="false" onAction="#onStartPatch" text="%btn.patch" />
-                              <Button fx:id="clearLogBtn" mnemonicParsing="false" onAction="#onClearLog" text="%btn.clearLog" />
+                              <Button mnemonicParsing="false" onAction="#onFavoriteDeleteItem" text="%fav.btn.delete">
+                              	<tooltip>
+                              		<Tooltip text="%fav.btn.delete.tooltip" />
+                              	</tooltip>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#onFavoriteSaveItem" text="%fav.btn.save">
+                              	<tooltip>
+                              		<Tooltip text="%fav.btn.save.tooltip" />
+                              	</tooltip>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#onFavoriteNewItem" text="%fav.btn.add">
+                              	<tooltip>
+                              		<Tooltip text="%fav.btn.add.tooltip" />
+                              	</tooltip>
+                              	<userData>
+                              		<HashMap />
+                              	</userData>
+                              </Button>
                            </children>
-                           <padding>
-                              <Insets top="5.0" />
-                           </padding>
                         </HBox>
                      </children>
-                  </GridPane>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+            </content>
+          </Tab>
+          <Tab closable="false" disable="true" text="%tab.history.title">
+               <content>
+                  <VBox>
+                     <children>
+                        <ListView fx:id="historyList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        	<placeholder>
+                        		<Label text="%list.history.placeholder" />
+                        	</placeholder>
+                        </ListView>
+                     </children>
+                  </VBox>
                </content>
-            </Tab>
-         </tabs>
+          </Tab>
+        </tabs>
       </TabPane>
-      <TextArea fx:id="logMsg" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" promptText="%logMsg.prompt" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-   </children>
-</GridPane>
+   </left>
+</BorderPane>

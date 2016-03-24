@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<patchReleaseConfigBeans>
+    <PatchReleaseConfig>
+        <name>a</name>
+        <patchReleaseDirectory>c</patchReleaseDirectory>
+        <patchTime>2016-03-24T20:47:12.895</patchTime>
+        <workspaceDirectory>eeeeeeeeeeeee</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <name>a3</name>
+        <patchReleaseDirectory>c</patchReleaseDirectory>
+        <patchTime>2016-03-24T20:47:08.263</patchTime>
+        <workspaceDirectory>b</workspaceDirectory>
+    </PatchReleaseConfig>
+</patchReleaseConfigBeans>

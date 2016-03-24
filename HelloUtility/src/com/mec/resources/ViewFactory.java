@@ -2,12 +2,12 @@ package com.mec.resources;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

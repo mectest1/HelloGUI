@@ -1,6 +1,8 @@
 package com.mec.duke;
 
 import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -19,6 +20,7 @@ import org.junit.Test;
 import com.mec.duke.util.Config;
 import com.mec.duke.util.Config2;
 import com.mec.duke.util.LocalDateTimeXmlAdapter;
+import com.mec.duke.util.PathXmlAdapter;
 
 
 
@@ -60,8 +62,9 @@ public class JAXBApplicationTest {
 	}
 	
 	
+	@Ignore
 	@Test
-	public void saveList(){
+	public void testSaveList(){
 		TestConfigs configs = new TestConfigs();
 		TestConfig tc = getTestConfig();
 		tc.setBirthDay(LocalDateTime.now());
@@ -70,7 +73,17 @@ public class JAXBApplicationTest {
 		configs.getConfigsList().add(getTestConfig());
 		
 		Config.config(this).save("helloConfigs", configs);
+		
 	}
+	
+	@Test 
+	public void testLoadList(){
+//		out.println("load from xml:");
+		out.println(Config.config(this).load("helloConfigs", TestConfigs.class).get());
+	}
+	
+	
+	
 	
 	private TestConfig getTestConfig(){
 		Map<String, String> config = new HashMap<String, String>();
@@ -89,6 +102,7 @@ public class JAXBApplicationTest {
 	}
 	
 	@XmlRootElement
+//	@XmlJavaTypeAdapter(PathXmlAdapter.class)	//<- would not work here;
 	static class TestConfigs{
 		List<TestConfig> configsList = new ArrayList<>();
 
@@ -109,17 +123,27 @@ public class JAXBApplicationTest {
 	
 	
 	@XmlRootElement
+	
 	static class TestConfig{	
 		
 		Map<String, String> params;
 		List<String> paramList;
 		Person person;
 		LocalDateTime birthDay;
+		Path path = Paths.get(".");
 		public TestConfig() { //without it: TestConfig does not have a no-arg default constructor.
 		}
 		TestConfig(Map<String, String> params){
 			Objects.requireNonNull(params);
 			this.params = params;
+		}
+		@XmlJavaTypeAdapter(PathXmlAdapter.class)
+		public Path getPath() {
+			return path;
+		}
+//		@XmlJavaTypeAdapter(PathXmlAdapter.class)
+		public void setPath(Path path) {
+			this.path = path;
 		}
 		public Map<String, String> getParams() {
 			return params;
@@ -150,7 +174,7 @@ public class JAXBApplicationTest {
 		@Override
 		public String toString() {
 			return "TestConfig [params=" + params + ", paramList=" + paramList + ", person=" + person + ", birthDay="
-					+ birthDay + "]";
+					+ birthDay + ", path=" + path + "]";
 		}
 	}
 	

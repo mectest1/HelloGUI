@@ -1,6 +1,5 @@
 package com.mec.application.views;
 
-import java.io.BufferedWriter;
 //import java.io.File;
 //import java.io.FileWriter;
 import java.io.IOException;
@@ -13,21 +12,33 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.mec.application.beans.PatchReleaseConfigBean;
+import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeanListCell;
+import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeans;
+import com.mec.resources.Config;
 import com.mec.resources.FileParser;
 import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
 import com.mec.resources.MsgLogger;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.WindowEvent;
 
 public class PatchReleaseController implements MsgLogger{
 
+	@FXML
+	private TextField configName;
+	
 	@FXML
 	private TextField workSpaceDirectory;
 	
@@ -49,6 +60,13 @@ public class PatchReleaseController implements MsgLogger{
 	private Button clearLogBtn;
 	
 	@FXML
+	private ListView<PatchReleaseConfigBean> favList;
+	@FXML
+	private ListView<PatchReleaseConfigBean> historyList;
+	
+	//------------
+	
+	@FXML
 	private void initialize(){
 //		logMsg.textProperty().bind(logs);
 		fieldEmpty.bind(
@@ -61,6 +79,30 @@ public class PatchReleaseController implements MsgLogger{
 //		workSpaceDirectory.setPromptText(Msg.get(this, "prompt.workspaceDir"));
 //		modifyList.setPromptText(Msg.get(this, "prompt.modifyList"));
 //		patchReleaseDirectory.setPromptText(Msg.get(this, "prompt.patchReleaseDir"));
+		
+		//
+		Config.config(this).setLogger(this);
+//		Callback<ListView<PatchReleaseConfigBean>, ListCell<PatchReleaseConfigBean>> favCellFactory= l -> 
+//			new ListCell<PatchReleaseConfigBean>(){
+//				@Override
+//				protected void updateItem(PatchReleaseConfigBean item, boolean empty) {
+//					super.updateItem(item, empty);
+//					if(empty){
+//						setText("");
+//					}else{
+//						setText(item.getName());
+//					}
+//				}
+//			};
+//		favList.setCellFactory(favCellFactory);
+		favList.setCellFactory(l -> new PatchReleaseConfigBeanListCell());
+		PatchReleaseConfigBeans favConfigList = Config.config(this).load(Msg.get(this, "config.favorites"), PatchReleaseConfigBeans.class)
+				.orElseGet(PatchReleaseConfigBeans::new);
+		favList.getItems().addAll(favConfigList.getConfigs());
+		favList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(favList));
+//		favList.setCellFactory(new PropertyValueFactory<>("name"));
+//		logMsg.getScene().getWindow().setOnCloseRequest(this::onWindowClosed);	//<-the windows is still uninitialized;
+		Platform.runLater(() -> logMsg.getScene().getWindow().setOnCloseRequest(this::onWindowClosed));
 	}
 	
 	
@@ -142,11 +184,71 @@ public class PatchReleaseController implements MsgLogger{
 		logMsg.clear();
 	}
 	
+	
+	
+	@FXML
+	private void onFavoriteSaveItem(ActionEvent evt){
+		PatchReleaseConfigBean config = favList.getSelectionModel().getSelectedItem();
+		if(null == config){
+			return;
+		}
+		config.setName(configName.getText());
+		config.setWorkspaceDirectory(Paths.get(workSpaceDirectory.getText()));
+		config.setPatchReleaseDirectory(Paths.get(patchReleaseDirectory.getText()));
+		favList.refresh();
+		saveFavoriteList();
+	}
+	@FXML
+	private void onFavoriteDeleteItem(ActionEvent evt){
+		PatchReleaseConfigBean config = favList.getSelectionModel().getSelectedItem();
+		if(null == config){
+			return;
+		}
+		favList.getItems().remove(config);
+	}
+	@FXML
+	private void onFavoriteNewItem(ActionEvent evt){
+//		String name = ViewFactory.inputText(DateUtil.getPathNameForNow(), "", "");
+		String name = configName.getText();
+		Path workspaceDirectory = Paths.get(workSpaceDirectory.getText());
+		Path pathReleaseDirectory = Paths.get(patchReleaseDirectory.getText());
+		PatchReleaseConfigBean config = new PatchReleaseConfigBean(name, workspaceDirectory, pathReleaseDirectory);
+		if(!favList.getItems().contains(config)){
+			favList.getItems().add(0, config);
+		}
+		favList.getSelectionModel().select(config);
+		saveFavoriteList();
+	}
+	
+	private void onWindowClosed(WindowEvent evt){
+		saveFavoriteList();
+	}
+	
+	private void saveFavoriteList(){
+		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(favList.getItems());
+		Config.config(this).save(Msg.get(this, "config.favorites"), configs);
+	}
+
+	private ChangeListener<? super PatchReleaseConfigBean> onListItemSelected(ListView<PatchReleaseConfigBean> listView){
+		return (ob, oldVal, newVal) -> {
+//			ListView<PatchReleaseConfigBean> listView = (ListView<PatchReleaseConfigBean>) evt.getTarget();
+			PatchReleaseConfigBean config = favList.getSelectionModel().getSelectedItem();
+			if(null == config){
+				return;
+			}
+			configName.setText(config.getName());
+			workSpaceDirectory.setText(config.getWorkspaceDirectory().toString());
+			patchReleaseDirectory.setText(config.getPatchReleaseDirectory().toString());
+			modifyList.setText(config.getModifyList());
+		};
+	}
+	
 	@Override
 	public void log(String msg) {
 		logMsg.appendText(msg);
 	}
 	
+//	private PatchReleaseConfigBeans favConfigList;
 	private JarTool jarTool = JarTool.newInstance(this);
 	private BooleanProperty fieldEmpty = new SimpleBooleanProperty();
 }

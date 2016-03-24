@@ -144,6 +144,12 @@ public class Config {
 		}
 	}
 	
+	/**
+	 * Load an instance of <code>configObjClass</code> from tag.xml. In case of any exception occurs, an empty result is what you got.
+	 * @param tag
+	 * @param configObjClass
+	 * @return
+	 */
 	public <T> Optional<T> load(String tag, Class<? extends T> configObjClass){
 		Optional<T> retval;
 		try {
@@ -159,6 +165,15 @@ public class Config {
 		return retval;
 	}
 	
+	/**
+	 * Save <code>configObj</code> as XML file into tag.xml
+	 * <p>
+	 * Q: What if tag.xml has already existed? 
+	 * A: It will be overwritten. This behavior would be modified by specifying {@link ConfigExistedPolicy} of this {@link Config} instance.
+	 * </p>
+	 * @param tag
+	 * @param configObj
+	 */
 	public <T> void save(String tag, T configObj){
 		Path xmlFile = getDataPath(tag);
 		try {
@@ -181,8 +196,8 @@ public class Config {
 	 * @param componentConfigDir directory name for each stand alone component that wants to store configurations;
 	 * @return a new {@link Config} instance, or an existing one with the same <code>componentConfigDir</code>
 	 */
-	public static Config config(String componentConfigDir){
-		return instances.computeIfAbsent(componentConfigDir, Config::new);
+	public static Config config(String componentConfigDirStr){
+		return instances.computeIfAbsent(componentConfigDirStr, Config::new);
 	}
 	/**
 	 * @param clazz clazz.name will be used as <code>componentConfigDir</code>
@@ -244,7 +259,7 @@ public class Config {
 	 * @author MEC
 	 *
 	 */
-	public enum DirectoryOrganizPolicy{
+	public enum DirectoryOrganizePolicy{
 		FLAT
 		,HIERARCHY
 		;
