@@ -123,7 +123,7 @@ public class PatchReleaseController implements MsgLogger{
 	@FXML
 	private void onStartPatch(){
 		try{
-			
+//			startPatch.setDisable(true);	//bound property can't be set
 			log(Msg.get(this, "info.patchStart"), LocalDateTime.now());
 			String workspaceDirStr = JarTool.normalizePath(workSpaceDirectory.getText());
 			Path workspaceDir = Paths.get(workspaceDirStr);
@@ -150,7 +150,7 @@ public class PatchReleaseController implements MsgLogger{
 			relocateJars(patchReleaseDir);
 			writeReadMe(patchReleaseDir, modifyList);
 			log(Msg.get(this, "info.patchEnd"), LocalDateTime.now());
-			//
+			
 //			if(delPath.isPresent()){
 //				delPath = Optional.empty();
 //			}
@@ -158,6 +158,7 @@ public class PatchReleaseController implements MsgLogger{
 		}catch(Exception e){
 			log(e);
 		}finally{
+			//startPatch.setDisable(false);	//bound property can't be set
 			//in case any error occurs during patch process, the delPath should always be reset;
 			if(delPath.isPresent()){	
 				delPath = Optional.empty();
