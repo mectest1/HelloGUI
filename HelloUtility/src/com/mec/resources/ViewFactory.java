@@ -93,6 +93,14 @@ public class ViewFactory {
 		return retval;
 	}
 	
+	public static Alert newAlert(AlertType alertType, String title, String header, String content){
+		Alert alert = new Alert(alertType);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		return alert;
+	}
+	
 	public static TextFlow newTextFlow(String text, Optional<Integer> maxLength){
 		if(maxLength.isPresent()){
 //			int maxSize = Msg.get(ViewFactory.class, "textFlow.maxSize", Integer::parseInt, 1000);

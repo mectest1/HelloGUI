@@ -1,8 +1,5 @@
 package com.mec.application;
 
-import java.util.HashMap;
-
-import com.mec.resources.DialogFactory;
 import com.mec.resources.Msg;
 import com.mec.resources.MsgLogger;
 import com.mec.resources.ViewFactory;
@@ -14,7 +11,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 public class RootPaneController implements MsgLogger{
 	
@@ -32,7 +28,7 @@ public class RootPaneController implements MsgLogger{
 //		about.setTitle(Msg.get(this, "about.title"));
 //		about.setHeaderText(Msg.get(this, "about.header"));
 //		about.setContentText(Msg.get(this, "about.content"));
-		Alert about = DialogFactory.newAlert(AlertType.INFORMATION, 
+		Alert about = ViewFactory.newAlert(AlertType.INFORMATION, 
 				Msg.get(this, "about.title"), 
 				Msg.get(this, "about.header"), 
 				Msg.get(this, "about.content")
