@@ -49,7 +49,8 @@
                               <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
 	                             </rowConstraints>
 	                              <children>
-	                                 <Label text="%lbl.eeID" />
+<!-- 	                                 <Label text="%lbl.eeID" /> -->
+	                                 <Label text="%lbl.configName" />
 	         <!--                         <Label text="Workspace Directory" GridPane.rowIndex="1" /> -->
 	                                 <Label text="%lbl.wsDir" GridPane.rowIndex="1" />
 	                                 <Label text="%lbl.relDir" GridPane.rowIndex="3" />
