@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -123,6 +124,7 @@ public class PatchReleaseController implements MsgLogger{
 	private void onStartPatch(){
 		try{
 			
+			log(Msg.get(this, "info.patchStart"), LocalDateTime.now());
 			String workspaceDirStr = JarTool.normalizePath(workSpaceDirectory.getText());
 			Path workspaceDir = Paths.get(workspaceDirStr);
 			JarTool.validateDirectory(workspaceDir, String.format(Msg.getExpMsg(this, "invalid.workspace"), workspaceDirStr));
@@ -147,7 +149,7 @@ public class PatchReleaseController implements MsgLogger{
 			
 			relocateJars(patchReleaseDir);
 			writeReadMe(patchReleaseDir, modifyList);
-			
+			log(Msg.get(this, "info.patchEnd"), LocalDateTime.now());
 			//
 //			if(delPath.isPresent()){
 //				delPath = Optional.empty();
