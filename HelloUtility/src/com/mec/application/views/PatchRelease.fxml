@@ -149,7 +149,8 @@
                   </VBox>
             </content>
           </Tab>
-          <Tab disable="true" closable="false" text="%tab.history.title">
+<!--           <Tab disable="true" closable="false" text="%tab.history.title"> -->
+          <Tab closable="false" text="%tab.history.title">
                <content>
                   <VBox>
                      <children>

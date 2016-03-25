@@ -69,7 +69,14 @@ public class Config {
 	}
 	
 	//----------------------------------------------------------
-	private void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
+	/**
+	 * Create the specific <code>path</code> if it does not exist. Possible <code>patchCreateMethod</code> would
+	 * look like <code>Files::createDirectories</code>
+	 * or <code>Files::createFile</code>
+	 * @param path
+	 * @param pathCreateMethod
+	 */
+	public void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
 		if(!Files.exists(path)){
 			try {
 //				Files.createDirectories(path);

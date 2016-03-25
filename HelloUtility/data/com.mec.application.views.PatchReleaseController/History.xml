@@ -7,10 +7,267 @@ SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
 SYS_index.jsp - EximBillWeb/WebContent (2 matches)
 SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
 SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
         <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:03.323</patchTime>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:06:09.796</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:06:07.366</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:06:04.397</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:06:02.242</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:06:01.162</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:06:00.707</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:05:45.322</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:04:26.27</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch4</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:04:25.696</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:04:05.007</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T10:00:41.165</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:58:09.506</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:56:38.41</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:55:54.113</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:54:50.791</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:52:44.827</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:51:44.347</patchTime>
+        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>--EE-8035
+SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
+SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
+SYS_index.jsp - EximBillWeb/WebContent (2 matches)
+SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
+SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
+EximBillWeb/WebContent/Images/favicon_vtb.ico
+
+CSEECore/src/com/cs/core/dao/DAOExec.java</modifyList>
+        <name>EECore262.1_20140307</name>
+        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch3</patchReleaseDirectory>
+        <patchTime>2016-03-25T09:50:28.544</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
     <PatchReleaseConfig>
@@ -23,241 +280,16 @@ SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
 EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
         <name>EECore262.1_20140307</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:02.691</patchTime>
+        <patchTime>2016-03-25T09:38:28.939</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
     <PatchReleaseConfig>
         <modifyList>--EE-8035
 SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
+</modifyList>
         <name>EECore262.1_20140307</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:02.083</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:01.552</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:01.065</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:00.609</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:45:00.185</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:59.785</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:59.421</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:59.053</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:58.739</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:58.437</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:58.168</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:57.912</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:57.682</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:57.455</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:57.254</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:57.065</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:56.885</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
-        <modifyList>--EE-8035
-SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
-SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)
-SYS_index.jsp - EximBillWeb/WebContent (2 matches)
-SYS_main.jsp - EximBillWeb/WebContent/screen (2 matches)
-SYS_UserFuncT.jsp - EximBillWeb/WebContent/screen (2 matches)
-EximBillWeb/WebContent/Images/favicon_vtb.ico</modifyList>
-        <name>EECore262.1_20140307</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:56.719</patchTime>
+        <patchTime>2016-03-25T08:39:21.893</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
 </patchReleaseConfigBeans>

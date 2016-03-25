@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <patchReleaseConfigBeans>
     <PatchReleaseConfig>
-        <name>EECore262.1_2014030724</name>
+        <name>EECore262.1_201403024</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:44:25.682</patchTime>
+        <patchTime>2016-03-25T08:38:54.962</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
     <PatchReleaseConfig>
-        <name>EECore262.1_2014030723</name>
+        <name>EECore262.1_20140304</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:34:50.028</patchTime>
+        <patchTime>2016-03-25T08:25:22.077</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
     <PatchReleaseConfig>
-        <name>EECore262.1_2014030722</name>
+        <name>EECore262.1_20140303</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:34:30.649</patchTime>
+        <patchTime>2016-03-25T08:25:19.317</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
     <PatchReleaseConfig>
-        <name>EECore262.1_20140307</name>
+        <name>EECore262.1_201403023</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-24T21:28:32.771</patchTime>
+        <patchTime>2016-03-25T08:25:01.156</patchTime>
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
 </patchReleaseConfigBeans>

@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +19,7 @@ import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeanFa
 import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeanHistoryCell;
 import com.mec.application.beans.PatchReleaseConfigBean.PatchReleaseConfigBeans;
 import com.mec.resources.Config;
+import com.mec.resources.DateUtil;
 import com.mec.resources.FileParser;
 import com.mec.resources.JarTool;
 import com.mec.resources.Msg;
@@ -83,7 +85,7 @@ public class PatchReleaseController implements MsgLogger{
 //		patchReleaseDirectory.setPromptText(Msg.get(this, "prompt.patchReleaseDir"));
 		
 		//
-		Config.config(this).setLogger(this);
+		Config.of(this).setLogger(this);
 //		Callback<ListView<PatchReleaseConfigBean>, ListCell<PatchReleaseConfigBean>> favCellFactory= l -> 
 //			new ListCell<PatchReleaseConfigBean>(){
 //				@Override
@@ -98,17 +100,17 @@ public class PatchReleaseController implements MsgLogger{
 //			};
 //		favList.setCellFactory(favCellFactory);
 		favList.setCellFactory(l -> new PatchReleaseConfigBeanFavoriteCell());
-		PatchReleaseConfigBeans favConfigList = Config.config(this).load(Msg.get(this, "config.favorites"), PatchReleaseConfigBeans.class)
+		PatchReleaseConfigBeans favConfigList = Config.of(this).load(Msg.get(this, "config.favorites"), PatchReleaseConfigBeans.class)
 				.orElseGet(PatchReleaseConfigBeans::new);
 		favList.getItems().addAll(favConfigList.getConfigs());
 		
 		historyList.setCellFactory(l -> new PatchReleaseConfigBeanHistoryCell());
-		PatchReleaseConfigBeans historyConfigList = Config.config(this).load(Msg.get(this, "config.history"), PatchReleaseConfigBeans.class)
+		PatchReleaseConfigBeans historyConfigList = Config.of(this).load(Msg.get(this, "config.history"), PatchReleaseConfigBeans.class)
 				.orElseGet(PatchReleaseConfigBeans::new);
 		historyList.getItems().addAll(historyConfigList.getConfigs());
-		favList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(favList));
-//		Stream.of(favList, historyList).forEach(list -> list.getSelectionModel().selectedIndexProperty().addListener(onListItemSelected(list)));;
-		historyList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(historyList));
+//		favList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(favList));
+//		historyList.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(historyList));
+		Stream.of(favList, historyList).forEach(list -> list.getSelectionModel().selectedItemProperty().addListener(onListItemSelected(list)));;
 		
 //		favList.setCellFactory(new PropertyValueFactory<>("name"));
 //		logMsg.getScene().getWindow().setOnCloseRequest(this::onWindowClosed);	//<-the windows is still uninitialized;
@@ -128,6 +130,7 @@ public class PatchReleaseController implements MsgLogger{
 			String patchReleaseDirStr = JarTool.normalizePath(patchReleaseDirectory.getText());
 			Path patchReleaseDir = Paths.get(patchReleaseDirStr);
 			if(!(Files.exists(patchReleaseDir))){
+				Config.of(this).createIfNotExists(patchReleaseDir, Files::createDirectories);
 				log(String.format(Msg.get(this, "info.patchReleaseDir.create"), patchReleaseDir));
 			}
 			
@@ -137,7 +140,8 @@ public class PatchReleaseController implements MsgLogger{
 			
 			for(String projectName : modifyListMap.keySet()){
 				Set<String> sourceFileList = modifyListMap.get(projectName);
-				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
+//				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir);
+				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir, getDelPath());
 				log(FileParser.NEWLINE);
 			}
 			
@@ -145,9 +149,17 @@ public class PatchReleaseController implements MsgLogger{
 			writeReadMe(patchReleaseDir, modifyList);
 			
 			//
+//			if(delPath.isPresent()){
+//				delPath = Optional.empty();
+//			}
 			saveHistoryList();
 		}catch(Exception e){
 			log(e);
+		}finally{
+			//in case any error occurs during patch process, the delPath should always be reset;
+			if(delPath.isPresent()){	
+				delPath = Optional.empty();
+			}
 		}
 	}
 	
@@ -157,18 +169,17 @@ public class PatchReleaseController implements MsgLogger{
 		for(Path jarFile : Files.list(patchReleaseDir).collect(Collectors.toList())){
 			String jarFileName = jarFile.getFileName().toString();
 			if(JarTool.WEB_CONTENT_JAR.matcher(jarFileName).matches()){
-				//
+				//leave WebContent.jar in patch release directory (aka current directory)
 			}else if(JarTool.EE_LIB_JAR.matcher(jarFileName).matches()){
 				if(null == eeLibDir){
 					eeLibDir = patchReleaseDir.resolve(Msg.get(this, "path.EE_LIB"));
-					if(Files.exists(eeLibDir)){
-						Files.move(eeLibDir, patchReleaseDir.resolve(String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis())));
-						eeLibDir =patchReleaseDir.resolve(Msg.get(this, "path.EE_LIB"));
-					}
-					if(Files.notExists(eeLibDir)){
-						Files.createDirectory(eeLibDir);
-						JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.toAbsolutePath()));
-					}
+					JarTool.tryMoveOldToDelDirectory(eeLibDir, getDelPath());
+//					if(Files.notExists(eeLibDir)){
+//						Files.createDirectory(eeLibDir);
+//						JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.toAbsolutePath()));
+//					}
+					Config.of(this).createIfNotExists(eeLibDir, Files::createDirectories);
+					JarTool.validateDirectory(eeLibDir, String.format(Msg.get(this, "path.EE_LIB.error"), eeLibDir.toAbsolutePath()));
 				}
 				log(String.format(Msg.get(this, "info.moveJar"), jarFileName, eeLibDir.toAbsolutePath()));
 				Files.move(jarFile,eeLibDir.resolve(jarFileName));
@@ -179,19 +190,36 @@ public class PatchReleaseController implements MsgLogger{
 	}
 	
 	private void writeReadMe(Path patchReleaseDir, List<String> contentLines) throws IOException{
-		Path readMe = JarTool.createNewFile(patchReleaseDir, 
-				Msg.get(this, "path.README"), 
-				String.format(Msg.get(this, "path.README.bak"), Msg.get(this, "path.README"), System.currentTimeMillis()));
-		try(PrintWriter writer = new PrintWriter((Files.newBufferedWriter(readMe)))){
-			for(String line : contentLines){
-				if(null == line){
-					continue;
-				}
-				writer.println(line);
-			}
-		}
-		
+//		Path readMe = JarTool.createNewFile(patchReleaseDir, 
+//				Msg.get(this, "path.README"), 
+//				String.format(Msg.get(this, "path.README.bak"), Msg.get(this, "path.README"), System.currentTimeMillis()));
+		Path readMe = patchReleaseDir.resolve(Msg.get(this, "path.README"));
+		JarTool.tryMoveOldToDelDirectory(readMe, getDelPath());
+		Config.of(this).createIfNotExists(readMe, Files::createFile);
+//		try(PrintWriter writer = new PrintWriter((Files.newBufferedWriter(readMe)))){
+//			for(String line : contentLines){
+//				if(null == line){
+//					continue;
+//				}
+//				writer.println(line);
+//			}
+//		}
+		Files.write(readMe, contentLines);
 	}
+	
+	
+	/**
+	 * Get a <strong>relative</strong> patch for delete directory
+	 * @return
+	 */
+	private Path getDelPath(){
+		if(!delPath.isPresent()){
+			String delPathStr = String.format(Msg.get(this, "path.del.patch"), DateUtil.getPathNameForNow());
+			delPath = Optional.of(Paths.get(delPathStr));
+		}
+		return delPath.get();
+	}
+	
 	
 	@FXML
 	private void onClearLog(){
@@ -204,9 +232,15 @@ public class PatchReleaseController implements MsgLogger{
 	private void onFavoriteSaveItem(ActionEvent evt){
 		PatchReleaseConfigBean config = favList.getSelectionModel().getSelectedItem();
 		if(null == config){
+			onFavoriteNewItem(evt);
+//			return;
+		}
+		String name = configName.getText();
+		if(favList.getItems().stream().filter(item -> !item.equals(config))
+				.anyMatch(item -> item.getName().equals(name))){
 			return;
 		}
-		config.setName(configName.getText());
+		config.setName(name);
 		config.setWorkspaceDirectory(Paths.get(workSpaceDirectory.getText()));
 		config.setPatchReleaseDirectory(Paths.get(patchReleaseDirectory.getText()));
 		favList.refresh();
@@ -224,13 +258,15 @@ public class PatchReleaseController implements MsgLogger{
 	private void onFavoriteNewItem(ActionEvent evt){
 //		String name = ViewFactory.inputText(DateUtil.getPathNameForNow(), "", "");
 		String name = configName.getText();
+		if(favList.getItems().stream().anyMatch(item -> item.getName().equals(name))){
+			return;
+		}
+		
 		String modifyListStr = modifyList.getText();
 		Path workspaceDirectory = Paths.get(workSpaceDirectory.getText());
 		Path pathReleaseDirectory = Paths.get(patchReleaseDirectory.getText());
 		PatchReleaseConfigBean config = new PatchReleaseConfigBean(name, workspaceDirectory, pathReleaseDirectory);
-		if(!favList.getItems().contains(config)){
-			favList.getItems().add(0, config);
-		}
+		favList.getItems().add(0, config);
 		favList.getSelectionModel().select(config);
 		saveFavoriteListToFile();
 //		if(null != modifyListStr){
@@ -239,14 +275,14 @@ public class PatchReleaseController implements MsgLogger{
 	}
 	
 	private void onWindowClosed(WindowEvent evt){
-		Config.config(this).setLogger(MsgLogger.defaultLogger());
+//		Config.of(this).setLogger(MsgLogger.defaultLogger());
 		saveFavoriteListToFile();
 		saveHistoryListToFile();
 	}
 	
 	private void saveFavoriteListToFile(){
 		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(favList.getItems());
-		Config.config(this).save(Msg.get(this, "config.favorites"), configs);
+		Config.of(this).save(Msg.get(this, "config.favorites"), configs);
 	}
 	private void saveHistoryList(){
 		String name = configName.getText();
@@ -264,7 +300,7 @@ public class PatchReleaseController implements MsgLogger{
 			historyRecords = historyRecords.subList(0, HISTORY_MAX);
 		}
 		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(historyRecords);
-		Config.config(this).save(Msg.get(this, "config.history"), configs);
+		Config.of(this).save(Msg.get(this, "config.history"), configs);
 	}
 
 //	private ChangeListener<? super Number> onListItemSelected(ListView<PatchReleaseConfigBean> listView){
@@ -285,8 +321,11 @@ public class PatchReleaseController implements MsgLogger{
 	private ChangeListener<? super PatchReleaseConfigBean> onListItemSelected(ListView<PatchReleaseConfigBean> listView){
 		return (ob, oldVal, newVal) -> {
 //			ListView<PatchReleaseConfigBean> listView = (ListView<PatchReleaseConfigBean>) evt.getTarget();
-			PatchReleaseConfigBean config = favList.getSelectionModel().getSelectedItem();
+			PatchReleaseConfigBean config = listView.getSelectionModel().getSelectedItem();
+//			int selectedIndex = favList.getSelectionModel().getSelectedIndex();
+//			PatchReleaseConfigBean config = favList.getItems().get(selectedIndex);
 			if(null == config){
+//			if(0 > selectedIndex){
 				return;
 			}
 			configName.setText(config.getName());
@@ -304,7 +343,12 @@ public class PatchReleaseController implements MsgLogger{
 	}
 	
 //	private PatchReleaseConfigBeans favConfigList;
+	private Optional<Path> delPath = Optional.empty();	//delete path to move old patch files in
 	private JarTool jarTool = JarTool.newInstance(this);
 	private BooleanProperty fieldEmpty = new SimpleBooleanProperty();
 	private static final int HISTORY_MAX = Msg.get(PatchReleaseController.class, "history.maxItem", Integer::parseInt, 20);
+//	private static final int HISTORY_MAX ;
+//	static{
+//		HISTORY_MAX = Msg.get(PatchReleaseController.class, "history.maxItem", Integer::parseInt, 20);
+//	}
 }

@@ -11,7 +11,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.mec.resources.DateUtil;
+import com.mec.application.beans.BeanAdapters.LocalDateTimeXmlAdapter;
+import com.mec.application.beans.BeanAdapters.PathXmlAdapter;
 import com.mec.resources.Msg;
 
 import javafx.scene.control.ListCell;
@@ -80,42 +81,42 @@ public class PatchReleaseConfigBean {
 		this.patchTime = patchTime;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((patchReleaseDirectory == null) ? 0 : patchReleaseDirectory.hashCode());
-		result = prime * result + ((workspaceDirectory == null) ? 0 : workspaceDirectory.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PatchReleaseConfigBean other = (PatchReleaseConfigBean) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (patchReleaseDirectory == null) {
-			if (other.patchReleaseDirectory != null)
-				return false;
-		} else if (!patchReleaseDirectory.equals(other.patchReleaseDirectory))
-			return false;
-		if (workspaceDirectory == null) {
-			if (other.workspaceDirectory != null)
-				return false;
-		} else if (!workspaceDirectory.equals(other.workspaceDirectory))
-			return false;
-		return true;
-	}
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((name == null) ? 0 : name.hashCode());
+//		result = prime * result + ((patchReleaseDirectory == null) ? 0 : patchReleaseDirectory.hashCode());
+//		result = prime * result + ((workspaceDirectory == null) ? 0 : workspaceDirectory.hashCode());
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		PatchReleaseConfigBean other = (PatchReleaseConfigBean) obj;
+//		if (name == null) {
+//			if (other.name != null)
+//				return false;
+//		} else if (!name.equals(other.name))
+//			return false;
+//		if (patchReleaseDirectory == null) {
+//			if (other.patchReleaseDirectory != null)
+//				return false;
+//		} else if (!patchReleaseDirectory.equals(other.patchReleaseDirectory))
+//			return false;
+//		if (workspaceDirectory == null) {
+//			if (other.workspaceDirectory != null)
+//				return false;
+//		} else if (!workspaceDirectory.equals(other.workspaceDirectory))
+//			return false;
+//		return true;
+//	}
 
 
 	@XmlRootElement

@@ -69,11 +69,23 @@ public class Config {
 	}
 	
 	//----------------------------------------------------------
-	private void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
+	/**
+	 * Create the specific <code>path</code> if it does not exist. Possible <code>patchCreateMethod</code> would
+	 * look like <code>Files::createDirectories</code>
+	 * or <code>Files::createFile</code>
+	 * @param path
+	 * @param pathCreateMethod
+	 */
+	public void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
 		if(!Files.exists(path)){
 			try {
 //				Files.createDirectories(path);
 				pathCreateMethod.create(path);
+				if(Files.isDirectory(path)){
+					logger.log(Msg.get(this, "log.create.directory"), path.toRealPath());
+				}else{
+					logger.log(Msg.get(this, "log.create.file"), path.toRealPath());
+				}
 			} catch (IOException e) {
 				logger.log(e);
 			}
@@ -196,24 +208,24 @@ public class Config {
 	 * @param componentConfigDir directory name for each stand alone component that wants to store configurations;
 	 * @return a new {@link Config} instance, or an existing one with the same <code>componentConfigDir</code>
 	 */
-	public static Config config(String componentConfigDirStr){
+	public static Config of(String componentConfigDirStr){
 		return instances.computeIfAbsent(componentConfigDirStr, Config::new);
 	}
 	/**
 	 * @param clazz clazz.name will be used as <code>componentConfigDir</code>
 	 * @return a new {@link Config} instance or existing one;
 	 */
-	public static Config config(Class<?> clazz){
+	public static Config of(Class<?> clazz){
 		Objects.requireNonNull(clazz);
-		return config(clazz.getName());
+		return of(clazz.getName());
 	}
 	/**
 	 * @param obj obj.class.name will be used as <code>componentConfigDir</code>
 	 * @return a new {@link Config} instance or existing one;
 	 */
-	public static Config config(Object obj){
+	public static Config of(Object obj){
 		Objects.requireNonNull(obj);
-		return config(obj.getClass().getName());
+		return of(obj.getClass().getName());
 	}
 	//------------------------------------------------
 	
@@ -237,7 +249,7 @@ public class Config {
 	private MsgLogger logger = MsgLogger.defaultLogger();
 	private static final Config instance = new Config();
 	private static final String CONFIG_FILENAME_PATTERN = Msg.get(Config.class, "config.fileName.pattern");
-	private static interface CreatePathMethod{
+	public static interface CreatePathMethod{
 		Path create(Path p) throws IOException;
 	}
 	private static Map<String, Config> instances = new HashMap<>();

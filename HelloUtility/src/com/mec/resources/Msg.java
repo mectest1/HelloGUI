@@ -88,8 +88,10 @@ public class Msg {
 		return get(obj.getClass(), tag);
 	}
 	
-//	public static <R> R get(Class<?> clazz, String tag, Function<String, R> converter, R defaultValue){
-	public static <R> Optional<R> get(Class<?> clazz, String tag, Function<String, R> converter){
+	public static <R> R get(Class<?> clazz, String tag, Function<String, R> converter, R defaultValue){
+		return get(clazz, tag, converter).orElse(defaultValue);
+	}
+	private static <R> Optional<R> get(Class<?> clazz, String tag, Function<String, R> converter){
 		if(null == converter){
 			return Optional.empty();
 		}

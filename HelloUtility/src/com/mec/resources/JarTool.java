@@ -27,12 +27,14 @@ public class JarTool {
 	private JarTool(){
 //		this.out = out;
 //		initLog();
+//		Config.of(this).setLogger(this);
 	}
 	
 	public static JarTool newInstance(MsgLogger logger){
 //		JarTool retval = new JarTool(logWriter);
 		JarTool retval = new JarTool();
 		retval.setLogger(logger);
+		Config.of(retval).setLogger(logger);
 		return retval;
 	}
 	
@@ -54,6 +56,7 @@ public class JarTool {
 //			, String patchDistDir
 //			, File patchReleaseDirectory
 			, Path patchReleaseDirectory
+			, Path delPath
 			) throws Exception{
 		Set<String> modifyListSet = new HashSet<>();
 //		for(int i = 0; i < modifyList.size(); ++i){
@@ -87,9 +90,11 @@ public class JarTool {
 			
 			if(isInDirectory(packageFile, sourceDir)){	//package file in source directory;
 				if(null == eelibJar){
-					Path patchFile = createNewFile(distDir
-							, String.format(Msg.get(this, "default.jar.name"), projectName)
-							, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
+//					Path patchFile = createNewFile(distDir
+//							, String.format(Msg.get(this, "default.jar.name"), projectName)
+//							, String.format(Msg.get(this, "default.jar.delName"), projectName, System.currentTimeMillis()));
+					Path patchFile = distDir.resolve(String.format(Msg.get(this, "default.jar.name"), projectName));
+					tryMoveOldToDelDirectory(patchFile, delPath);
 //					eelibJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(patchFile)));
 					eelibJar = new JarOutputStream(new BufferedOutputStream(Files.newOutputStream(patchFile)));
 				}
@@ -106,7 +111,9 @@ public class JarTool {
 					//
 					String defaultWebContentJarDir = Msg.get(this, "webContent.dir");
 					String webContentJarName = String.format(Msg.get(this, "default.jar.name"), defaultWebContentJarDir);
-					Path webContentJarFile  = createNewFile(distDir, webContentJarName, String.format(Msg.get(this, "default.jar.delName"), webContentJarName, System.currentTimeMillis()));
+//					Path webContentJarFile  = createNewFile(distDir, webContentJarName, String.format(Msg.get(this, "default.jar.delName"), webContentJarName, System.currentTimeMillis()));
+					Path webContentJarFile = distDir.resolve(webContentJarName);
+					tryMoveOldToDelDirectory(webContentJarFile, delPath);
 //					webContentJar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(webContentJarFile)));
 					webContentJar = new JarOutputStream(new BufferedOutputStream(Files.newOutputStream(webContentJarFile)));
 				}
@@ -124,6 +131,25 @@ public class JarTool {
 //			webContentJar.close();
 //		}
 		closeOutputStream(eelibJar, webContentJar);
+	}
+	
+	/**
+	 * Try to move <code>file</code> to sibling directory <code>deleteSibling</code>
+	 * @param file
+	 * @param deleteSibling
+	 * @throws IOException
+	 */
+	public static void tryMoveOldToDelDirectory(Path file, Path deleteSibling) throws IOException{
+		if(Files.exists(file)){
+//			Files.move(eeLibDir, patchReleaseDir.resolve(String.format(Msg.get(this, "path.EE_LIB.bak"), System.currentTimeMillis())));
+//			Files.move(eeLibDir, eeLibDir.resolveSibling(getDelPath()));
+			Path delDir = file.resolveSibling(deleteSibling);
+			Config.of(JarTool.class).createIfNotExists(delDir, Files::createDirectories);
+//			Files.move(file, delDir);
+			Files.move(file, delDir.resolve(file.getFileName()));
+//			eeLibDir =patchReleaseDir.resolve(Msg.get(this, "path.EE_LIB"));
+		}
+		
 	}
 	
 	/**
@@ -150,6 +176,15 @@ public class JarTool {
 		zipFile(webContentJar, webContentFolder, entryName);
 	}
 	
+	/**
+	 * {@link Config#createIfNotExists(Path, com.mec.resources.Config.CreatePathMethod)} is recommended
+	 * @param parentDirectory
+	 * @param fileName
+	 * @param bakFileName
+	 * @return
+	 * @throws IOException
+	 */
+	@Deprecated
 	public static Path createNewFile(Path parentDirectory, String fileName, String bakFileName) throws IOException{
 //		File patchFile = new File(parentDirectory, fileName);
 		Path patchFile = parentDirectory.resolve(fileName);
