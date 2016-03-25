@@ -13,12 +13,6 @@
         <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
     </PatchReleaseConfig>
     <PatchReleaseConfig>
-        <name>EECore262.1_20140303</name>
-        <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
-        <patchTime>2016-03-25T08:25:19.317</patchTime>
-        <workspaceDirectory>E:\SVN\EximbillsEnterprise\branches\EECore262.1_20140307</workspaceDirectory>
-    </PatchReleaseConfig>
-    <PatchReleaseConfig>
         <name>EECore262.1_201403023</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
         <patchTime>2016-03-25T08:25:01.156</patchTime>
