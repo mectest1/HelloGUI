@@ -35,7 +35,7 @@
                      <content>
                      	<BorderPane>
                      		<center>
-                     			<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="650.0">
+                     			<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0">
 	                             <columnConstraints>
 	                               <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="150.0" />
 	                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="494.0" />
@@ -124,12 +124,12 @@
                               		<Tooltip text="%fav.btn.delete.tooltip" />
                               	</tooltip>
                               </Button>
-                              <Button mnemonicParsing="false" prefWidth="65" onAction="#onFavoriteSaveItem" text="%fav.btn.save">
+                              <Button mnemonicParsing="false" onAction="#onFavoriteSaveItem" prefWidth="65" text="%fav.btn.save">
                               	<tooltip>
                               		<Tooltip text="%fav.btn.save.tooltip" />
                               	</tooltip>
                               </Button>
-                              <Button mnemonicParsing="false" prefWidth="65" onAction="#onFavoriteNewItem" text="%fav.btn.add">
+                              <Button mnemonicParsing="false" onAction="#onFavoriteNewItem" prefWidth="65" text="%fav.btn.add">
                               	<tooltip>
                               		<Tooltip text="%fav.btn.add.tooltip" />
                               	</tooltip>
