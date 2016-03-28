@@ -194,7 +194,7 @@ public class Plugins {
 //			super();
 //		}
 		
-		public PluginConfig(String pluginDirectory){
+		protected PluginConfig(String pluginDirectory){
 			super(pluginDirectory);
 		}
 		
