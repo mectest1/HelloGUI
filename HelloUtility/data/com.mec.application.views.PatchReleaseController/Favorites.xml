@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <patchReleaseConfigBeans>
     <PatchReleaseConfig>
+        <name>Plugin-FileManager</name>
+        <patchReleaseDirectory>E:\Git\github.com\mectest1\HelloGUI\HelloUtility\plugins\FileManager</patchReleaseDirectory>
+        <patchTime>2016-03-28T19:03:42.433</patchTime>
+        <workspaceDirectory>E:\Git\github.com\mectest1\HelloGUI</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
         <name>EECore262.1_201403024</name>
         <patchReleaseDirectory>E:\Date\2016-03\Defect #40637\_testPatch2</patchReleaseDirectory>
         <patchTime>2016-03-25T08:38:54.962</patchTime>

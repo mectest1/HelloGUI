@@ -76,6 +76,11 @@
                       			<HashMap view="%view.logView.url" title="%view.logView.title"/>
                       		</userData>
                       </MenuItem>
+                      <MenuItem mnemonicParsing="false" onAction="#viewMenuItemClicked" text="%menu.view.sqlLogParser" disable="true">
+                      		<userData>
+                      			<HashMap view="%view.sqlLogParser.url" title="%view.sqlLogParser.title"/>
+                      		</userData>
+                      </MenuItem>
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="%menu.help">

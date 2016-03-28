@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
@@ -38,8 +39,9 @@ import javax.xml.bind.Unmarshaller;
  */
 public class Config {
 
-	private Config(){
-		configDir = Paths.get(Msg.get(this, "data.path"));
+	protected Config(){
+//		configDir = Paths.get(Msg.get(this, "data.path"));
+		configDir = getDataRoot();
 		createIfNotExists(configDir, Files::createDirectory);
 	}
 	
@@ -47,7 +49,7 @@ public class Config {
 		this();
 		this.componentConfigDir = configDir.resolve(componentConfigDir);
 	}
-	private Config(String componentConfigDirStr){
+	protected Config(String componentConfigDirStr){
 		this(Paths.get(componentConfigDirStr));
 	}
 	
@@ -82,9 +84,11 @@ public class Config {
 //				Files.createDirectories(path);
 				pathCreateMethod.create(path);
 				if(Files.isDirectory(path)){
-					logger.log(Msg.get(this, "log.create.directory"), path.toRealPath());
+//					logger.log(Msg.get(this, "log.create.directory"), path.toRealPath());
+					logger.log(Msg.get(Config.class, "log.create.directory"), path.toRealPath());
 				}else{
-					logger.log(Msg.get(this, "log.create.file"), path.toRealPath());
+//					logger.log(Msg.get(this, "log.create.file"), path.toRealPath());
+					logger.log(Msg.get(Config.class, "log.create.file"), path.toRealPath());
 				}
 			} catch (IOException e) {
 				logger.log(e);
@@ -115,6 +119,13 @@ public class Config {
 		createIfNotExists(retval, Files::createFile);
 		return retval;
 	}
+	/**
+	 * Get data file for the config with specified tag. The config file will bear this form:
+	 * <code>componentConfigDir/tag.xml</code>. If this file (and all its parent directories) doesn't exist 
+	 * yet, it will be created.
+	 * @param tag tag.xml
+	 * @return
+	 */
 	private Path getDataPath(String tag){
 //		Path fullConfigPath = configDir.resolve(componentConfigDir);
 		return getConfigWithFullPath(componentConfigDir, tag);
@@ -200,8 +211,19 @@ public class Config {
 	 * The one and only getInstance() method;
 	 * @return 
 	 */
+	@Deprecated
 	static Config inst(){
 		return instance;
+	}
+	
+	/**
+	 * Generate custom <code>Config</code> instances with the <code>configFactory</code>
+	 * @param componentConfigDirStr
+	 * @param configFactory factory used to genereate custom <code>Config</code> objects
+	 * @return
+	 */
+	public static Config of(String componentConfigDirStr, Function<String, Config> configFactory){
+		return instances.computeIfAbsent(componentConfigDirStr, configFactory);
 	}
 	
 	/**
@@ -217,6 +239,9 @@ public class Config {
 	 */
 	public static Config of(Class<?> clazz){
 		Objects.requireNonNull(clazz);
+//		if(Arrays.asList(clazz.getInterfaces()).contains(MsgLogger.class)){
+//			
+//		}
 		return of(clazz.getName());
 	}
 	/**
@@ -225,11 +250,34 @@ public class Config {
 	 */
 	public static Config of(Object obj){
 		Objects.requireNonNull(obj);
+//		if(obj instanceof MsgLogger){
+//			of(obj.getClass().getName()).setLogger((MsgLogger)obj);
+//		}
 		return of(obj.getClass().getName());
 	}
+//	/**
+//	 * Invoke {@link #setLogger(MsgLogger)} and return this {@link #Config} instance;
+//	 * @param logger
+//	 * @return
+//	 */
+//	public Config withLogger(MsgLogger logger){
+//		setLogger(logger);
+//		return this;
+//	}
 	//------------------------------------------------
 	
 	//---------------------------------------
+	/**
+	 * Root path that holds all configuration files; for the default {@link #Config} class, the data path
+	 * is <code>./data</code>
+	 * <pre>
+	 * Subclass of {@link Config} should override this method to customize the root directory to store data.
+	 * </pre>
+	 * @return
+	 */
+	protected Path getDataRoot(){
+		return Paths.get(Msg.get(this, "data.path"));
+	}
 	public void setLogger(MsgLogger logger) {
 		this.logger = logger;
 	}
@@ -247,6 +295,7 @@ public class Config {
 //		createIfNotExists(configDir, Files::createDirectories);
 //	}
 	private MsgLogger logger = MsgLogger.defaultLogger();
+	@Deprecated
 	private static final Config instance = new Config();
 	private static final String CONFIG_FILENAME_PATTERN = Msg.get(Config.class, "config.fileName.pattern");
 	public static interface CreatePathMethod{

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <patchReleaseConfigBeans>
     <PatchReleaseConfig>
+        <modifyList>HelloUtilityPlugin-FileManager/src/com/mec/app/plugin/filemanager/FileManager.java</modifyList>
+        <name>Plugin-FileManager</name>
+        <patchReleaseDirectory>E:\Git\github.com\mectest1\HelloGUI\HelloUtility\plugins\FileManager</patchReleaseDirectory>
+        <patchTime>2016-03-28T19:06:42.716</patchTime>
+        <workspaceDirectory>E:\Git\github.com\mectest1\HelloGUI</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
         <modifyList>--EE-8035
 SecuModulesAndFunctions.jsp - EximBillWeb/WebContent/screen/SECU (2 matches)
 SYS_DashBoardMT.js - EximBillWeb/WebContent/screen (2 matches)

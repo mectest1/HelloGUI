@@ -2,6 +2,7 @@ package com.mec.duke;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -401,6 +402,7 @@ public class LanguageFeatureTest {
 	}
 	//====================================================================
 	
+	@Ignore
 	@Test
 	public void testTreeSet(){
 		class Drink implements Comparable<Drink>{
@@ -427,6 +429,25 @@ public class LanguageFeatureTest {
 		drinks.add(new Drink("Tea"));
 		out.println(drinks);	//result:[Drink [name=Coffee]]
 
+	}
+	
+	@Test
+	public void testSuperInterfaces(){
+		class D1 implements I1{
+			@Override
+			public void doIt() {
+				// TODO Auto-generated method stub
+				
+			}
+		}
+		
+		class D2 extends D1 implements Serializable{
+			
+		}
+		
+		Arrays.stream(D1.class.getInterfaces()).forEach(c -> out.println(c.getTypeName()));
+		Arrays.stream(D2.class.getGenericInterfaces()).forEach(c -> out.println(c.getTypeName()));	//<- only prints out direct interfaces;
+		Arrays.stream(D2.class.getAnnotatedInterfaces()).forEach(c -> out.println(c.getClass().getName()));
 	}
 	
 	static interface DeclareStuff{

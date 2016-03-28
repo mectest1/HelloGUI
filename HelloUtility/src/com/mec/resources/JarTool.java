@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.jar.JarOutputStream;
@@ -467,6 +468,15 @@ public class JarTool {
 		}
 		return line;
 	}
+	
+	
+	public static boolean isJarFile(Path path){
+		Objects.requireNonNull(path);
+		return !Files.isDirectory(path) 
+				&& JAR_FILE_PATTERN.matcher(path.getFileName().toString()).matches();
+	}
+	
+	
 
 	private void setLogger(MsgLogger logger){
 		this.logger = logger;
@@ -483,6 +493,7 @@ public class JarTool {
 	public static final List<String> SOURCE_FOLDER = Msg.getList(JarTool.class, "source.dir");
 	private static final List<String> WEB_CONTENT_FOLDER = Msg.getList(JarTool.class, "webContent.dir");
 	
+	private static final Pattern JAR_FILE_PATTERN = Pattern.compile(Msg.get(JarTool.class, "pattern.jar.file"), Pattern.CASE_INSENSITIVE);
 	public static Pattern WEB_CONTENT_JAR = Pattern.compile(Msg.get(JarTool.class, "pattern.jarName.WebContent"));
 	public static Pattern EE_LIB_JAR = Pattern.compile(Msg.get(JarTool.class, "pattern.jarName.EE_LIB"));
 }

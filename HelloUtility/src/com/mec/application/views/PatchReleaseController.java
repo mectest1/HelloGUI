@@ -221,6 +221,12 @@ public class PatchReleaseController implements MsgLogger{
 			delPath = Optional.of(Paths.get(delPathStr));
 		}
 		return delPath.get();
+//		return delPath.orElseGet(() -> {
+//			String delPathStr = String.format(Msg.get(this, "path.del.patch"), DateUtil.getPathNameForNow());
+//			Path retval = Paths.get(delPathStr);
+//			delPath = Optional.of(retval);
+//			return retval;
+//		});
 	}
 	
 	
