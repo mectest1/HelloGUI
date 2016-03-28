@@ -262,7 +262,9 @@ public class Config {
 	 * @return a new {@link Config} instance, or an existing one with the same <code>componentConfigDir</code>
 	 */
 	public static Config of(String componentConfigDirStr){
-		return instances.computeIfAbsent(componentConfigDirStr, Config::new);
+		//return instances.computeIfAbsent(componentConfigDirStr, Config::new);
+		String configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath().toString();
+		return instances.computeIfAbsent(configRealPath, key -> new Config(componentConfigDirStr));
 	}
 	/**
 	 * @param clazz clazz.name will be used as <code>componentConfigDir</code>
@@ -333,6 +335,29 @@ public class Config {
 		Path create(Path p) throws IOException;
 	}
 	private static Map<String, Config> instances = new HashMap<>();
+	
+//	public static class ConfigFactory{
+//		private ConfigFactory(){
+//			//
+//		}
+//		
+//		public static Config basedOn(String dataPathDir){
+//			@OVerride
+//			return new Config(){
+//				protected Path getDataRoot(){
+//					return Paths.get(dataPathDir);
+//				}
+//			}
+//		}
+//		
+//		private static Map<String, Config> configInstances = new HashMap<>();
+//		static{
+//			String appConfig = Msg.get(Config.class, "data.path");
+//			configInstances.put(appConfig, Config.of(Config.class));
+//			String pluginConfig = Msg.get(Plugin.class, "plugin.root.dir");
+//			configInstances.put(pluginConfig, PluginConfig.of(Plugin.class));
+//		}
+//	}
 	
 	/**
 	 * policy that specifies the behavior when config file already exists;
