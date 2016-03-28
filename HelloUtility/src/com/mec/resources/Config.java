@@ -263,7 +263,8 @@ public class Config {
 	 */
 	public static Config of(String componentConfigDirStr){
 		//return instances.computeIfAbsent(componentConfigDirStr, Config::new);
-		String configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath().toString();
+		//String configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath().toString();
+		Path configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath();
 		return instances.computeIfAbsent(configRealPath, key -> new Config(componentConfigDirStr));
 	}
 	/**
@@ -334,7 +335,8 @@ public class Config {
 	public static interface CreatePathMethod{
 		Path create(Path p) throws IOException;
 	}
-	private static Map<String, Config> instances = new HashMap<>();
+	//private static Map<String, Config> instances = new HashMap<>();
+	private static Map<Path, Config> instances = new HashMap<>();
 	
 //	public static class ConfigFactory{
 //		private ConfigFactory(){
@@ -342,8 +344,9 @@ public class Config {
 //		}
 //		
 //		public static Config basedOn(String dataPathDir){
-//			@OVerride
+//		
 //			return new Config(){
+//				@OVerride
 //				protected Path getDataRoot(){
 //					return Paths.get(dataPathDir);
 //				}
