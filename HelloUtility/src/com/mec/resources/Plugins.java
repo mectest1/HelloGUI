@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.sun.glass.ui.CommonDialogs.Type;
 
 public class Plugins {
 
