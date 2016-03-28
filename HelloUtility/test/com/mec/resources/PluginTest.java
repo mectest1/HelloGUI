@@ -20,11 +20,31 @@ public class PluginTest {
 		PluginConfig.of(fmPlugin).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void testLoadPlugin(){
 		final String fmPlugin = "FileManager";
 		Plugins.load(fmPlugin);
-		
 	}
+	
+	
+	
+	//-------------------------------------------------
+	@Ignore
+	@Test
+	public void testGeneratePluginConfig2(){
+		final String fmPlugin = "SQLParser";
+		PluginConfigBean configBean = new PluginConfigBean();
+		configBean.setEntryClass("com.mec.app.plugin.sqlparser.SQLParser");
+//		PluginConfig.of(fmPlugin, PluginConfig::new).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
+		PluginConfig.of(fmPlugin).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
+	}
+	
+//	@Ignore
+	@Test
+	public void testLoadPlugin2(){
+		final String fmPlugin = "SQLParser";
+		Plugins.load(fmPlugin);
+	}
+	//-------------------------------------------------
 }

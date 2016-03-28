@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <patchReleaseConfigBeans>
     <PatchReleaseConfig>
+        <name>Plugin-SQLParser</name>
+        <patchReleaseDirectory>E:\Git\github.com\mectest1\HelloGUI\HelloUtility\plugins\SQLParser</patchReleaseDirectory>
+        <patchTime>2016-03-28T20:10:48.72</patchTime>
+        <workspaceDirectory>E:\Git\github.com\mectest1\HelloGUI</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
         <name>Plugin-FileManager</name>
         <patchReleaseDirectory>E:\Git\github.com\mectest1\HelloGUI\HelloUtility\plugins\FileManager</patchReleaseDirectory>
         <patchTime>2016-03-28T19:03:42.433</patchTime>

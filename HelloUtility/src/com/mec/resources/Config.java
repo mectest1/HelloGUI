@@ -18,6 +18,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
+import com.mec.resources.Plugins.PluginConfig;
+
 /**
  * Configuration Factory
  * <p>
@@ -34,6 +36,34 @@ import javax.xml.bind.Unmarshaller;
  * The generated configuration XML file can later be loaded with
  * <code>Config.config(Config.class).load("foo", BarObject.class)</code>, which may be empty.
  * </p>
+ * <h4>Note for reusage of Config:</h4>
+ * <p>
+ * To reuse the Config component, it's recommended to sub-class this class and:
+ * <ol>
+ * <li>Override {@link #getDataPath(String)} to provide your own data root directory </li>
+ * <li>Supplier a constructor that receives one single String argument (in which you can invoke {@link #Config(String)}) of course)</li>
+ * <li>And provide your own version of {@link #of(String)} (or something like that), in which you can invoke {@link #of(String, Function)}</li>
+ * </ol>
+ * 
+ * Typical usage case:
+ * <pre>
+ * class AbcConfig
+ * 
+ * private AbcConfig(String abcConfigName){
+ * 	super(abcConfigName);
+ * }
+ * public static Config of(String abcConfigName){
+ * 	 return Config.of(abcConfigName, AbcConfig::new);
+ * }
+ * protected Path getDataPath(){
+ * 	return "abc";
+ * } 
+ * </pre>
+ * </p>
+ * <p>
+ * See {@link PluginConfig} for a concrete example.
+ * </p>
+ *
  * @author MEC
  *
  */
@@ -217,12 +247,13 @@ public class Config {
 	}
 	
 	/**
-	 * Generate custom <code>Config</code> instances with the <code>configFactory</code>
+	 * Generate custom <code>Config</code> instances with the <code>configFactory</code>. Subclass is encouraged to 
+	 * override this method to provide their own implementation of Config instances. 
 	 * @param componentConfigDirStr
 	 * @param configFactory factory used to genereate custom <code>Config</code> objects
 	 * @return
 	 */
-	public static Config of(String componentConfigDirStr, Function<String, Config> configFactory){
+	protected static Config of(String componentConfigDirStr, Function<String, Config> configFactory){
 		return instances.computeIfAbsent(componentConfigDirStr, configFactory);
 	}
 	
