@@ -63,4 +63,15 @@ public class PluginTest {
 		Plugins.loadSync(fmPlugin);
 	}
 	//-------------------------------------------------
+	
+	
+	static class CustomClassLoader extends ClassLoader{
+
+		@Override
+		protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+			// TODO Auto-generated method stub
+			return super.loadClass(name, resolve);
+		}
+		
+	}
 }

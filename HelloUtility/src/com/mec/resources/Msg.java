@@ -1,7 +1,9 @@
 package com.mec.resources;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -21,14 +23,13 @@ import java.util.function.Function;
  */
 public class Msg {
 
-//	private Msg(){
-////		resources = ResourceBundle.getBundle(MESSAGES);
-//		
+//	private Msg(String resourceBundlePath){
+//		resources = ResourceBundle.getBundle(resourceBundlePath);
 //	}
-	
-	private Msg(ResourceBundle resourceBundle){
-		this.resources = resourceBundle;
-	}
+//	
+//	private Msg(ResourceBundle resourceBundle){
+//		this.resources = resourceBundle;
+//	}
 	
 //	public static Messages getInstance(){
 //		return instance;
@@ -42,9 +43,9 @@ public class Msg {
 	protected static Optional<String> getFull(String key){
 		
 		try {
-//			return Optional.of(resources.getString(key));
+			return Optional.of(resources.getString(key));
 //			return Optional.of(getResources().getString(key));
-			return Optional.of(defaultInstance.getResources().getString(key));
+//			return Optional.of(defaultInstance.getResources().getString(key));
 		} catch (MissingResourceException e) {
 			return Optional.empty();
 		}
@@ -180,16 +181,37 @@ public class Msg {
 	
 	
 	//------------------------------------------------------
-	protected ResourceBundle getResources(){
-		return resources;
-	}
+//	protected ResourceBundle getResources(){
+//		return resources;
+//	}
 //	private static Msg getDefault(){
 //		return defaultInstance;
 //	}
+//	/**
+//	 * Get {@link Msg} instance from the specified <code>resourcePath</code>.
+//	 * Typical usage:
+//	 * <code><pre>
+//	 * Msg m = Msg.of("com.foo.bar.Resources");
+//	 * m.get(this, "derp");
+//	 * </pre></code>
+//	 * @param resourcePath
+//	 * @return
+//	 */
+//	public static Msg of(String resourcePath){
+//		return msgs.computeIfAbsent(resourcePath, Msg::new);
+//	}
+//	protected Optional<String> getFull(String key){
+//		
+//	}
 	
 	private static final String MESSAGES = "com.mec.resources.MessagesBundle";
-	private ResourceBundle resources;	//ResourceBundle.getBundle(MESSAGES);
-	private static Msg defaultInstance = new Msg(ResourceBundle.getBundle(MESSAGES));
+	private static ResourceBundle resources = ResourceBundle.getBundle(MESSAGES);
+//	private ResourceBundle resources;	//ResourceBundle.getBundle(MESSAGES);
+//	private static Msg defaultInstance = new Msg(ResourceBundle.getBundle(MESSAGES));
+//	private static final Map<String, Msg> msgs = new HashMap<>();
+//	static{
+//		msgs.put(MESSAGES, defaultInstance);
+//	}
 	private static final String TAG_COMBINE_PATTERN = "%s.%s";
 	private static final GetCallerClassNameMethod getCaller = new SecurityManagerMethod();
 	

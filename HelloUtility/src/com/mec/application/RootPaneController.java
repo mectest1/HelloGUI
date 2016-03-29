@@ -24,10 +24,6 @@ public class RootPaneController implements MsgLogger{
 	
 	@FXML
 	private void onAbout(){
-//		Alert about = new Alert(AlertType.INFORMATION);
-//		about.setTitle(Msg.get(this, "about.title"));
-//		about.setHeaderText(Msg.get(this, "about.header"));
-//		about.setContentText(Msg.get(this, "about.content"));
 		Alert about = ViewFactory.newAlert(AlertType.INFORMATION, 
 				Msg.get(this, "about.title"), 
 				Msg.get(this, "about.header"), 
@@ -43,95 +39,24 @@ public class RootPaneController implements MsgLogger{
 	
 	@FXML
 	private void initialize(){
-//		prepareNewLog();
 		ViewFactory.setLogOutput(this);
-//		logMsg.getStyleClass().clear(); //clear default style classes for log msg
-//		logMsg.getStyleClass().add(Msg.get(this, "style.logMsg"));
-//		logMsg.setStyle("-fx-background-color: white;");
 	}
 	
 
 	//Note: static method cannot be FXML method?
 	@FXML
 	private void viewMenuItemClicked(ActionEvent event){
-//		MenuItem menuItem = (MenuItem) event.getTarget();
-//		@SuppressWarnings("unchecked")
-//		HashMap<String, String> userData = (HashMap<String, String>) menuItem.getUserData();
-//		String view = userData.get(ViewFactory.FXML_ATTR_KEY_VIEW);
-//		String title = userData.get(ViewFactory.FXML_ATTR_KEY_TITLE);
-//		ViewFactory.showNewStage(view, title);
 		ViewFactory.onClickedViewMenuItem(event);
 	}
 
 	
-//	@FXML
-//	private void onBase64Decoder(ActionEvent event){
-//		
-////		com.sun.org.apache.xml.internal.security.Init.init();
-//		
-////		String viewUrl = Msg.get(this, "menu.view.base64decoder.url");
-////		Pane viewPane = ViewFactory.loadView(viewUrl);
-////		
-//////		Stage stage = new Stage();
-//////		stage.setScene(new Scene(viewPane));
-////		Stage stage = ViewFactory.newStage(viewPane, Msg.get(this, "menu.view.base64decoder.title"));
-////		
-////		stage.show();
-//		
-////		ViewFactory.showNewStage(Msg.get(this, "menu.view.base64decoder.url"), Msg.get(this, "menu.view.base64decoder.title"));
-//		
-//		MenuItem menuItem = (MenuItem) event.getTarget();
-//		@SuppressWarnings("unchecked")
-//		HashMap<String, String> userData = (HashMap<String, String>) menuItem.getUserData();
-//		String view = userData.get(ViewFactory.FXML_ATTR_KEY_VIEW);
-//		String title = userData.get(ViewFactory.FXML_ATTR_KEY_TITLE);
-//		ViewFactory.showNewStage(view, title);
-//	}
-	
-	
-//	@FXML
-//	private void onPatchRelease(){
-//		ViewFactory.showNewStage(Msg.get(this, "menu.view.patchRelease.url"), Msg.get(this, "menu.view.patchRelease.title"));
-//	}
-//	
-//	@FXML
-//	private void onFileManager(){
-//		ViewFactory.showNewStage(Msg.get(this, "menu.view.fileManager.url"), Msg.get(this, "menu.view.fileManager.title"));
-//	}
-	
 	@FXML
 	private void onClearLog(){
 		logMsg.clear();
-//		prepareNewLog();
 	}
 	
-//	private void prepareNewLog(){
-//		try {
-//			if (null != sw) {
-//				sw.close();
-//			}
-//			sw = new StringWriter();
-//			PrintWriter pw = new PrintWriter(sw);
-//			ViewFactory.setLogOutput(pw);
-//		} catch (Exception e) {
-//			appendLog(JarTool.exceptionToStr(e));
-//		}
-//	}
-//	private void appendLog(String msg){
-////		logMsg.setText(new StringBuilder(logMsg.getText()).append(msg).toString());
-//		logMsg.appendText(msg);
-////		logMsg.setScrollTop(Double.MAX_VALUE);	//scroll to bottom
-//	}
-	
-	
-
 	@Override
 	public void log(String msg) {
-//		appendLog(msg);
 		logMsg.appendText(msg);
 	}
-
-
-//	private StringWriter sw;
-	
 }
