@@ -127,7 +127,7 @@ public class Config {
 	
 	//---------------------------------------------------
 	/**
-	 * For compatible usage
+	 * Use {@link #defaultData()} for this configuration. For compatible usage. 
 	 * @param componentObj
 	 * @return
 	 */
@@ -136,6 +136,9 @@ public class Config {
 	}
 	public static ConfigEndpoint of(Class<?> componentClass){
 		return defaultData().of(componentClass.getName());
+	}
+	public static ConfigEndpoint of(String componentConfigDirStr){
+		return defaultData().of(componentConfigDirStr);
 	}
 	
 	@Override
@@ -195,6 +198,9 @@ public class Config {
 ////				instances.put(configChain., value)
 //			}
 			this.configChain = configChain;
+//			this.componentConfigDir = Paths.get(Msg.get(Config.class, "path.default.componentConfigDir"));
+			setComponentConfigDir(this.componentConfigDir);
+//			setComponentConfigDir(DEFAULT_COMPONENT_CONFIG_DIR);
 //			setComponentConfigDir(this.configChain.getDataPath());
 		}
 		
@@ -296,7 +302,8 @@ public class Config {
 
 		//----------------------------------------------
 		private void setComponentConfigDir(Path componentConfigDir){
-			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElse(Config.defaultData().configChain.getDataPath());
+//			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElse(Config.defaultData().configChain.getDataPath());
+			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElseGet(() -> Config.defaultData().configChain.getDataPath());
 			Optional.ofNullable(configChain.getDataPath())
 				.ifPresent(p -> this.componentConfigDir = p.resolve(componentConfigDir));
 //			return this;
@@ -325,8 +332,9 @@ public class Config {
 		
 		private Config configChain;
 //		private Path componentConfigDir = Config.defaultData().configChain.getDataPath();
-		private Path componentConfigDir;
+		private Path componentConfigDir = DEFAULT_COMPONENT_CONFIG_DIR;
 		private Map<String, ConfigEndpoint> componentConfigs = new HashMap<>();
+		private static final Path DEFAULT_COMPONENT_CONFIG_DIR = Paths.get(Msg.get(Config.class, "path.default.componentConfigDir"));
 	}
 	
 	

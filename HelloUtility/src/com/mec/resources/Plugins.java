@@ -58,13 +58,14 @@ public class Plugins {
 	private static void loadPlugin(String pluginName){
 		Plugin plugin = plugins.computeIfAbsent(pluginName, Plugin::new);
 		plugin.setLogger(logger);
-//		PluginConfig.of(pluginName, PluginConfig::new).setLogger(logger);
-		PluginConfig.of(pluginName).setLogger(logger);
+//		PluginConfig.of(pluginName).setLogger(logger);
+		Config.of(pluginName).setLogger(logger);
 //		Config.of.of(pluginName).setLogger(logger);
-//		PluginConfigBean configBean = PluginConfig.of(pluginName).load(PLUGIN_CONFIG_FILE, PluginConfigBean.class).get();
-		PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class).get();
 		
 		try {
+//			PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class).get();
+			PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), pluginName)));
 			Class<?> entryClass = plugin.loadClass(configBean.getEntryClass());
 //			Method entryMethod = Arrays.stream(entryClass.getMethods())	//<- return all the public methods
 			Method entryMethod = Arrays.stream(entryClass.getDeclaredMethods())
