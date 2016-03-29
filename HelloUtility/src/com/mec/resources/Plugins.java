@@ -2,12 +2,6 @@ package com.mec.resources;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -27,6 +21,9 @@ import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.mec.application.beans.PluginInfo.PluginContext;
+import com.mec.application.beans.PluginInfo.PluginStart;
+//import com.mec.application.beans.PluginAnnotations.Start;
 import com.mec.resources.Config.ConfigEndpoint;
 
 
@@ -51,26 +48,26 @@ public class Plugins {
 	 * 
 	 * <p>
 	 * After load completes, the plugin will be started with class specified in <code>pluginConfig.xml<code> 
-	 * and (as you may have guessed) method annotated with {@link PluginEntryMehtod} as entry point.
+	 * and (as you may have guessed) method annotated with {@link PluginStart} as entry point.
 	 * </p>
 	 * @param pluginName
 	 */
 	private static void loadPlugin(String pluginName){
 		Plugin plugin = plugins.computeIfAbsent(pluginName, Plugin::new);
 		plugin.setLogger(logger);
-//		PluginConfig.of(pluginName).setLogger(logger);
-		Config.of(pluginName).setLogger(logger);
+		PluginConfig.of(pluginName).setLogger(logger);
+//		Config.of(pluginName).setLogger(logger);
 //		Config.of.of(pluginName).setLogger(logger);
 		
 		try {
-//			PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class).get();
-			PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+			PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+//			PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
 					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), pluginName)));
 			Class<?> entryClass = plugin.loadClass(configBean.getEntryClass());
 //			Method entryMethod = Arrays.stream(entryClass.getMethods())	//<- return all the public methods
 			Method entryMethod = Arrays.stream(entryClass.getDeclaredMethods())
 					.filter(method -> 
-						null != method.getAnnotation(PluginEntryMehtod.class)
+						null != method.getAnnotation(PluginStart.class)
 					)
 					.findAny()
 					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.noEntryMethod"), entryClass.getName())));
@@ -160,24 +157,6 @@ public class Plugins {
 	 */
 //	private static final Path PLUGIN_ROOT_DIR = Paths.get(Msg.get(Plugins.class, "plugin.root.dir")); 
 	
-	/**
-	 * Plugin entry class should have at least one of its method annotated with this annotation,
-	 * whose arguments may be empty, or one argument with type of <code>{@link PluginContext}</code>.
-	 * e.g.: The entry method should have one of these two forms: 
-	 * <ul>
-	 * <li>{ReturnType} methodName()</li>
-	 * <li>{ReturnType} methodName(PluginContext pc}</li>
-	 * <ul>
-	 * @author MEC
-	 *
-	 */
-	@Retention(RetentionPolicy.RUNTIME)	//<- needed, else its default value is RetentionPolicy.CLASS
-	@Documented
-	@Target({ElementType.METHOD})
-	public @interface PluginEntryMehtod{
-		
-	}
-	
 	@XmlRootElement(name="pluginConfig")
 	static class PluginConfigBean{
 		private String entryClass;
@@ -193,21 +172,10 @@ public class Plugins {
 		}
 	}
 	
-
-	
-	/**
-	 * Provides plugin context for the plugin entry method
-	 * @author MEC
-	 *
-	 */
-	public interface PluginContext{
-		
-	}
 	
 	private static class PluginContextImpl implements PluginContext{
 		
 	}
-	
 	
 	static class PluginConfig{
 		

@@ -11,7 +11,7 @@ import com.mec.resources.Plugins.PluginConfigBean;
 public class PluginTest {
 
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void testGeneratePluginConfig(){
 		final String fmPlugin = "FileManager";
@@ -55,7 +55,7 @@ public class PluginTest {
 		PluginConfig.of(fmPlugin).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void testLoadPlugin2(){
 		final String fmPlugin = "SQLParser";

@@ -1,0 +1,23 @@
+#2016-03-29
+Q: How to develop plugin for HelloUtility?
+A: Pretty simple and straight:
+	1, Add PluginInterface.jar into your project's dependency list;
+	2, Create an entry class with a method annotated with @PluginStart. Note that this method may have one argument with type of PluginContext, or no argument.
+	3, Create a directory in ${HelloUtility_Root_Directory}/plugins/ with your plugin's name, put any .jar files here, then create pluginConfig.xml with
+		content like this:
+		<pluginConfig>
+		    <entryClass>${your entry class name}</entryClass>
+		</pluginConfig>
+	4, And it's done.
+	
+	Here is an example (from Plugin: FileManager):
+	1, Related library files:
+		./plugins/FileManager/HelloUtilityPlugin-FileManager.jar
+	2, Entry class: com.mec.app.plugin.filemanager.FileManager
+		Entry method: FileManager.sayHello(); 
+	3, pluginConfig.xml content:
+		<pluginConfig>
+		    <entryClass>com.mec.app.plugin.filemanager.FileManager</entryClass>
+		</pluginConfig>
+	
+Q: 

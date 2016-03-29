@@ -2,12 +2,12 @@ package com.mec.app.plugin.filemanager;
 
 import java.io.PrintStream;
 
-import com.mec.resources.Plugins.PluginEntryMehtod;
+import com.mec.application.beans.PluginInfo.PluginStart;
 
 public class FileManager {
 
 	
-	@PluginEntryMehtod
+	@PluginStart
 	private void sayHello(){
 		out.println("Hello, from FileManager");
 	}

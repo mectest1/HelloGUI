@@ -2,13 +2,13 @@ package com.mec.app.plugin.sqlparser;
 
 import java.io.PrintStream;
 
-import com.mec.resources.Plugins.PluginContext;
-import com.mec.resources.Plugins.PluginEntryMehtod;
+import com.mec.application.beans.PluginInfo.PluginContext;
+import com.mec.application.beans.PluginInfo.PluginStart;
 
 public class SQLParser {
 
 	
-	@PluginEntryMehtod
+	@PluginStart
 	private void sayHello(PluginContext pc){
 		out.println("Hello, SQLParser, " + pc);
 	}
