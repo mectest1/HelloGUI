@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.mec.duke.util.Config;
+import com.mec.duke.util.Config3;
 import com.mec.duke.util.Config2;
 import com.mec.duke.util.LocalDateTimeXmlAdapter;
 import com.mec.duke.util.PathXmlAdapter;
@@ -44,18 +44,18 @@ public class JAXBApplicationTest {
 	@Test
 	public void testMarshalWithEnhancedConfig(){
 		TestConfig testConfig = getTestConfig();
-		Config.config(this).save("helloConfig", testConfig);
+		Config3.config(this).save("helloConfig", testConfig);
 		
 		TestConfig testConfig2 = getTestConfig();
 		testConfig2.setBirthDay(LocalDateTime.now());
-		Config.config(this).save("helloConfig2", testConfig2);
+		Config3.config(this).save("helloConfig2", testConfig2);
 	}
 	
 	@Ignore
 	@Test
 	public void testUnmarshalWithEnhancedConfig(){
-		TestConfig testConfig = Config.config(this).load("helloConfig", TestConfig.class).get();
-		TestConfig testConfig2 = Config.config(this).load("helloConfig2", TestConfig.class).get();
+		TestConfig testConfig = Config3.config(this).load("helloConfig", TestConfig.class).get();
+		TestConfig testConfig2 = Config3.config(this).load("helloConfig2", TestConfig.class).get();
 		
 		out.println(testConfig);
 		out.println(testConfig2);
@@ -72,14 +72,14 @@ public class JAXBApplicationTest {
 		configs.getConfigsList().add(getTestConfig());
 		configs.getConfigsList().add(getTestConfig());
 		
-		Config.config(this).save("helloConfigs", configs);
+		Config3.config(this).save("helloConfigs", configs);
 		
 	}
 	
 	@Test 
 	public void testLoadList(){
 //		out.println("load from xml:");
-		out.println(Config.config(this).load("helloConfigs", TestConfigs.class).get());
+		out.println(Config3.config(this).load("helloConfigs", TestConfigs.class).get());
 	}
 	
 	

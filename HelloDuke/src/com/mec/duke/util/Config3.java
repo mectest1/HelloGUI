@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
@@ -34,50 +33,21 @@ import javax.xml.bind.Unmarshaller;
  * The generated configuration XML file can later be loaded with
  * <code>Config.config(Config.class).load("foo", BarObject.class)</code>, which may be empty.
  * </p>
- * <h4>Note for reusage of Config:</h4>
- * <p>
- * To reuse the Config component, it's recommended to sub-class this class and:
- * <ol>
- * <li>Override {@link #getDataPath(String)} to provide your own data root directory </li>
- * <li>Supplier a constructor that receives one single String argument (in which you can invoke {@link #Config(String)}) of course)</li>
- * <li>And provide your own version of {@link #of(String)} (or something like that), in which you can invoke {@link #of(String, Function)}</li>
- * </ol>
- * 
- * Typical usage case:
- * <pre>
- * class AbcConfig
- * 
- * private AbcConfig(String abcConfigName){
- * 	super(abcConfigName);
- * }
- * public static Config of(String abcConfigName){
- * 	 return Config.of(abcConfigName, AbcConfig::new);
- * }
- * protected Path getDataPath(){
- * 	return "abc";
- * } 
- * </pre>
- * </p>
- * <p>
- * See {@link PluginConfig} for a concrete example.
- * </p>
- *
  * @author MEC
  *
  */
-public class Config {
+public class Config3 {
 
-	protected Config(){
-//		configDir = Paths.get(Msg.get(this, "data.path"));
-		configDir = getDataRoot();
+	private Config3(){
+		configDir = Paths.get(Msg.get(this, "data.path"));
 		createIfNotExists(configDir, Files::createDirectory);
 	}
 	
-	private Config(Path componentConfigDir){
+	private Config3(Path componentConfigDir){
 		this();
 		this.componentConfigDir = configDir.resolve(componentConfigDir);
 	}
-	protected Config(String componentConfigDirStr){
+	private Config3(String componentConfigDirStr){
 		this(Paths.get(componentConfigDirStr));
 	}
 	
@@ -111,13 +81,6 @@ public class Config {
 			try {
 //				Files.createDirectories(path);
 				pathCreateMethod.create(path);
-				if(Files.isDirectory(path)){
-//					logger.log(Msg.get(this, "log.create.directory"), path.toRealPath());
-					logger.log(Msg.get(Config.class, "log.create.directory"), path.toRealPath());
-				}else{
-//					logger.log(Msg.get(this, "log.create.file"), path.toRealPath());
-					logger.log(Msg.get(Config.class, "log.create.file"), path.toRealPath());
-				}
 			} catch (IOException e) {
 				logger.log(e);
 			}
@@ -147,13 +110,6 @@ public class Config {
 		createIfNotExists(retval, Files::createFile);
 		return retval;
 	}
-	/**
-	 * Get data file for the config with specified tag. The config file will bear this form:
-	 * <code>componentConfigDir/tag.xml</code>. If this file (and all its parent directories) doesn't exist 
-	 * yet, it will be created.
-	 * @param tag tag.xml
-	 * @return
-	 */
 	private Path getDataPath(String tag){
 //		Path fullConfigPath = configDir.resolve(componentConfigDir);
 		return getConfigWithFullPath(componentConfigDir, tag);
@@ -195,12 +151,6 @@ public class Config {
 		}
 	}
 	
-	/**
-	 * Load an instance of <code>configObjClass</code> from tag.xml. In case of any exception occurs, an empty result is what you got.
-	 * @param tag
-	 * @param configObjClass
-	 * @return
-	 */
 	public <T> Optional<T> load(String tag, Class<? extends T> configObjClass){
 		Optional<T> retval;
 		try {
@@ -216,15 +166,6 @@ public class Config {
 		return retval;
 	}
 	
-	/**
-	 * Save <code>configObj</code> as XML file into tag.xml
-	 * <p>
-	 * Q: What if tag.xml has already existed? 
-	 * A: It will be overwritten. This behavior would be modified by specifying {@link ConfigExistedPolicy} of this {@link Config} instance.
-	 * </p>
-	 * @param tag
-	 * @param configObj
-	 */
 	public <T> void save(String tag, T configObj){
 		Path xmlFile = getDataPath(tag);
 		try {
@@ -239,77 +180,36 @@ public class Config {
 	 * The one and only getInstance() method;
 	 * @return 
 	 */
-	@Deprecated
-	static Config inst(){
+	static Config3 inst(){
 		return instance;
 	}
 	
 	/**
-	 * Generate custom <code>Config</code> instances with the <code>configFactory</code>. Subclass is encouraged to 
-	 * override this method to provide their own implementation of Config instances. 
-	 * @param componentConfigDirStr
-	 * @param configFactory factory used to genereate custom <code>Config</code> objects
-	 * @return
-	 */
-	protected static Config of(String componentConfigDirStr, Function<String, Config> configFactory){
-		return instances.computeIfAbsent(componentConfigDirStr, configFactory);
-	}
-	
-	/**
 	 * @param componentConfigDir directory name for each stand alone component that wants to store configurations;
-	 * @return a new {@link Config} instance, or an existing one with the same <code>componentConfigDir</code>
+	 * @return a new {@link Config3} instance, or an existing one with the same <code>componentConfigDir</code>
 	 */
-	public static Config of(String componentConfigDirStr){
-		return instances.computeIfAbsent(componentConfigDirStr, Config::new);
-//		String configRealPath = getDataPath(componentConfigDirStr).toRealPath().toString();
-//		Path configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath();
-//		return instances.computeIfAbsent(configRealPath, key -> new Config(componentConfigDirStr));
+	public static Config3 config(String componentConfigDir){
+		return instances.computeIfAbsent(componentConfigDir, Config3::new);
 	}
 	/**
 	 * @param clazz clazz.name will be used as <code>componentConfigDir</code>
-	 * @return a new {@link Config} instance or existing one;
+	 * @return a new {@link Config3} instance or existing one;
 	 */
-	public static Config of(Class<?> clazz){
+	public static Config3 config(Class<?> clazz){
 		Objects.requireNonNull(clazz);
-//		if(Arrays.asList(clazz.getInterfaces()).contains(MsgLogger.class)){
-//			
-//		}
-		return of(clazz.getName());
+		return config(clazz.getName());
 	}
 	/**
 	 * @param obj obj.class.name will be used as <code>componentConfigDir</code>
-	 * @return a new {@link Config} instance or existing one;
+	 * @return a new {@link Config3} instance or existing one;
 	 */
-	public static Config of(Object obj){
+	public static Config3 config(Object obj){
 		Objects.requireNonNull(obj);
-//		if(obj instanceof MsgLogger){
-//			of(obj.getClass().getName()).setLogger((MsgLogger)obj);
-//		}
-		return of(obj.getClass().getName());
+		return config(obj.getClass().getName());
 	}
-//	/**
-//	 * Invoke {@link #setLogger(MsgLogger)} and return this {@link #Config} instance;
-//	 * @param logger
-//	 * @return
-//	 */
-//	public Config withLogger(MsgLogger logger){
-//		setLogger(logger);
-//		return this;
-//	}
 	//------------------------------------------------
 	
 	//---------------------------------------
-	/**
-	 * Root path that holds all configuration files; for the default {@link #Config} class, the data path
-	 * is <code>./data</code>
-	 * <pre>
-	 * Subclass of {@link Config} should override this method to customize the root directory to store data.
-	 * </pre>
-	 * @return
-	 */
-	protected Path getDataRoot(){
-		return Paths.get(Msg.get(this, "data.path"));
-	}
 	public void setLogger(MsgLogger logger) {
 		this.logger = logger;
 	}
@@ -319,7 +219,7 @@ public class Config {
 	 */
 	private Path configDir;
 	/**
-	 * Path of parent directory for component-specific configurations, will be resolved relative to <code>configDir</code> when new {@link Config} instance is created.
+	 * Path of parent directory for component-specific configurations, will be resolved relative to <code>configDir</code> when new {@link Config3} instance is created.
 	 */
 	private Path componentConfigDir;
 //	private static Path configDir = Paths.get(Msg.get(Config.class, "data.path"));
@@ -327,52 +227,12 @@ public class Config {
 //		createIfNotExists(configDir, Files::createDirectories);
 //	}
 	private MsgLogger logger = MsgLogger.defaultLogger();
-	@Deprecated
-	private static final Config instance = new Config();
-	private static final String CONFIG_FILENAME_PATTERN = Msg.get(Config.class, "config.fileName.pattern");
-	public static interface CreatePathMethod{
+	private static final Config3 instance = new Config3();
+	private static final String CONFIG_FILENAME_PATTERN = Msg.get(Config3.class, "config.fileName.pattern");
+	private static interface CreatePathMethod{
 		Path create(Path p) throws IOException;
 	}
-	private static Map<String, Config> instances = new HashMap<>();
-//	private static Map<Path, Config> instances = new HashMap<>();
-	
-//	public static class ConfigFactory{
-//		private ConfigFactory(){
-//			//
-//		}
-//		
-//		public static Config basedOn(String dataPathDir){
-//		
-//			return new Config(){
-//				@OVerride
-//				protected Path getDataRoot(){
-//					return Paths.get(dataPathDir);
-//				}
-//			}
-//		}
-//		
-//		private static Map<String, Config> configInstances = new HashMap<>();
-//		static{
-//			String appConfig = Msg.get(Config.class, "data.path");
-//			configInstances.put(appConfig, Config.of(Config.class));
-//			String pluginConfig = Msg.get(Plugin.class, "plugin.root.dir");
-//			configInstances.put(pluginConfig, PluginConfig.of(Plugin.class));
-//		}
-//	}
-	
-	private static class CustomConfig extends Config{
-
-		
-		protected CustomConfig(String dataRootDir) {
-			super();
-			this.dataRoot = Paths.get(dataRootDir);
-		}
-		@Override
-		protected Path getDataRoot() {
-			return dataRoot;
-		}
-		private final Path dataRoot;
-	}
+	private static Map<String, Config3> instances = new HashMap<>();
 	
 	/**
 	 * policy that specifies the behavior when config file already exists;
@@ -391,7 +251,7 @@ public class Config {
 	 * @author MEC
 	 *
 	 */
-	public enum DirectoryOrganizePolicy{
+	public enum DirectoryOrganizPolicy{
 		FLAT
 		,HIERARCHY
 		;

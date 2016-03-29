@@ -12,7 +12,9 @@ public interface MsgLogger {
 		log(sw.toString());
 	};
 	void log(String msg);
-	
+	default void log(String format, Object ... args){
+		log(String.format(format, args));
+	}
 	static MsgLogger defaultLogger(){
 		return System.out::println; 
 	}

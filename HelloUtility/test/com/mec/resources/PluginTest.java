@@ -3,6 +3,7 @@ package com.mec.resources;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mec.resources.Config.ConfigEndpoint;
 import com.mec.resources.Plugins.Plugin;
 import com.mec.resources.Plugins.PluginConfig;
 import com.mec.resources.Plugins.PluginConfigBean;
@@ -17,14 +18,20 @@ public class PluginTest {
 		PluginConfigBean configBean = new PluginConfigBean();
 		configBean.setEntryClass("com.mec.app.plugin.filemanager.FileManager");
 //		PluginConfig.of(fmPlugin, PluginConfig::new).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
-		PluginConfig.of(fmPlugin).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
+		
+//		PluginConfig.of(fmPlugin).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
+		ConfigEndpoint pluginConfig = PluginConfig.of(fmPlugin);
+		pluginConfig.save(Plugin.PLUGIN_CONFIG_FILE, configBean);
 	}
 	
 	@Ignore
 	@Test
-	public void testLoadPlugin(){
+	public void testLoadPlugin() throws Exception{
 		final String fmPlugin = "FileManager";
-		Plugins.load(fmPlugin);
+//		Plugins.load(fmPlugin);
+//		Thread.sleep(10000L);
+		
+		Plugins.loadSync(fmPlugin);
 	}
 	
 	
@@ -44,7 +51,8 @@ public class PluginTest {
 	@Test
 	public void testLoadPlugin2(){
 		final String fmPlugin = "SQLParser";
-		Plugins.load(fmPlugin);
+//		Plugins.load(fmPlugin);
+		Plugins.loadSync(fmPlugin);
 	}
 	//-------------------------------------------------
 }

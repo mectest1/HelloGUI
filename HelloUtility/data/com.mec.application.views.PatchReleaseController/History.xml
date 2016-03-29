@@ -4,6 +4,13 @@
         <modifyList>HelloUtilityPlugin-FileManager/src/com/mec/app/plugin/filemanager/FileManager.java</modifyList>
         <name>Plugin-FileManager</name>
         <patchReleaseDirectory>E:\Git\github.com\mectest1\HelloGUI\HelloUtility\plugins\FileManager</patchReleaseDirectory>
+        <patchTime>2016-03-29T11:28:22.01</patchTime>
+        <workspaceDirectory>E:\Git\github.com\mectest1\HelloGUI</workspaceDirectory>
+    </PatchReleaseConfig>
+    <PatchReleaseConfig>
+        <modifyList>HelloUtilityPlugin-FileManager/src/com/mec/app/plugin/filemanager/FileManager.java</modifyList>
+        <name>Plugin-FileManager</name>
+        <patchReleaseDirectory>E:\Git\github.com\mectest1\HelloGUI\HelloUtility\plugins\FileManager</patchReleaseDirectory>
         <patchTime>2016-03-28T20:29:50.936</patchTime>
         <workspaceDirectory>E:\Git\github.com\mectest1\HelloGUI</workspaceDirectory>
     </PatchReleaseConfig>

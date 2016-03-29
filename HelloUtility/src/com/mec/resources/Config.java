@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
@@ -17,90 +16,65 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
-import com.mec.resources.Plugins.PluginConfig;
+import com.mec.resources.Plugins.Plugin;
 
 /**
- * Configuration Factory
- * <p>
- * Structure of the configurations will look like this (with default policies):
- * <code>${configDir}/${componentConfigDir}/tag.xml</code>
- * <br/>
- * </p>
- * <p>
- * e.g.
- * <code>Config.config(Config.class).save("foo", barObject)</code> will generate the following file: 
- * <strong>./data/com.mec.resources.Config/foo.xml</strong>
- * </p>
- * <p>
- * The generated configuration XML file can later be loaded with
- * <code>Config.config(Config.class).load("foo", BarObject.class)</code>, which may be empty.
- * </p>
- * <h4>Note for reusage of Config:</h4>
- * <p>
- * To reuse the Config component, it's recommended to sub-class this class and:
- * <ol>
- * <li>Override {@link #getDataPath(String)} to provide your own data root directory </li>
- * <li>Supplier a constructor that receives one single String argument (in which you can invoke {@link #Config(String)}) of course)</li>
- * <li>And provide your own version of {@link #of(String)} (or something like that), in which you can invoke {@link #of(String, Function)}</li>
- * </ol>
- * 
- * Typical usage case:
+ * To replace the Original {@link Config} class;
  * <pre>
- * class AbcConfig
+ * Usage case: 
+ * <dl>
+ * <dt>Config.to("data/").of(this.getClass()).save("derp", Derp.class)</dt>
+ * <dd>Save config <code>derp.xml</code> in ./data/{this.class.name}/derp.xml</dd>
  * 
- * private AbcConfig(String abcConfigName){
- * 	super(abcConfigName);
- * }
- * public static Config of(String abcConfigName){
- * 	 return Config.of(abcConfigName, AbcConfig::new);
- * }
- * protected Path getDataPath(){
- * 	return "abc";
- * } 
+ * <dt>Config.defaultData().of(this).save("foo", Foo.class);</dt>
+ * <dd>Same as Config.to("data/").of(this).save("foo", Foo.class)</dd>
+ * 
+ * <dt>Config.pluginData().of(this).save("bar", Bar.class)</dt>
+ * <dd>Same as Config.to("plugin/").of(this).save("bar", Bar.class)</dd>
+ * 
+ * <dt>Config.of(this).save("derpia", Derpia.class)</dt>
+ * <dd>Same as Config.defaultData().of(this).save("derpia", Derpia.class)</dd>
+ * 
+ * <dt></dt>
+ * <dd></dd>
+ * </dl>
  * </pre>
- * </p>
- * <p>
- * See {@link PluginConfig} for a concrete example.
- * </p>
- *
  * @author MEC
  *
  */
 public class Config {
 
-	protected Config(){
-//		configDir = Paths.get(Msg.get(this, "data.path"));
-		configDir = getDataRoot();
-		createIfNotExists(configDir, Files::createDirectory);
+	private Config(String dataRootDir){
+		this(Paths.get(dataRootDir));
 	}
 	
-	private Config(Path componentConfigDir){
-		this();
-		this.componentConfigDir = configDir.resolve(componentConfigDir);
-	}
-	protected Config(String componentConfigDirStr){
-		this(Paths.get(componentConfigDirStr));
+	private Config(Path dataRoot){
+		this(dataRoot, null);
 	}
 	
-	//---------------------------------------------------------
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	private <T> Optional<T> loadConfig(Object obj, String tag, Class<? extends T> configObjClass){
-		
-		return loadConfig(obj.getClass(), tag, (Class<? extends T>) configObjClass);
-	}
 	/**
-	 * @param objClassAsPath obj.class.name will be used as parent name for this config
-	 * @param tag tag.xml to be saved
-	 * @param configObj configuration object to be saved
+	 * Note used for now
+	 * @param dataRootDir
+	 * @param parentConfig
 	 */
-	@Deprecated
-	private <T> void saveConfig(Object objClassAsPath, String tag, T configObj){
-		saveConfig(objClassAsPath.getClass(), tag, configObj);
+	private Config(String dataRootDir, Config parentConfig){
+		this(Paths.get(dataRootDir), parentConfig);
 	}
 	
-	//----------------------------------------------------------
+	/**
+	 * Not used for now
+	 * @param dataRoot
+	 * @param parentConfig
+	 */
+	private Config(Path dataRoot, Config parentConfig){
+		Objects.requireNonNull(dataRoot);
+		this.dataRoot = dataRoot;
+		this.parent = parentConfig;
+	}
+	
+	//---------------------------------------------------
 	/**
 	 * Create the specific <code>path</code> if it does not exist. Possible <code>patchCreateMethod</code> would
 	 * look like <code>Files::createDirectories</code>
@@ -111,13 +85,10 @@ public class Config {
 	public void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
 		if(!Files.exists(path)){
 			try {
-//				Files.createDirectories(path);
 				pathCreateMethod.create(path);
 				if(Files.isDirectory(path)){
-//					logger.log(Msg.get(this, "log.create.directory"), path.toRealPath());
 					logger.log(Msg.get(Config.class, "log.create.directory"), path.toRealPath());
 				}else{
-//					logger.log(Msg.get(this, "log.create.file"), path.toRealPath());
 					logger.log(Msg.get(Config.class, "log.create.file"), path.toRealPath());
 				}
 			} catch (IOException e) {
@@ -125,243 +96,243 @@ public class Config {
 			}
 		}
 	}
-	
 
-	@Deprecated
-	private Path getDataPath(Object obj, String tag){
-		return getDataPath(obj.getClass(), tag);
-	}
-	
-	@Deprecated
-	private Path getDataPath(Class<?> clazz, String tag){
-		return getDataPath(clazz.getName(), tag);
-	}
-	
-	@Deprecated
-	private Path getDataPath(String componentConfigDirStr, String tag){
-		Path fullConfigPath = configDir.resolve(componentConfigDirStr);
-		return getConfigWithFullPath(fullConfigPath, tag);
-	}
-	private Path getConfigWithFullPath(Path fullConfigPath, String tag){
-		createIfNotExists(fullConfigPath, Files::createDirectories);
-		
-		Path retval = fullConfigPath.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
-		createIfNotExists(retval, Files::createFile);
-		return retval;
-	}
-	/**
-	 * Get data file for the config with specified tag. The config file will bear this form:
-	 * <code>componentConfigDir/tag.xml</code>. If this file (and all its parent directories) doesn't exist 
-	 * yet, it will be created.
-	 * @param tag tag.xml
-	 * @return
-	 */
-	private Path getDataPath(String tag){
-//		Path fullConfigPath = configDir.resolve(componentConfigDir);
-		return getConfigWithFullPath(componentConfigDir, tag);
-	}
-	
-	
-	//------------------------------------------------------------
-	@Deprecated
-	private <T> Optional<T> loadConfig(Class<?> clazz, String tag, Class<? extends T> configObjClass){
-//		Path xmlFile = getDataPath(clazz, tag);
-		Optional<T> retval;
-		try {
-			Path componentConfigDir = configDir.resolve(clazz.getName());
-			Path xmlFile = componentConfigDir.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
-			if(!(Files.exists(componentConfigDir) && Files.exists(xmlFile))){
-				throw new FileNotFoundException(xmlFile.normalize().toString());
-//				throw new FileNotFoundException(xmlFile.toRealPath().toString());
-			}
-			
-			retval = Optional.of(BeanMarshal.loadFromXML(configObjClass, xmlFile));
-		} catch (JAXBException | FileNotFoundException e) {
-			logger.log(e);
-			retval = Optional.empty();
-		}
-		return retval;
-	}
-	/**
-	 * @param clazz class.name will be used as configuration parent
-	 * @param tag configuration object will be saved into tag.xml
-	 * @param configObj configuration object to be saved
-	 */
-	@Deprecated
-	private <T> void saveConfig(Class<?> clazz, String tag, T configObj){
-		Path xmlFile = getDataPath(clazz, tag);
-		try {
-			BeanMarshal.saveToXML(configObj, xmlFile);
-		} catch (JAXBException e) {
-			logger.log(e);
-		}
-	}
-	
-	/**
-	 * Load an instance of <code>configObjClass</code> from tag.xml. In case of any exception occurs, an empty result is what you got.
-	 * @param tag
-	 * @param configObjClass
-	 * @return
-	 */
-	public <T> Optional<T> load(String tag, Class<? extends T> configObjClass){
-		Optional<T> retval;
-		try {
-			Path xmlFile = componentConfigDir.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
-			if(!(Files.exists(componentConfigDir) && Files.exists(xmlFile))){
-				throw new FileNotFoundException(xmlFile.normalize().toString());
-			}
-			retval = Optional.of(BeanMarshal.loadFromXML(configObjClass, xmlFile));
-		} catch (JAXBException | FileNotFoundException e) {
-			logger.log(e);
-			retval = Optional.empty();
-		}
-		return retval;
-	}
-	
-	/**
-	 * Save <code>configObj</code> as XML file into tag.xml
-	 * <p>
-	 * Q: What if tag.xml has already existed? 
-	 * A: It will be overwritten. This behavior would be modified by specifying {@link ConfigExistedPolicy} of this {@link Config} instance.
-	 * </p>
-	 * @param tag
-	 * @param configObj
-	 */
-	public <T> void save(String tag, T configObj){
-		Path xmlFile = getDataPath(tag);
-		try {
-			BeanMarshal.saveToXML(configObj, xmlFile);
-		} catch (JAXBException e) {
-			logger.log(e);
-		}
-	}
-	
-	//------------------------------------------------
-	/**
-	 * The one and only getInstance() method;
-	 * @return 
-	 */
-	@Deprecated
-	static Config inst(){
-		return instance;
-	}
-	
-	/**
-	 * Generate custom <code>Config</code> instances with the <code>configFactory</code>. Subclass is encouraged to 
-	 * override this method to provide their own implementation of Config instances. 
-	 * @param componentConfigDirStr
-	 * @param configFactory factory used to genereate custom <code>Config</code> objects
-	 * @return
-	 */
-	protected static Config of(String componentConfigDirStr, Function<String, Config> configFactory){
-		return instances.computeIfAbsent(componentConfigDirStr, configFactory);
-	}
-	
-	/**
-	 * @param componentConfigDir directory name for each stand alone component that wants to store configurations;
-	 * @return a new {@link Config} instance, or an existing one with the same <code>componentConfigDir</code>
-	 */
-	public static Config of(String componentConfigDirStr){
-		//return instances.computeIfAbsent(componentConfigDirStr, Config::new);
-		//String configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath().toString();
-		Path configRealPath = getDataPath().resolve(componentConfigDirStr).toRealPath();
-		return instances.computeIfAbsent(configRealPath, key -> new Config(componentConfigDirStr));
-	}
-	/**
-	 * @param clazz clazz.name will be used as <code>componentConfigDir</code>
-	 * @return a new {@link Config} instance or existing one;
-	 */
-	public static Config of(Class<?> clazz){
-		Objects.requireNonNull(clazz);
-//		if(Arrays.asList(clazz.getInterfaces()).contains(MsgLogger.class)){
-//			
+	//---------------------------------------------------
+	private static ConfigEndpoint to(String dataRootDir){
+		Objects.requireNonNull(dataRootDir);
+		String key = null;
+//		try {
+//			key = Paths.get(dataRootDir).toRealPath().toString();
+			key = Paths.get(dataRootDir).normalize().toAbsolutePath().toString();
+//		} catch (IOException e) {
+//			MsgLogger.defaultLogger().log(e);
+//			key = dataRootDir;
 //		}
-		return of(clazz.getName());
-	}
-	/**
-	 * @param obj obj.class.name will be used as <code>componentConfigDir</code>
-	 * @return a new {@link Config} instance or existing one;
-	 */
-	public static Config of(Object obj){
-		Objects.requireNonNull(obj);
-//		if(obj instanceof MsgLogger){
-//			of(obj.getClass().getName()).setLogger((MsgLogger)obj);
+		return instances.computeIfAbsent(key, k -> new ConfigEndpoint(new Config(dataRootDir)));
+//		ConfigEndpoint retval = instances.computeIfAbsent(key, k -> new ConfigEndpoint(new Config(dataRootDir)));
+//		ConfigEndpoint retval = instances.get(key);
+//		if(null == retval){
+//			retval = new ConfigEndpoint(new Config(dataRootDir));
+//			instances.put(key, retval);
 //		}
-		return of(obj.getClass().getName());
+//		return retval;
 	}
-//	/**
-//	 * Invoke {@link #setLogger(MsgLogger)} and return this {@link #Config} instance;
-//	 * @param logger
-//	 * @return
-//	 */
-//	public Config withLogger(MsgLogger logger){
-//		setLogger(logger);
-//		return this;
-//	}
-	//------------------------------------------------
+	public static ConfigEndpoint defaultData(){
+//		return to(Msg.get(Config.class, "data.path"));
+		return DEFAULT_CONFIG_DATA;
+	}
+	public static ConfigEndpoint pluginData(){
+		return to(Msg.get(Plugin.class, "plugin.root.dir"));
+	}
 	
-	//---------------------------------------
+	//---------------------------------------------------
 	/**
-	 * Root path that holds all configuration files; for the default {@link #Config} class, the data path
-	 * is <code>./data</code>
-	 * <pre>
-	 * Subclass of {@link Config} should override this method to customize the root directory to store data.
-	 * </pre>
+	 * For compatible usage
+	 * @param componentObj
 	 * @return
 	 */
-	protected Path getDataRoot(){
-		return Paths.get(Msg.get(this, "data.path"));
+	public static ConfigEndpoint of(Object componentObj){
+		return defaultData().of(componentObj.getClass().getName());
+	}
+	public static ConfigEndpoint of(Class<?> componentClass){
+		return defaultData().of(componentClass.getName());
+	}
+	
+	@Override
+	public String toString() {
+		return "Config [dataRoot=" + dataRoot + ", parent=" + parent + "]";
+	}
+
+	//---------------------------------------------------
+	/**
+	 * The whole data path for this Config, may be null.
+	 * @return
+	 */
+	protected Path getDataPath(){
+		Optional<Path> retval = null;
+		retval = Optional.ofNullable(getParent()).map(Config::getDataPath);
+		return retval.map(parent -> parent.resolve(dataRoot)).orElse(dataRoot);
+	}
+	private Config getParent(){
+		return this.parent;
 	}
 	public void setLogger(MsgLogger logger) {
 		this.logger = logger;
 	}
-
+	private MsgLogger getLogger(){
+		return this.logger;
+	}
+	//---------------------------------------------------
+	
 	/**
-	 * Parent directory for all configuration files;
+	 * Root directory for configurations managed by this Config instance.
+	 * Note that it may reside in another Config's (a.k.a parentConfig's)
+	 * dataRoot;
 	 */
-	private Path configDir;
-	/**
-	 * Path of parent directory for component-specific configurations, will be resolved relative to <code>configDir</code> when new {@link Config} instance is created.
-	 */
-	private Path componentConfigDir;
-//	private static Path configDir = Paths.get(Msg.get(Config.class, "data.path"));
-//	static{
-//		createIfNotExists(configDir, Files::createDirectories);
-//	}
+	private Path dataRoot;
+	private Config parent;
 	private MsgLogger logger = MsgLogger.defaultLogger();
-	@Deprecated
-	private static final Config instance = new Config();
+	private static Map<String, ConfigEndpoint> instances = new HashMap<>();
 	private static final String CONFIG_FILENAME_PATTERN = Msg.get(Config.class, "config.fileName.pattern");
+	private static final ConfigEndpoint DEFAULT_CONFIG_DATA;
+	static{
+		String defaultDataPath = Msg.get(Config.class, "data.path");
+		DEFAULT_CONFIG_DATA = new ConfigEndpoint(new Config(defaultDataPath));
+		instances.put(defaultDataPath, DEFAULT_CONFIG_DATA);
+	}
+	
+	/**
+	 * The endpoint of a whole Config chain
+	 * <p>
+	 * Actual work is done here.
+	 * </p>
+	 * @author MEC
+	 *
+	 */
+	public static class ConfigEndpoint{
+		private ConfigEndpoint(Config configChain){
+//			if(null != configChain.getDataPath()){
+////				instances.put(configChain., value)
+//			}
+			this.configChain = configChain;
+//			setComponentConfigDir(this.configChain.getDataPath());
+		}
+		
+		private ConfigEndpoint newSibling(Path siblingComponentConfigDir){
+			ConfigEndpoint retval = new ConfigEndpoint(this.configChain);
+			retval.setComponentConfigDir(siblingComponentConfigDir);
+			return retval;
+		}
+		
+		//-------------------------------------------------------------------
+		/**
+		 * For compatibility
+		 * @param path
+		 * @param pathCreateMethod
+		 */
+		public void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
+			configChain.createIfNotExists(path, pathCreateMethod);
+		}
+		public void setLogger(MsgLogger logger){
+			configChain.setLogger(logger);
+		}
+		//-------------------------------------------------------------------
+		
+		
+		private Path getConfigWithFullPath(Path fullConfigPath, String tag){
+			configChain.createIfNotExists(fullConfigPath, Files::createDirectories);
+			
+			Path retval = fullConfigPath.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
+			configChain.createIfNotExists(retval, Files::createFile);
+			return retval;
+		}
+		
+		private Path getDataPath(String tag){
+//			return getConfigWithFullPath(configChain.getDataPath(), tag);
+			return getConfigWithFullPath(componentConfigDir, tag);
+		}
+		
+		/**
+		 * @param tag
+		 * @param configObjClass
+		 * @return
+		 */
+		public <T> Optional<T> load(String tag, Class<? extends T> configObjClass){
+			Optional<T> retval;
+			try {
+				Path xmlFile = componentConfigDir.resolve(String.format(CONFIG_FILENAME_PATTERN, tag));
+				if(!(Files.exists(componentConfigDir) && Files.exists(xmlFile))){
+					throw new FileNotFoundException(xmlFile.normalize().toString());
+				}
+				retval = Optional.of(BeanMarshal.loadFromXML(configObjClass, xmlFile));
+			} catch (JAXBException | FileNotFoundException e) {
+				configChain.getLogger().log(e);
+				retval = Optional.empty();
+			}
+			return retval;
+		}
+		
+		public <T> void save(String tag, T configObj){
+			Path xmlFile = getDataPath(tag);
+			try {
+				BeanMarshal.saveToXML(configObj, xmlFile);
+			} catch (JAXBException e) {
+				configChain.getLogger().log(e);
+			}
+		}
+		
+		//------------------------------------------
+		public ConfigEndpoint of(Object componentObj){
+			return of(componentObj.getClass().getName());
+		}
+		public ConfigEndpoint of(Class<?> componentClass){
+			return of(componentClass.getName());
+		}
+		public ConfigEndpoint of(String componentConfigDirStr){
+			return of(Paths.get(componentConfigDirStr));
+		}
+		public ConfigEndpoint of(Path componentConfigDir){
+			Objects.requireNonNull(componentConfigDir);
+//			setComponentConfigDir(componentConfigDir);
+//			ConfigEndpoint retval = Optional.ofNullable(componentConfigs.get(getComponentConfigKey(componentConfigDir)))
+//					.orElseGet(() -> {
+//						
+//					})
+//					;
+			String key = getComponentConfigKey(componentConfigDir);
+			ConfigEndpoint retval = componentConfigs.get(key);
+			if(null == retval){
+				retval = this.newSibling(componentConfigDir);
+				componentConfigs.put(key, retval);
+			}
+			return retval;
+		}
+		
+		
+		@Override
+		public String toString() {
+			return "ConfigEndpoint [configRootPath=" + configChain.getDataPath() + ", componentConfigDir=" + componentConfigDir + "]";
+		}
+
+		//----------------------------------------------
+		private void setComponentConfigDir(Path componentConfigDir){
+			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElse(Config.defaultData().configChain.getDataPath());
+			Optional.ofNullable(configChain.getDataPath())
+				.ifPresent(p -> this.componentConfigDir = p.resolve(componentConfigDir));
+//			return this;
+		}
+//		private Path getComponentConfigDir(){
+//			
+//		}
+		private String getComponentConfigKey(Path componentConfigDir){
+			String retval = componentConfigDir.toString();
+			
+			Path configPath = configChain.getDataPath();
+//			try {
+				if (null != configPath) {
+//					retval = configPath.resolve(componentConfigDir).toRealPath().toString();	//the file would exist so that toRealPath() can work properly
+					retval = configPath.resolve(componentConfigDir).normalize().toAbsolutePath().toString();
+				} else{
+//					retval = componentConfigDir.toRealPath().toString();
+					retval = componentConfigDir.normalize().toAbsolutePath().toString();
+				}
+//			} catch (IOException e) {
+//				configChain.getLogger().log(e);
+//			}
+			return retval;
+		}
+		
+		
+		private Config configChain;
+//		private Path componentConfigDir = Config.defaultData().configChain.getDataPath();
+		private Path componentConfigDir;
+		private Map<String, ConfigEndpoint> componentConfigs = new HashMap<>();
+	}
+	
+	
 	public static interface CreatePathMethod{
 		Path create(Path p) throws IOException;
 	}
-	//private static Map<String, Config> instances = new HashMap<>();
-	private static Map<Path, Config> instances = new HashMap<>();
-	
-//	public static class ConfigFactory{
-//		private ConfigFactory(){
-//			//
-//		}
-//		
-//		public static Config basedOn(String dataPathDir){
-//		
-//			return new Config(){
-//				@OVerride
-//				protected Path getDataRoot(){
-//					return Paths.get(dataPathDir);
-//				}
-//			}
-//		}
-//		
-//		private static Map<String, Config> configInstances = new HashMap<>();
-//		static{
-//			String appConfig = Msg.get(Config.class, "data.path");
-//			configInstances.put(appConfig, Config.of(Config.class));
-//			String pluginConfig = Msg.get(Plugin.class, "plugin.root.dir");
-//			configInstances.put(pluginConfig, PluginConfig.of(Plugin.class));
-//		}
-//	}
-	
 	/**
 	 * policy that specifies the behavior when config file already exists;
 	 * @author MEC
@@ -412,5 +383,5 @@ public class Config {
 			return (T) um.unmarshal(xmlFile.toFile());
 		}
 	}
-
+	
 }

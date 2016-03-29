@@ -21,16 +21,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.mec.resources.Config.ConfigEndpoint;
+
 
 public class Plugins {
 
 	
+	protected static void loadSync(String pluginName){
+		loadPlugin(pluginName);
+	}
 	//
+	/**
+	 * Load plugin with the specific name asynchronously.
+	 * @param pluginName
+	 */
+	public static void load(String pluginName){
+		CompletableFuture.runAsync(() -> Plugins.loadPlugin(pluginName))
+//			.whenCompleteAsync((v, error) -> Plugins.startPlugin(entryObj, entryMethod, pc));
+			;
+	}
 	/**
 	 * Load plugin with the specified plugin name. Jar files will be searched in {@link #PLUGIN_ROOT_DIR}/<code>tag</code>/
 	 * 
@@ -40,11 +55,12 @@ public class Plugins {
 	 * </p>
 	 * @param pluginName
 	 */
-	public static void load(String pluginName){
+	private static void loadPlugin(String pluginName){
 		Plugin plugin = plugins.computeIfAbsent(pluginName, Plugin::new);
 		plugin.setLogger(logger);
 //		PluginConfig.of(pluginName, PluginConfig::new).setLogger(logger);
 		PluginConfig.of(pluginName).setLogger(logger);
+//		Config.of.of(pluginName).setLogger(logger);
 //		PluginConfigBean configBean = PluginConfig.of(pluginName).load(PLUGIN_CONFIG_FILE, PluginConfigBean.class).get();
 		PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class).get();
 		
@@ -84,7 +100,7 @@ public class Plugins {
 //				throw new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.method.wrongArgsNum"), entryMethod.getName()));
 //			}
 			Object obj = entryClass.newInstance();
-			start(obj, entryMethod, plugin.getPluginContext());
+			startPlugin(obj, entryMethod, plugin.getPluginContext());
 		} catch (ClassNotFoundException
 				|IllegalAccessException
 				|InstantiationException
@@ -110,7 +126,7 @@ public class Plugins {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	private static void start(Object entryObj, Method entryMethod, PluginContext pc) 
+	private static void startPlugin(Object entryObj, Method entryMethod, PluginContext pc) 
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		
 		entryMethod.setAccessible(true);
@@ -183,33 +199,41 @@ public class Plugins {
 	 * @author MEC
 	 *
 	 */
-	public static class PluginContext{
+	public interface PluginContext{
+		
+	}
+	
+	private static class PluginContextImpl implements PluginContext{
 		
 	}
 	
 	
-	static class PluginConfig extends Config{
+	static class PluginConfig{
 		
 //		private PluginConfig(){
 //			super();
 //		}
 		
-		protected PluginConfig(String pluginDirectory){
-			super(pluginDirectory);
-		}
+//		protected PluginConfig(String pluginDirectory){
+//			super(pluginDirectory);
+//		}
 		
-//		@Override
-		public static Config of(String pluginName){
-			return Config.of(pluginName, PluginConfig::new);
+////		@Override
+//		public static Config of(String pluginName){
+//			return Config.of(pluginName, PluginConfig::new);
+//		}
+		public static ConfigEndpoint of(String pluginName){
+//			return Config.pluginData();
+			return Config.pluginData().of(pluginName);
 		}
 
-		@Override
-		protected Path getDataRoot() {
-//			return super.getDataRoot();
-			return PLUGIN_CONFIG_PATH;
-		}
-		
-		private static final Path PLUGIN_CONFIG_PATH = Paths.get(Msg.get(Plugin.class, "plugin.root.dir"));
+//		@Override
+//		protected Path getDataRoot() {
+////			return super.getDataRoot();
+//			return PLUGIN_CONFIG_PATH;
+//		}
+//		
+//		private static final Path PLUGIN_CONFIG_PATH = Paths.get(Msg.get(Plugin.class, "plugin.root.dir"));
 	}
 	
 	//----------------------------------------------
@@ -325,7 +349,7 @@ public class Plugins {
 //		}
 		
 		protected PluginContext getPluginContext(){
-			return new PluginContext();
+			return new PluginContextImpl();
 		}
 		private void setName(String name){
 			this.name = name;
