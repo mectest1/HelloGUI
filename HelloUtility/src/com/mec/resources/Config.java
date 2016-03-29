@@ -82,7 +82,7 @@ public class Config {
 	 * @param path
 	 * @param pathCreateMethod
 	 */
-	public void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
+	private void createIfNotExists(Path path, CreatePathMethod pathCreateMethod){
 		if(!Files.exists(path)){
 			try {
 				pathCreateMethod.create(path);
@@ -98,6 +98,11 @@ public class Config {
 	}
 
 	//---------------------------------------------------
+	/**
+	 * Return a new {@link ConfigEndpoint} instance with this {@link Config}'s {@link #dataRoot} set to <code>dataRootDir</code>
+	 * @param dataRootDir
+	 * @return
+	 */
 	private static ConfigEndpoint to(String dataRootDir){
 		Objects.requireNonNull(dataRootDir);
 		String key = null;
@@ -313,7 +318,7 @@ public class Config {
 //			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElse(Config.defaultData().configChain.getDataPath());
 			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElseGet(() -> Config.defaultData().configChain.getDataPath());
 			Optional.ofNullable(configChain.getDataPath())
-				.ifPresent(p -> this.componentConfigDir = p.resolve(componentConfigDir));
+				.ifPresent(p -> this.componentConfigDir = p.resolve(this.componentConfigDir));
 //			return this;
 		}
 //		private Path getComponentConfigDir(){

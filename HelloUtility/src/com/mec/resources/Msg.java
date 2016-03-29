@@ -21,9 +21,13 @@ import java.util.function.Function;
  */
 public class Msg {
 
-	private Msg(){
-//		resources = ResourceBundle.getBundle(MESSAGES);
-		
+//	private Msg(){
+////		resources = ResourceBundle.getBundle(MESSAGES);
+//		
+//	}
+	
+	private Msg(ResourceBundle resourceBundle){
+		this.resources = resourceBundle;
 	}
 	
 //	public static Messages getInstance(){
@@ -38,7 +42,9 @@ public class Msg {
 	protected static Optional<String> getFull(String key){
 		
 		try {
-			return Optional.of(resources.getString(key));
+//			return Optional.of(resources.getString(key));
+//			return Optional.of(getResources().getString(key));
+			return Optional.of(defaultInstance.getResources().getString(key));
 		} catch (MissingResourceException e) {
 			return Optional.empty();
 		}
@@ -172,8 +178,18 @@ public class Msg {
 		}
 	}
 	
+	
+	//------------------------------------------------------
+	protected ResourceBundle getResources(){
+		return resources;
+	}
+//	private static Msg getDefault(){
+//		return defaultInstance;
+//	}
+	
 	private static final String MESSAGES = "com.mec.resources.MessagesBundle";
-	private static ResourceBundle resources = ResourceBundle.getBundle(MESSAGES);
+	private ResourceBundle resources;	//ResourceBundle.getBundle(MESSAGES);
+	private static Msg defaultInstance = new Msg(ResourceBundle.getBundle(MESSAGES));
 	private static final String TAG_COMBINE_PATTERN = "%s.%s";
 	private static final GetCallerClassNameMethod getCaller = new SecurityManagerMethod();
 	

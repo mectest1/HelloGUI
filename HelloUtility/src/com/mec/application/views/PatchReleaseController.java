@@ -77,6 +77,7 @@ public class PatchReleaseController implements MsgLogger{
 		fieldEmpty.bind(
 				Bindings.or(workSpaceDirectory.textProperty().isEmpty(), patchReleaseDirectory.textProperty().isEmpty())
 				.or(modifyList.textProperty().isEmpty())
+//				.or(patchProceeding)
 				);
 		startPatch.disableProperty().bind(fieldEmpty);
 		clearLogBtn.disableProperty().bind(logMsg.textProperty().isEmpty());
@@ -125,6 +126,8 @@ public class PatchReleaseController implements MsgLogger{
 		try{
 //			startPatch.setDisable(true);	//bound property can't be set
 			log(Msg.get(this, "info.patchStart"), LocalDateTime.now());
+//			patchProceeding.set(true);
+			
 			String workspaceDirStr = JarTool.normalizePath(workSpaceDirectory.getText());
 			Path workspaceDir = Paths.get(workspaceDirStr);
 			JarTool.validateDirectory(workspaceDir, String.format(Msg.getExpMsg(this, "invalid.workspace"), workspaceDirStr));
@@ -163,6 +166,7 @@ public class PatchReleaseController implements MsgLogger{
 			if(delPath.isPresent()){	
 				delPath = Optional.empty();
 			}
+//			patchProceeding.set(false);
 		}
 	}
 	
@@ -356,6 +360,13 @@ public class PatchReleaseController implements MsgLogger{
 	private JarTool jarTool = JarTool.newInstance(this);
 	private BooleanProperty fieldEmpty = new SimpleBooleanProperty();
 	private static final int HISTORY_MAX = Msg.get(PatchReleaseController.class, "history.maxItem", Integer::parseInt, 20);
+	
+	
+	/**
+	 * After click the {@link #startPatch} button, the patch process is still not finished yet. 
+	 */
+//	private BooleanProperty patchProceeding = new SimpleBooleanProperty(false);	//<- not of much use for now;
+	
 //	private static final int HISTORY_MAX ;
 //	static{
 //		HISTORY_MAX = Msg.get(PatchReleaseController.class, "history.maxItem", Integer::parseInt, 20);

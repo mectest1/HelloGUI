@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.mec.resources.Config.ConfigEndpoint;
+
 public class JarTool {
 
 	private JarTool(){
@@ -178,7 +180,7 @@ public class JarTool {
 	}
 	
 	/**
-	 * {@link Config#createIfNotExists(Path, com.mec.resources.Config.CreatePathMethod)} is recommended
+	 * {@link ConfigEndpoint#createIfNotExists(Path, com.mec.resources.Config.CreatePathMethod)} is recommended
 	 * @param parentDirectory
 	 * @param fileName
 	 * @param bakFileName
