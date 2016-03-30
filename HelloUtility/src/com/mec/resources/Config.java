@@ -139,19 +139,19 @@ public class Config {
 	 * @return
 	 */
 	public static ConfigEndpoint of(Object componentObj){
-		return defaultData().of(componentObj.getClass().getName());
+		return defaultData().component(componentObj.getClass().getName());
 	}
 	/**
 	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.of(Class)}. 
 	 */
 	public static ConfigEndpoint of(Class<?> componentClass){
-		return defaultData().of(componentClass.getName());
+		return defaultData().component(componentClass.getName());
 	}
 	/**
 	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.of(componentConfigDirStr)}. 
 	 */
 	public static ConfigEndpoint of(String componentConfigDirStr){
-		return defaultData().of(componentConfigDirStr);
+		return defaultData().component(componentConfigDirStr);
 	}
 	
 	@Override
@@ -281,16 +281,37 @@ public class Config {
 		}
 		
 		//------------------------------------------
-		public ConfigEndpoint of(Object componentObj){
-			return of(componentObj.getClass().getName());
+		/**
+		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentObj</code>'s class name
+		 * @param componentObj
+		 * @return
+		 */
+		public ConfigEndpoint component(Object componentObj){
+			return component(componentObj.getClass().getName());
 		}
-		public ConfigEndpoint of(Class<?> componentClass){
-			return of(componentClass.getName());
+		/**
+		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentClass</code>'s name
+		 * @param componentClass
+		 * @return
+		 */
+		public ConfigEndpoint component(Class<?> componentClass){
+			return component(componentClass.getName());
 		}
-		public ConfigEndpoint of(String componentConfigDirStr){
-			return of(Paths.get(componentConfigDirStr));
+		/**
+		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentConfigDirStr</code>
+		 * @param componentConfigDirStr
+		 * @return
+		 */
+		public ConfigEndpoint component(String componentConfigDirStr){
+			return component(Paths.get(componentConfigDirStr));
 		}
-		public ConfigEndpoint of(Path componentConfigDir){
+		/**
+		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentConfigDir</code>, 
+		 * follow calling of {@link #save} and {@link #load} will be operated in this path.
+		 * @param componentConfigDir data file will be saved in/load from configChain.dataPath/<strong><code>componentConfigDir</code></strong>/tag.xml
+		 * @return
+		 */
+		private ConfigEndpoint component(Path componentConfigDir){
 			Objects.requireNonNull(componentConfigDir);
 //			setComponentConfigDir(componentConfigDir);
 //			ConfigEndpoint retval = Optional.ofNullable(componentConfigs.get(getComponentConfigKey(componentConfigDir)))
