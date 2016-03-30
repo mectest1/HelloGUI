@@ -61,6 +61,8 @@ public class PluginTest {
 		final String fmPlugin = "SQLParser";
 //		Plugins.load(fmPlugin);
 		Plugins.loadSync(fmPlugin);
+		
+		
 	}
 	//-------------------------------------------------
 	

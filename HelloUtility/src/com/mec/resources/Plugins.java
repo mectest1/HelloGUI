@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -33,15 +34,26 @@ public class Plugins {
 	protected static void loadSync(String pluginName){
 		loadPlugin(pluginName);
 	}
+	protected static void unloadSync(String pluginName){
+		unloadPlugin(pluginName);
+	}
 	//
 	/**
-	 * Load plugin with the specific name asynchronously.
+	 * Load plugin with the specified name asynchronously.
 	 * @param pluginName
 	 */
 	public static void load(String pluginName){
 		CompletableFuture.runAsync(() -> Plugins.loadPlugin(pluginName))
 //			.whenCompleteAsync((v, error) -> Plugins.startPlugin(entryObj, entryMethod, pc));
 			;
+	}
+	
+	/**
+	 * Unload plugin with the specified name asynchronously.
+	 * @param pluginName
+	 */
+	public static void unload(String pluginName){
+		CompletableFuture.runAsync(() -> Plugins.unloadPlugin(pluginName));
 	}
 	/**
 	 * Load plugin with the specified plugin name. Jar files will be searched in {@link #PLUGIN_ROOT_DIR}/<code>tag</code>/
@@ -60,17 +72,19 @@ public class Plugins {
 //		Config.of.of(pluginName).setLogger(logger);
 		
 		try {
-			PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
-//			PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
-					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), pluginName)));
-			Class<?> entryClass = plugin.loadClass(configBean.getEntryClass());
-//			Method entryMethod = Arrays.stream(entryClass.getMethods())	//<- return all the public methods
-			Method entryMethod = Arrays.stream(entryClass.getDeclaredMethods())
-					.filter(method -> 
-						null != method.getAnnotation(PluginStart.class)
-					)
-					.findAny()
-					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.noEntryMethod"), entryClass.getName())));
+			plugin.load();
+			plugin.start();
+//			PluginConfigBean configBean = PluginConfig.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+////			PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+//					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), pluginName)));
+//			Class<?> entryClass = plugin.loadClass(configBean.getEntryClass());
+////			Method entryMethod = Arrays.stream(entryClass.getMethods())	//<- return all the public methods
+//			Method entryMethod = Arrays.stream(entryClass.getDeclaredMethods())
+//					.filter(method -> 
+//						null != method.getAnnotation(PluginStart.class)
+//					)
+//					.findAny()
+//					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.noEntryMethod"), entryClass.getName())));
 //			Method entryMethod = null;
 //			for(Method method : entryClass.getDeclaredMethods()){
 //				PluginEntryMehtod pem = method.getAnnotation(PluginEntryMehtod.class);
@@ -97,8 +111,8 @@ public class Plugins {
 //			}else{
 //				throw new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.method.wrongArgsNum"), entryMethod.getName()));
 //			}
-			Object obj = entryClass.newInstance();
-			startPlugin(obj, entryMethod, plugin.getPluginContext());
+//			Object obj = entryClass.newInstance();
+//			startPlugin(obj, entryMethod, plugin.getPluginContext());
 		} catch (ClassNotFoundException
 				|IllegalAccessException
 				|InstantiationException
@@ -108,38 +122,38 @@ public class Plugins {
 			logger.log(e);
 		}
 	}
-	
+
 	/**
-	 * Start the plugin by invoking the <code>entryMethod</code> on <code>entryObj</code>
-	 * e.g. One of these method will be invoked (depends on the entryMethod's signature):
-	 * <ul>
-	 * 
-	 * <li><code>entryObj.entryMethod()</code></li>
-	 * <li><code>entryObj.entryMethod(pc)</code></li>
-	 * </ul>
-	 * @param entryObj
-	 * @param entryMethod
-	 * @param pc
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * Unload plugin with name <code>pluginName</code>
+	 * @param pluginName
 	 */
-	private static void startPlugin(Object entryObj, Method entryMethod, PluginContext pc) 
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		
-		entryMethod.setAccessible(true);
-		
-		Class<?>[] parameterTypes = entryMethod.getParameterTypes();
-		if(0 == parameterTypes.length){
-			entryMethod.invoke(entryObj);
-		}else if(1 == parameterTypes.length && PluginContext.class.equals(parameterTypes[0])){
-//			PluginContext pc = new PluginContext();
-//			entryMethod.invoke(obj, plugin.getPluginContext());
-			entryMethod.invoke(entryObj, pc);
-		}else{
-			throw new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.method.wrongArgsNum"), entryMethod.getName()));
+	private static void unloadPlugin(String pluginName){
+		Objects.requireNonNull(pluginName);
+		Plugin plugin = plugins.get(pluginName);
+		if(null == plugin){
+			logger.log(Msg.get(Plugins.class, "msg.unload.plugin.missing"), pluginName);
+			return;
 		}
+		plugin.stop();
+		plugins.remove(pluginName);
 	}
+////	private static void startPlugin(Object entryObj, Method entryMethod, PluginContext pc) 
+//	private static void startPlugin(Plugin plugin) 
+//			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException{
+//		plugin.start();
+////		entryMethod.setAccessible(true);
+////		
+////		Class<?>[] parameterTypes = entryMethod.getParameterTypes();
+////		if(0 == parameterTypes.length){
+////			entryMethod.invoke(entryObj);
+////		}else if(1 == parameterTypes.length && PluginContext.class.equals(parameterTypes[0])){
+//////			PluginContext pc = new PluginContext();
+//////			entryMethod.invoke(obj, plugin.getPluginContext());
+////			entryMethod.invoke(entryObj, pc);
+////		}else{
+////			throw new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.method.wrongArgsNum"), entryMethod.getName()));
+////		}
+//	}
 	
 	
 //	public static void load(Path pluginPath){
@@ -193,7 +207,7 @@ public class Plugins {
 //		}
 		public static ConfigEndpoint of(String pluginName){
 //			return Config.pluginData();
-			return Config.pluginData().of(pluginName);
+			return Config.pluginData().component(pluginName);
 		}
 
 //		@Override
@@ -281,7 +295,7 @@ public class Plugins {
 			}
 		}
 		
-		public Class<?> loadClass(String className) throws ClassNotFoundException{
+		private Class<?> loadClass(String className) throws ClassNotFoundException{
 			try{
 				Optional<Plugin> parent = getParent();
 //				parent.ifPresent(p -> p.loadClass(className));
@@ -300,17 +314,68 @@ public class Plugins {
 		private ClassLoader getClassLoader(){
 			return ucl;
 		}
+		//------------------------------------------------------
 		/**
-		 * Close this plugin, release any .jar files that have been opened by this plugin manager.
+		 * Try to load the <code>entryClass</code> (as specified in <code>pluginConfig.xml</code>) from .jar files or directories;
+		 * @throws ClassNotFoundException
 		 */
-		public void close(){
+		public void load() throws ClassNotFoundException{
+			PluginConfigBean configBean = PluginConfig.of(name).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+//					PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), name)));
+			entryClass = loadClass(configBean.getEntryClass());
+//					Method entryMethod = Arrays.stream(entryClass.getMethods())	//<- return all the public methods
+		}
+		
+		/**
+		 * Start the plugin by invoking the <code>entryMethod</code> on <code>entryObj</code>
+		 * e.g. One of these method will be invoked (depends on the entryMethod's signature):
+		 * <ul>
+		 * 
+		 * <li><code>entryObj.entryMethod()</code></li>
+		 * <li><code>entryObj.entryMethod(pc)</code></li>
+		 * </ul>
+		 * @param entryObj
+		 * @param entryMethod
+		 * @param pc
+		 * @throws IllegalAccessException
+		 * @throws IllegalArgumentException
+		 * @throws InvocationTargetException
+		 * @throws InstantiationException 
+		 */
+		public void start() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+			Method entryMethod = Arrays.stream(entryClass.getDeclaredMethods())
+					.filter(method -> 
+					null != method.getAnnotation(PluginStart.class)
+							)
+					.findAny()
+					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.noEntryMethod"), entryClass.getName())));
+			entryMethod.setAccessible(true);
+			
+			Object entryObj = this.entryClass.newInstance();
+			Class<?>[] parameterTypes = entryMethod.getParameterTypes();
+			if(0 == parameterTypes.length){
+				entryMethod.invoke(entryObj);
+			}else if(1 == parameterTypes.length && PluginContext.class.equals(parameterTypes[0])){
+//				PluginContext pc = new PluginContext();
+//				entryMethod.invoke(obj, plugin.getPluginContext());
+				entryMethod.invoke(entryObj, getPluginContext());
+			}else{
+				throw new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.method.wrongArgsNum"), entryMethod.getName()));
+			}
+		}
+		
+		/**
+		 * Stop & Close this plugin, release any .jar files that have been opened by this plugin manager.
+		 */
+		public void stop(){
 			try {
 				ucl.close();
 			} catch (IOException e) {
 				logger.log(e);
 			}
 		}
-		
+		//------------------------------------------------------
 		
 //		public static Plugin of(String pluginName){
 //			
@@ -340,6 +405,8 @@ public class Plugins {
 		private MsgLogger logger = MsgLogger.defaultLogger();
 		private URLClassLoader ucl;
 		private String name;
+		private Class<?> entryClass;
+		//
 		private static final Plugin PLUGIN_ROOT = new Plugin(Paths.get(Msg.get(Plugin.class, "lib.dir")), ClassLoader.getSystemClassLoader());
 		private static final Path PLUGIN_ROOT_DIR = Paths.get(Msg.get(Plugin.class, "plugin.root.dir")); 
 		protected static final String PLUGIN_CONFIG_FILE = Msg.get(Plugin.class, "plugin.config.file");

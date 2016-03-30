@@ -132,7 +132,7 @@ public class Config {
 	
 	//---------------------------------------------------
 	/**
-	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.of(Object)}. 
+	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(Object)}. 
 	 * 
 	 * <h4>Note: For compatible usage.</h4> 
 	 * @param componentObj
@@ -142,13 +142,13 @@ public class Config {
 		return defaultData().component(componentObj.getClass().getName());
 	}
 	/**
-	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.of(Class)}. 
+	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(Class)}. 
 	 */
 	public static ConfigEndpoint of(Class<?> componentClass){
 		return defaultData().component(componentClass.getName());
 	}
 	/**
-	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.of(componentConfigDirStr)}. 
+	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(componentConfigDirStr)}. 
 	 */
 	public static ConfigEndpoint of(String componentConfigDirStr){
 		return defaultData().component(componentConfigDirStr);
