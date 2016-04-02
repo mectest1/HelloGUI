@@ -194,15 +194,180 @@ public enum OpCode {
 	
 	
 	//-------------------------------------------------
-	//
+	//Integer addition
 	//-------------------------------------------------
-	
+	,iadd
+	,ladd
+	,iinc			//operands: vindex, const;
+					//or use: wide iinc, indexbyte1, indexbyte2, constbyte1, constbyte2
+	//-------------------------------------------------
+	//Integer subtraction
+	//-------------------------------------------------
+	,isub
+	,lsub
+	//-------------------------------------------------
+	//Integer multiplication
+	//-------------------------------------------------
+	,imul
+	,lmul
+	//-------------------------------------------------
+	//Integer devision
+	//-------------------------------------------------
+	,idiv
+	,ldiv
+	//-------------------------------------------------
+	//Integer remainder
+	//-------------------------------------------------
+	,irem
+	,lrem
+	//-------------------------------------------------
+	//Integer negation
+	//-------------------------------------------------
+	,ineg
+	,lneg
+	//-------------------------------------------------
+	//Shifting ints
+	//-------------------------------------------------
+	,ishl
+	,ishr
+	,iushr
+	,lshl
+	,lshr
+	,lushr
 	
 	
 	//-------------------------------------------------
-	//
+	//Bitwise logical operations
 	//-------------------------------------------------
+	,iand
+	,ior
+	,ixor
+	,land
+	,lor
+	,lxor
 	
+	//-------------------------------------------------
+	//Float-points number arithmetics
+	//-------------------------------------------------
+	,fadd
+	,dadd
+	
+	,fsub
+	,dsub
+	
+	,fmul
+	,dmul
+	
+	,fdiv
+	,ddiv
+	
+	,frem			//use Math.IEEEremainder() to get the IEEE compliant remainder of floats 
+	,drem
+	
+	,fneg
+	,dneg
+	
+	//-------------------------------------------------
+	//Object operations
+	//-------------------------------------------------
+					//Actually, it's "new", but since "new" is a keyword in Java Language, so~
+	,New			//operands: indexbyte1, indexbyte2
+	,putfield		//operands: indexbyte1, indexbyte2
+	,getfield		//operands: indexbyte1, indexbyte2
+	
+	,putstatic		//operands: indexbyte1, indexbyte2
+	,getstatic		//operands: indexbyte1, indexbyte2
+	
+	
+	//-------------------------------------------------
+	//Type checking
+	//-------------------------------------------------
+	,checkcast		//operands: indexbyte1, indexbyte2
+	,InstanceOf		//operands: indexbyte1, indexbyte2
+	
+	//-------------------------------------------------
+	//Array operations Part 1: create, get length
+	//-------------------------------------------------
+	,newarray		//operand: atype
+	,anewarray		//operands: indexbyte1, indexbyte2
+	,multianewarray	//operands: indexbyte1, indexbyte2, dimensions
+	
+	,arraylength
+	
+	
+	//-------------------------------------------------
+	//Array operations Part2: put and get elements
+	//-------------------------------------------------
+	,baload			//Note: for both bytes and booleans
+	,caload
+	,saload
+	,iaload
+	,laload
+	,faload
+	,daload
+	,aaload
+	
+	,bastore		//the lower eight bits of the popped int value will be stored
+	,castore
+	,sastore		//As with castore, the lower sixteen bits of the popped int value will be stored
+	,iastore
+	,lastore
+	,fastore
+	,dastore
+	,aastore
+	
+	
+	//-------------------------------------------------
+	//Conditional branch Part 1: integer comparison with zero
+	//-------------------------------------------------
+	,ifeq			//operands: branchbyte1, branchbyte2
+	,ifne			//operands: branchbyte1, branchbyte2
+	,iflt			//operands: branchbyte1, branchbyte2
+	,ifle			//operands: branchbyte1, branchbyte2
+	,ifgt			//operands: branchbyte1, branchbyte2
+	,ifge			//operands: branchbyte1, branchbyte2
+	
+	//-------------------------------------------------
+	//Conditional branch Part 2: comparison of two integers
+	//-------------------------------------------------
+	,if_icmpeq		//operands: branchbyte1, branchbyte2
+	,if_icmpne
+	,if_icmplt
+	,if_icmple
+	,if_icmpgt
+	,if_icmpge
+	
+	//-------------------------------------------------
+	//Conditional branch Part 3: comparison of longs, floats, and doubles
+	//-------------------------------------------------
+	//Note: These opcodes don't cause a branch by themselves.
+	//Instead, they push the int value that represents the result of 
+	//the comparison: 0 for equal to, 1 to reater than, and -1 for less than,
+	//, and then se one of the int compare opcodes introduced above to 
+	//force the actual branch
+	,lcmp			//operand: none
+	,fcmpg			//operand: none. pushes 1 for NaN
+	,fcmpl			//operand: none. pushes -1 for NaN
+	,dcmpg			//operand: none. pushes 1 for NaN
+	,dcmpl			//operand: none. pushes -1 for NaN
+	
+	//-------------------------------------------------
+	//Conditional branch Part 4: object reference comparison with null
+	//-------------------------------------------------
+	,ifnull			//operands: branchbyte1, branchbyte2
+	,ifnonnull
+	
+	//-------------------------------------------------
+	//Conditional branch Part 5: comparison of two object references
+	//-------------------------------------------------
+	,if_acompeq		//operands: branchbyte1, branchbyte2
+	,if_acompne
+	
+	//-------------------------------------------------
+	//Unconditional branch
+	//-------------------------------------------------
+	,Goto			//operands: branchbyte1, branchbyte2
+	,goto_w			//operands: branchbyte1, branchbyte2, branchbyte3, branchbyte4
 	
 	
 	//-------------------------------------------------
