@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/journal-schema" xmlns:tns="http://www.example.org/journal-schema" elementFormDefault="qualified">
+	<element name="catalog" type="catalogType"></element>
+	<complexType name="catalogType">
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="journal" />
+		</sequence>
+<!-- 		<attribute name="title" type="string" use="required" /> -->
+<!-- 		<attribute name="publisher" type="string" use="optional" default="Unknown" /> -->
+		<attributeGroup ref="catalogAttrGroup" />
+	</complexType>
+	
+	<element name="journal">
+		<complexType>
+			<choice>
+				<element name="article" type="paperType" />
+				<element name="research" type="paperType" />
+			</choice>
+		</complexType>
+	</element>
+	
+<!-- 	<complexType name="paperType"> -->
+<!-- 		<all> -->
+<!-- 			<element type="title" type="titleType" /> -->
+<!-- 			<element type="author" type="authorType"/> -->
+<!-- 		</all> -->
+<!-- 	</complexType> -->
+	<complexType name="paperType">
+		<group ref="paperGroup" />
+	</complexType>
+	<group name="paperGroup">
+		<all>
+			<element ref="title"/>
+			<element ref="author"/>
+		</all>
+	</group>
+	
+	<attributeGroup name="catalogAttrGroup">
+		<attribute name="title" type="string" use="required" />
+		<attribute name="publisher" type="string" use="optional" default="Unknown" />
+	</attributeGroup>
+	
+	
+	<complexType name="authorType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="email" type="string" use="optional" />
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="titleType">
+		<simpleContent>
+			<restriction base="string">
+				<minLength value="10"/>
+				<maxLength value="256" />
+			</restriction>
+		</simpleContent>
+	</complexType>
+	<complexType name="catalogTypeExt">
+		<complexContent>
+			<extension base="catalogType">
+				<attribute name="webAddress" type="string" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="paperTypeRes">
+		<complexContent>
+			<restriction base="paperType">
+				<all>
+					<element name="title" title="titleType" />
+				</all>
+			</restriction>
+		</complexContent>
+	</complexType>
+	<element name="authorType">
+		<simpleType>
+			<restriction base="string">
+				<minLength value="10" />
+				<maxLength value="256" />
+			</restriction>
+		</simpleType>
+	</element>
+	<element name="chapterNumbers">
+		<simpleType>
+			<list itemType="integer" />
+		</simpleType>
+	</element>
+	<element name="chapterNames">
+		<simpleType>
+			<list itemType="string" />
+		</simpleType>
+	</element>
+	<element name="chapters">
+		<simpleType>
+			<union memberTypes="chapterNumbers, chapterNames" />
+		</simpleType>
+	</element>
+</schema>
