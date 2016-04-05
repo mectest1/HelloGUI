@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/journal-schema" xmlns:tns="http://www.example.org/journal-schema" elementFormDefault="qualified">
+	<element name="catalog" type="catalogType" />
+	<complexType name="catalogType">
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="journal" />
+		</sequence>
+		<attribute name="title" type="string" use="required" />
+		<attribute name="publisher" type="string" use="optional" default="Unknown" />
+	</complexType>
+	
+	<element name="journal">
+		<complexType>
+			<choice>
+				<element name="article" type="paperType" />
+				<element name="research" type="paperType" />
+			</choice>
+		</complexType>
+	</element>
+	
+	<complexType name="paperType">
+		<all>
+			<element type="title" type="titleType" />
+			<element type="author" type="authorType" />
+		</all>
+	</complexType>
+	
+	<complexType name="authorType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="email" type="string" use="optional" />
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="titleType">
+		<simpleContent>
+			<restriction base="string">
+				<minLength value="10"/>
+				<maxLength value="256" />
+			</restriction>
+		</simpleContent>
+	</complexType>
+</schema>
