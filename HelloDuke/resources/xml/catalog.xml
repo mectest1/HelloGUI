@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog title="OnJava.com" publisher="O'Reilly">
+	<journal date="January 2004">
+		<article>
+			<title>Data Binding with XMLBeans</title>
+			<author>Daniel Steinberg</author>
+		</article>
+	</journal>
+	<journal date="Sept 2005">
+		<article>
+			<title>What Is Hibernate</title>
+			<author>James Elliott</author>
+		</article>
+	</journal>
+</catalog>
