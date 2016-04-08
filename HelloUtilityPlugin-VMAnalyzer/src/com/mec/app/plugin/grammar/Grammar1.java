@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.ToIntBiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -165,10 +166,26 @@ public class Grammar1 implements Grammar{
 		public String toString(){
 			return getValue();
 		}
+		
+		public int evaluate(){
+			int retval = 0;
+			if(null == op){
+				if(null != term){
+					retval = term.getValue();
+				}else{
+					retval = expr.evaluate();
+				}
+			}else{
+				retval = op.calculate(expr.evaluate(), term.getValue());
+			}
+			
+			return retval;
+		}
+
 		private Expr expr;
 		private OpType op;
 		private Term term;
-		private static final String EMPTY_STR = "";
+//		private static final String EMPTY_STR = "";
 	}
 	
 	static class Term{
@@ -180,8 +197,8 @@ public class Grammar1 implements Grammar{
 			return new Term(value);
 		}
 		
-		public String getValue(){
-			return String.valueOf(t);
+		public int getValue(){
+			return t;
 		}
 		
 		public static final boolean isValidTerm(char ch){
@@ -189,28 +206,34 @@ public class Grammar1 implements Grammar{
 		}
 		@Override
 		public String toString(){
-			return getValue();
+			return String.valueOf(getValue());
 		}
 		
 		int t;	//attribute;
 	}
 	
 	enum OpType{
-		ADD('+')
-		,SUBSTRACT('-')
+		ADD('+', (l, r) -> l + r)
+		,SUBSTRACT('-', (l, r) -> l - r)
 		;
 		
-		private OpType(char value){
+		private OpType(char value, ToIntBiFunction<Integer, Integer> calRule){
 			val = value;
+			this.calculateRule = calRule;
 		}
 		
 		public char getValue(){
 			return val;
 		}
 		
+		public int calculate(int left, int right){
+			return calculateRule.applyAsInt(left, right);
+		}
+	
 		public static OpType of(char value){
 			return valMap.get(value);
 		}
+		
 		
 		@Override
 		public String toString(){
@@ -219,6 +242,7 @@ public class Grammar1 implements Grammar{
 		
 		private static Map<Character, OpType> valMap = new HashMap<>();;
 		private char val;
+		private ToIntBiFunction<Integer, Integer> calculateRule;
 		static{
 			Arrays.stream(OpType.values()).forEach(op -> valMap.put(op.getValue(), op));
 		}

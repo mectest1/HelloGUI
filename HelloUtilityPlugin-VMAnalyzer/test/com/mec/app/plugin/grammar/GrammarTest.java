@@ -37,7 +37,7 @@ public class GrammarTest {
 		out.printf("%s -> %s\n", str, g1.parse(str).getResult());
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void testInvalidExpression(){
 		Grammar g1 = new Grammar1();
@@ -63,6 +63,18 @@ public class GrammarTest {
 		}catch(Exception e){
 //			out.printf("%s - %s\n", e.getClass().getName(), e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testExecuteExpression(){
+		String str = "9-5+2";
+		
+		Grammar g1 = new Grammar1();
+		
+		ParseResult<Expr> result1 = g1.parse(str);
+		
+		GrammarExecutor<Expr, Integer> exec = new Grammar1Executor();
+		out.printf("%s evaluate result: %s\n", str, exec.execute(result1));
 	}
 
 
