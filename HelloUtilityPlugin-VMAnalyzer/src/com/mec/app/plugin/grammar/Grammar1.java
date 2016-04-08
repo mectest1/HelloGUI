@@ -22,14 +22,6 @@ import java.util.Optional;
  * ...
  * term -> 9					term.t = '9'
  * 
- * Another production rule for expr:
- * expr -> term + expr_right
- * expr -> term - expr_right
- * expr_right -> term + expr_right
- * expr_right -> term - expr_right
- * expr_right -> {empty}
- * term -> 0 | 1 | 2 | ... | 9
- * 
  * @author MEC
  *
  */
@@ -55,22 +47,40 @@ public class Grammar1 implements Grammar{
 //			OpType op = OpType.of(scanner.nextChar());
 ////			Expr rightExpr getExpr(scanner);
 //		}
-		Expr expr = getExpr(scanner);
-		
+//		Expr expr = getExpr(scanner);
+		Expr expr = new Expr(Expr.of(scanner.nextTerm()));
+		while(scanner.hasNext()){
+			expr = new Expr(expr);
+			expr.setOp(scanner.nextOp());
+			expr.setTerm(scanner.nextTerm());
+		}
 		
 		return ParseResult.of(expr);
 	}
 	
 	
+	@Deprecated
 	private Expr getExpr(Scanner scanner){
-		Term term = Term.of(scanner.nextInt());
-		Expr retval = Expr.of(term);
-		if(scanner.hasNext()){
-			OpType op = OpType.of(scanner.nextChar());
-			Expr expr = getExpr(scanner);
-			retval.setOp(op);
-			retval.setExpr(expr);
+//		Term term = Term.of(scanner.nextInt());
+//		Expr retval = Expr.of(term);
+//		if(scanner.hasNext()){
+//			OpType op = OpType.of(scanner.nextChar());
+//			Expr expr = getExpr(scanner);
+//			retval.setOp(op);
+//			retval.setExpr(expr);
+//		}
+		Expr retval = new Expr();
+//		if(scanner.hasNextTerm()){
+//			retval.setExpr(Expr.of(Term.of(scanner.nextInt())));
+		retval.setExpr(Expr.of(scanner.nextTerm()));
+//		}
+		if(scanner.hasNextOp()){
+//			retval.setOp(OpType.of(scanner.nextChar()));
+//			retval.setTerm(Term.of(scanner.nextInt()));
+			retval.setOp(scanner.nextOp());
+			retval.setTerm(scanner.nextTerm());
 		}
+		
 		return retval;
 	}
 	
@@ -81,7 +91,7 @@ public class Grammar1 implements Grammar{
 			chars = str.toCharArray();
 		}
 
-		public int nextInt(){
+		private int nextInt(){
 			char digitChar = chars[curIndex++];
 			if(!Character.isDigit(digitChar)){
 				throw new IllegalArgumentException(String.format("%s is not digit char", digitChar));
@@ -90,13 +100,33 @@ public class Grammar1 implements Grammar{
 			return Integer.parseInt(Character.toString(digitChar));
 		}
 		
-		public char nextChar(){
+		private char nextChar(){
 			return chars[curIndex++];
 		}
 		
 		public boolean hasNext(){
 			return curIndex < chars.length;
 		}
+		
+		public Term nextTerm(){
+			return Term.of(nextInt());
+		}
+		
+		public OpType nextOp(){
+			return OpType.of(nextChar());
+		}
+		
+		
+		private boolean hasNextOp(){
+			return hasNext() && null != OpType.of(chars[curIndex + 1]);
+		}
+		
+		private boolean hasNextTerm(){
+			return hasNext() && Term.isValidTerm(chars[curIndex + 1]);
+		}
+		
+		
+		
 		private char chars[];
 		private int curIndex = 0;
 		
@@ -104,8 +134,15 @@ public class Grammar1 implements Grammar{
 
 	static class Expr{
 		
+		protected Expr(){
+			
+		}
+		
+		protected Expr(Expr expr){
+			this.expr = expr;
+		}
 		private Expr(Expr expr, OpType op, Term term){
-			this.exprRight = expr;
+			this.expr = expr;
 			this.op = op;
 			this.term = term;
 		}
@@ -114,29 +151,36 @@ public class Grammar1 implements Grammar{
 			return new Expr(null, null, term);
 		}
 		
-		public static Expr of(Expr expr, OpType op, Term term){
-			return new Expr(expr, op, term);
-		}
+//		public static Expr of(Expr expr, OpType op, Term term){
+//			return new Expr(expr, op, term);
+//		}
 		
 		public void setOp(OpType op){
 			this.op = op;
 		}
 		public void setExpr(Expr expr){
-			this.exprRight = expr;
+			this.expr = expr;
 		}
+		public void setTerm(Term term){
+			this.term = term;
+		}
+	
 		public String getValue(){
-//			char derp = "".;
+			//Two complicated for good
 //			return String.format(
 //					"%s%s%s"
-//					, term.getValue()
 //					, Optional.ofNullable(exprRight).map(Expr::getValue).orElse(EMPTY_STR)
+//					, term.getValue()
 //					, Optional.ofNullable(
 //							Optional.ofNullable(op).map(opType -> String.valueOf(opType.getValue()))
 //						).map(p -> p.orElse(EMPTY_STR)).get()
 //					);
 			StringBuilder retval = new StringBuilder();
-			if(null != exprRight){
-				retval.append(exprRight.getValue()).append(term.toString()).append(op.getValue());
+			if(null != expr){
+				retval.append(expr.getValue());
+				if(null != op){
+					retval.append(term.toString()).append(op.getValue());
+				}
 			}else{
 				retval.append(term.getValue());
 			}
@@ -147,7 +191,7 @@ public class Grammar1 implements Grammar{
 		public String toString(){
 			return getValue();
 		}
-		private Expr exprRight;
+		private Expr expr;
 		private OpType op;
 		private Term term;
 		private static final String EMPTY_STR = "";
@@ -166,6 +210,9 @@ public class Grammar1 implements Grammar{
 			return String.valueOf(t);
 		}
 		
+		public static final boolean isValidTerm(char ch){
+			return Character.isDigit(ch);
+		}
 		@Override
 		public String toString(){
 			return getValue();
