@@ -1,10 +1,11 @@
 package com.mec.app.plugin.grammar;
 
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Example 2.10:  The annotated parse tree listed below is based on the translation
@@ -28,26 +29,10 @@ import java.util.Optional;
 public class Grammar1 implements Grammar{
 	@Override
 	public ParseResult<Expr> parse(String str){
-//		final char NON_CHAR = '0x00';
 		Objects.requireNonNull(str);
-//		char[] chars = str.toCharArray();
-//		Scanner scanner = new Scanner(str);	//<- The Tokenizer || Lexical Recognizer should be implemented by hand as well;
-		
-//		char prev = NON_CHAR;
-//		for(int i = 0; i < chars.length; ++i){
-//			char cur = chars[i];
-//			
-//		}
 		
 		Scanner scanner = new Scanner(str);
 		
-		//Get expr_right
-//		Term term = Term.of(scanner.nextInt());
-//		while(scanner.hasNext()){
-//			OpType op = OpType.of(scanner.nextChar());
-////			Expr rightExpr getExpr(scanner);
-//		}
-//		Expr expr = getExpr(scanner);
 		Expr expr = new Expr(Expr.of(scanner.nextTerm()));
 		while(scanner.hasNext()){
 			expr = new Expr(expr);
@@ -57,33 +42,6 @@ public class Grammar1 implements Grammar{
 		
 		return ParseResult.of(expr);
 	}
-	
-	
-	@Deprecated
-	private Expr getExpr(Scanner scanner){
-//		Term term = Term.of(scanner.nextInt());
-//		Expr retval = Expr.of(term);
-//		if(scanner.hasNext()){
-//			OpType op = OpType.of(scanner.nextChar());
-//			Expr expr = getExpr(scanner);
-//			retval.setOp(op);
-//			retval.setExpr(expr);
-//		}
-		Expr retval = new Expr();
-//		if(scanner.hasNextTerm()){
-//			retval.setExpr(Expr.of(Term.of(scanner.nextInt())));
-		retval.setExpr(Expr.of(scanner.nextTerm()));
-//		}
-		if(scanner.hasNextOp()){
-//			retval.setOp(OpType.of(scanner.nextChar()));
-//			retval.setTerm(Term.of(scanner.nextInt()));
-			retval.setOp(scanner.nextOp());
-			retval.setTerm(scanner.nextTerm());
-		}
-		
-		return retval;
-	}
-	
 	
 	static class Scanner{
 		Scanner(String str){
@@ -109,11 +67,23 @@ public class Grammar1 implements Grammar{
 		}
 		
 		public Term nextTerm(){
-			return Term.of(nextInt());
+			try{
+				return Term.of(nextInt());
+			}catch(ArrayIndexOutOfBoundsException | IllegalArgumentException e){
+				out.printf("Error: digit character expected at index %s\n", curIndex);
+				printPositionInfo();
+				throw e;
+			}
 		}
 		
 		public OpType nextOp(){
-			return OpType.of(nextChar());
+			try{
+				return OpType.of(nextChar());
+			}catch(ArrayIndexOutOfBoundsException | NumberFormatException e){
+				out.printf("Error: operator character expected at index %s\n", curIndex);
+				printPositionInfo();
+				throw e;
+			}
 		}
 		
 		
@@ -125,11 +95,19 @@ public class Grammar1 implements Grammar{
 			return hasNext() && Term.isValidTerm(chars[curIndex + 1]);
 		}
 		
+		private void printPositionInfo(){
+			out.println(String.valueOf(chars));
+//			Stream.of(chars).forEach(c -> out.print(" "));
+//			for(int i = 0; i < chars.length; ++i) out.print(" ");
+			for(int i = 0; i < curIndex - 1; ++i) out.print(" ");
+			out.println("^");
+		}
 		
 		
 		private char chars[];
 		private int curIndex = 0;
-		
+		private static final PrintStream out = System.out;
+//		private static final PrintStream err = System.err;
 	}
 
 	static class Expr{
@@ -150,11 +128,7 @@ public class Grammar1 implements Grammar{
 		public static Expr of(Term term){
 			return new Expr(null, null, term);
 		}
-		
-//		public static Expr of(Expr expr, OpType op, Term term){
-//			return new Expr(expr, op, term);
-//		}
-		
+
 		public void setOp(OpType op){
 			this.op = op;
 		}
@@ -249,5 +223,4 @@ public class Grammar1 implements Grammar{
 			Arrays.stream(OpType.values()).forEach(op -> valMap.put(op.getValue(), op));
 		}
 	}
-//	char lookahread;
 }

@@ -6,7 +6,7 @@ public interface Grammar{
 	
 	
 
-	interface ParseResult<T>{
+	public static interface ParseResult<T>{
 		T getResult();
 		
 		/**

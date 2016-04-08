@@ -2,6 +2,7 @@ package com.mec.app.plugin.grammar;
 
 import java.io.PrintStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mec.app.plugin.grammar.Grammar.ParseResult;
@@ -9,12 +10,13 @@ import com.mec.app.plugin.grammar.Grammar1.Expr;
 
 public class GrammarTest {
 
+	@Ignore
 	@Test
 	public void test() {
 //		fail("Not yet implemented");
 		
 		
-		final String str = "9+5-2";
+		String str = "9+5-2";
 		
 		Grammar g1 = new Grammar1();
 		
@@ -24,7 +26,43 @@ public class GrammarTest {
 //		g2.parse(str);
 		
 		//expected: 95+2-
-		out.println(result1.getResult());
+		out.printf("%s -> %s\n", str, result1.getResult());
+		
+		str = "9-5+2";
+		ParseResult<Expr> result2 = g1.parse(str);
+		out.printf("%s -> %s\n", str, result2.getResult());
+		
+		
+		str = "1+2-3+4-5+6-7+8-9";
+		out.printf("%s -> %s\n", str, g1.parse(str).getResult());
+	}
+	
+//	@Ignore
+	@Test
+	public void testInvalidExpression(){
+		Grammar g1 = new Grammar1();
+		String str = "1+2-3+";
+		try{
+			out.printf("%s -> %s\n", str, g1.parse(str).getResult());
+		}catch(Exception e){
+//			out.printf("%s - %s\n", e.getClass().getName(), e.getMessage());
+		}
+		
+		out.println();
+		str = "1+2-+";
+		try{
+			out.printf("%s -> %s\n", str, g1.parse(str).getResult());
+		}catch(Exception e){
+//			out.printf("%s - %s\n", e.getClass().getName(), e.getMessage());
+		}
+		
+		out.println();
+		str = "+2-+";
+		try{
+			out.printf("%s -> %s\n", str, g1.parse(str).getResult());
+		}catch(Exception e){
+//			out.printf("%s - %s\n", e.getClass().getName(), e.getMessage());
+		}
 	}
 
 
