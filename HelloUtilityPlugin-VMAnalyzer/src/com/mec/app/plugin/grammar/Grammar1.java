@@ -79,8 +79,13 @@ public class Grammar1 implements Grammar{
 		
 		public OpType nextOp(){
 			try{
-				return OpType.of(nextChar());
-			}catch(ArrayIndexOutOfBoundsException | NumberFormatException e){
+				char ch = nextChar();
+				OpType retval =  OpType.of(ch);
+				if(null == retval){
+					throw new IllegalArgumentException(String.format("Unrecognized operator: %s", ch));
+				}
+				return retval;
+			}catch(ArrayIndexOutOfBoundsException | IllegalArgumentException e){
 				out.printf("Error: operator character expected at index %s\n", curIndex);
 				printPositionInfo();
 				throw e;
