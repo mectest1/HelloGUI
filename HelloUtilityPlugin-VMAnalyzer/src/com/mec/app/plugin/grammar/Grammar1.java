@@ -28,6 +28,7 @@ import java.util.stream.Stream;
  *
  */
 public class Grammar1 implements Grammar{
+//	@SuppressWarnings("unchecked")
 	@Override
 	public ParseResult<Expr> parse(String str){
 		Objects.requireNonNull(str);
