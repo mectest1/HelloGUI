@@ -97,7 +97,10 @@ public class GrammarTest {
 
 	@Test
 	public void testGrammar2PredictiveParsing(){
-		
+//		String stmtStr = "for(; expr; expr) other";	//<- space is not supported for now
+		String stmtStr = "for(;expr;expr)other";
+		Grammar g2 = new Grammar2PredictiveParsing();
+		g2.parse(stmtStr);
 	}
 	
 	
