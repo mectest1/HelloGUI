@@ -1,12 +1,14 @@
 package com.mec.app.plugin.grammar;
 
 import java.io.PrintStream;
+import java.util.Optional;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mec.app.plugin.grammar.Grammar.ParseResult;
 import com.mec.app.plugin.grammar.Grammar1.Expr;
+import com.mec.app.plugin.grammar.Grammar4.Token;
 
 public class GrammarTest {
 
@@ -95,6 +97,7 @@ public class GrammarTest {
 	}
 
 
+	@Ignore
 	@Test
 	public void testGrammar2PredictiveParsing(){
 //		String stmtStr = "for(; expr; expr) other";	//<- space is not supported for now
@@ -103,8 +106,34 @@ public class GrammarTest {
 		g2.parse(stmtStr);
 	}
 	
+	@Ignore
+	@Test
+	public void testGrammar3(){
+		String stmtStr = "1+2-3+4-5+6";
+		Grammar g3 = new Grammar3();
+		g3.parse(stmtStr);
+	}
 	
+	@Ignore
+	@Test
+	public void testGrammar2Lexer(){
+		String str = "1+2-3*4/5";
+		printTokens(str);
+		
+		printTokens("1   +2   4 /5 * 6789 ");
+		printTokens("1   +2   4 /5 ^ 67 # @ ()89 ");
+		printTokens("1   +2 Wahat der111 zzx .  4 /5 ^ 67 # @ ()89 ");
+	}
 	
+	private void printTokens(String str){
+		Grammar4.Lexer lexer = new Grammar4.Lexer(str);
+		for(Optional<Token> token = lexer.nextToken();
+				token.isPresent();
+				token = lexer.nextToken()){
+			out.printf(" %s ", token.get());
+		}
+		out.println();
+	}
 //	/**
 //	 * Example 2.10:  The annotated parse tree listed below is based on the translation
 //	 * expressions consisting of digits separated by plus or minus signs into postfix notation. 
