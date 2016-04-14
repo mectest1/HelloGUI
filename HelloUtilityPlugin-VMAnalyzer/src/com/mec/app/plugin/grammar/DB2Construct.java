@@ -26,8 +26,15 @@ public interface DB2Construct {
 	
 	SQLStatement getDropSQL();
 	
+//	String getName();
 	
+	static String strippedQuotes(String str){
+		Matcher m = QUOTED_STR.matcher(str);
+		m.matches();
+		return m.group(1);
+	}
 	
+	static final Pattern QUOTED_STR = Pattern.compile("\"?(\\w+)\"?"); 
 	//-----------------------------------------
 	class Table implements DB2Construct{
 		public Table(String schema, String tableName, String dbName, String tablespace){
@@ -40,6 +47,13 @@ public interface DB2Construct {
 			Optional.ofNullable(schema).ifPresent(s -> this.schema = s);
 			Optional.ofNullable(dbName).ifPresent(d -> this.dbName = d);
 		}
+
+		
+//		@Override
+//		public static final String getName() {
+//			return "TABLE";
+//		}
+
 
 		public Table(String schemaAndTableName, 
 				String dbNameAndTablespace){
@@ -175,7 +189,7 @@ public interface DB2Construct {
 		 
 		private CreateTable createSQL;
 		private DropTable dropTable;
-	
+		public static final String NAME = "TABLE";
 	
 		
 		
@@ -301,6 +315,7 @@ public interface DB2Construct {
 			private static final int INIT = -1;
 //			private static final Pattern TYPE_LENGTH_PATTERN = Pattern.compile("(\\w+)[\\((\\d+)[,(\\d+)]\\)]");
 			//ref: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+			//Match the type and length. Example scenarios: DATE,  DECIMAL(18,3), CHAR(3), etc.
 			private static final Pattern TYPE_LENGTH_PATTERN = Pattern.compile("(\\w+)(?:\\((\\d+)(?:,(\\d+))?\\))?");
 		}
 		
@@ -370,6 +385,12 @@ public interface DB2Construct {
 			this.lobColumn = lobColumn;
 		}
 
+
+		
+//		@Override
+//		public static final String getName() {
+//			return "AUXILIARY";
+//		}
 		@Override
 		public CreateAuxiliaryTable getCreateSQL() {
 			if(null == createSQL){
@@ -429,7 +450,7 @@ public interface DB2Construct {
 		private String auxiliaryTableName;
 		private String auxIndexName;
 		private static int startIndex = 1;
-		
+		public static final String NAME = "AUXILIARY";
 		
 		private CreateAuxiliaryTable createSQL;
 		private DropAuxiliaryTable dropSQL;
@@ -447,10 +468,17 @@ public interface DB2Construct {
 		public Tablespace(String dbName, String tablespace){
 			//createSQL = new CreateTablespace(dbName, tablespace);
 			//dropSQL = new DropTablespace(dbName, tablespace);
-			this.database = dbName;
-			this.tablespace = tablespace;
+//			this.database = dbName;
+//			this.tablespace = tablespace;
+			this.database = strippedQuotes(dbName);
+			this.tablespace = strippedQuotes(tablespace);
 		}
 
+
+		
+//		public static final String getName() {
+//			return "TABLESPACE";
+//		}
 		@Override
 		public CreateTablespace getCreateSQL() {
 			if(null == createSQL){
@@ -480,6 +508,9 @@ public interface DB2Construct {
 		protected DropTablespace dropSQL; 
 		protected String database;
 		protected String tablespace;
+		
+		
+		public static final String NAME = "TABLESPACE";
 	}
 	
 	class LobTablespace extends Tablespace{
@@ -494,6 +525,7 @@ public interface DB2Construct {
 			}
 			return createSQL;
 		}
+		public static final String NAME = "LOB";
 	}
 	
 	//----------------------------------------------------------
@@ -539,6 +571,7 @@ public interface DB2Construct {
 
 		private String name;
 		private Table table;
+		public static final String NAME = "LOB";
 	}
 	
 	

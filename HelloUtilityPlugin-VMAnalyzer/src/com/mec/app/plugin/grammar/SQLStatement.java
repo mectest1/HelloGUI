@@ -12,7 +12,33 @@ import com.mec.app.plugin.grammar.DB2Construct.Tablespace;
 
 public interface SQLStatement {
 
+//	String getStart();
 	
+	interface StatementType{
+		
+	}
+	
+	enum CreateStatementType implements StatementType{
+		CREATE_TABLESPACE
+		,CREATE_LOB_TABLESPACE
+		
+		,CREATE_TABLE
+		,CREATE_AUXLIARY_TABLE
+		
+		,CREATE_UNIQUE_INDEX
+		,CREATE_INDEX
+		,
+		
+		;
+	}
+	
+	enum AlterStatementType implements StatementType{
+		ALTER_TABLE
+		
+		
+		;
+		
+	}
 	//----------------------------------------
 
 
