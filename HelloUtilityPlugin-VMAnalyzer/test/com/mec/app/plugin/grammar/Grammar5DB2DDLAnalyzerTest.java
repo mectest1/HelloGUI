@@ -3,11 +3,20 @@ package com.mec.app.plugin.grammar;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.IntStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.mec.app.plugin.grammar.DB2Construct.AuxiliaryTable;
+import com.mec.app.plugin.grammar.DB2Construct.Table;
+import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
+import com.mec.app.plugin.grammar.DB2Construct.Table.ColumnDataTypeAndLength;
+import com.mec.app.plugin.grammar.Grammar5DB2DDLAnalyzer.Lexer;
 
 public class Grammar5DB2DDLAnalyzerTest {
 
+	@Ignore
 	@Test
 	public void testExtractTableInfo() {
 		Grammar5DB2DDLAnalyzer g5 = Grammar5DB2DDLAnalyzer.inst(ddlFile, outputDir);
@@ -15,6 +24,112 @@ public class Grammar5DB2DDLAnalyzerTest {
 	}
 	
 	
+	@Ignore
+	@Test
+	public void testCreateTable(){
+		Table table = new Table("\"EXIMMETA\".\"ECD_APROC_MGR\"", "\"EXIMDB\".\"EXIM\"");
+//		Table table = new Table("EXIMMETA", "ECD_APROC_MGR", "EXIMDB", "EXIM");
+		out.println(table.getCreateSQL().toString());
+		
+		table = new Table("\"EXIMMETA\".\"ECD_APROC_MGR\"", "\"EXIMMETA\"");
+		out.println(table.getCreateSQL().toString());
+		
+		
+		table = new Table("\"ECD_APROC_MGR\"", "\"EXIMMETA\"");
+		out.println(table.getCreateSQL().toString());
+		
+	} 
+	
+	@Ignore
+	@Test
+	public void testCreateTableWithColumns(){
+		Table table = new Table("EXIMMETA", "ECD_APROC_MGR", "EXIMDB", "EXIM");
+		
+		table.addColumn(new Column("C_BEF_DAYS_FLD", "VARCHAR(18)"));
+		table.addColumn(new Column("C_CAL", "CLOB(524288)"));
+		table.addColumn(new Column("C_CATA", "VARCHAR(4000)"));
+		table.addColumn(new Column("C_CATA_TYPE", "VARCHAR(1)", "NOT NULL WITH DEFAULT 'S'"));
+		table.addColumn(new Column("C_FUNC_ID", "VARCHAR(18)"));
+		table.addColumn(new Column("C_SCHEMA_TYPE", "VARCHAR(1)", " NOT NULL"));
+		table.addColumn(new Column("C_STARTBYMANUAL", "VARCHAR(1)"));
+		table.addColumn(new Column("C_START_FLAG", "VARCHAR(1)", "NOT NULL"));
+		table.addColumn(new Column("C_TASK_COMP", "VARCHAR(48)"));
+		table.addColumn(new Column("C_TASK_DESC", "VARCHAR(64)"));
+		table.addColumn(new Column("C_TASK_ID", "VARCHAR(16)", "NOT NULL"));
+		table.addColumn(new Column("C_TASK_NAME", "VARCHAR(48)", "NOT NULL"));
+		table.addColumn(new Column("C_TASK_VIEW", "VARCHAR(18)"));
+		table.addColumn(new Column("I_BEFORE_DAYS", "INTEGER"));
+		table.addColumn(new Column("I_DAY", "INTEGER"));
+		table.addColumn(new Column("I_HOUR", "INTEGER"));
+		table.addColumn(new Column("I_MINUTE", "INTEGER"));
+		table.addColumn(new Column("I_MONTH", "INTEGER"));
+		table.addColumn(new Column("I_SCHEDULE_TYPE", "VARCHAR(1)", "NOT NULL"));
+		table.addColumn(new Column("I_WEEK", "INTEGER"));
+//		table.addColumn(new Column("", ""));
+//		table.addColumn(new Column("", ""));
+		
+		
+		out.println(table.getCreateSQL().toString());
+		
+	}
+	
+	@Ignore
+	@Test
+	public void testAuxiliaryTSNames(){
+		IntStream.range(0, 10).forEach(i -> out.println(AuxiliaryTable.getNextLobTS()));
+	}
+	
+	@Ignore
+	@Test
+	public void testLexer(){
+		Lexer lexer = Lexer.parseStr("\"C_CAL\" CLOB(524288) ,");
+		while(lexer.hasNextToken()){
+			out.println(lexer.nextToken());
+		}
+		out.println("-------------------------------------------");
+		lexer = Lexer.parseStr("\"C_CATA_TYPE\" VARCHAR(1) NOT NULL WITH DEFAULT 'S',");
+		while(lexer.hasNextToken()){
+			out.println(lexer.nextToken());
+		}
+		out.println("-------------------------------------------");
+		lexer = Lexer.parseStr("\"ID\" DECIMAL(22 ,        0) NOT NULL ) ");
+		while(lexer.hasNextToken()){
+			out.println(lexer.nextToken());
+		}
+	}
+	
+	@Test
+	public void testColumnDataTypeAndLength(){
+		String desc = "DECIMAL(24,4)";
+		ColumnDataTypeAndLength dt = ColumnDataTypeAndLength.of(desc);
+		out.println(dt);
+		
+		desc = "DATE";
+		dt = ColumnDataTypeAndLength.of(desc);
+		out.println(dt);
+		
+		
+		desc = "VARCHAR(35)";
+		dt = ColumnDataTypeAndLength.of(desc);
+		out.println(dt);
+		
+		
+		desc = "VARCHAR(35)";
+		dt = ColumnDataTypeAndLength.of(desc);
+		out.println(dt);
+		
+		
+		desc = "DOUBLE";
+		dt = ColumnDataTypeAndLength.of(desc);
+		out.println(dt);
+		
+		
+		desc = "CLOB(12345)";
+		dt = ColumnDataTypeAndLength.of(desc);
+		out.println(dt);
+		
+		
+	}
 	
 	
 	private static final PrintStream out = System.out;
