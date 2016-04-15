@@ -141,7 +141,7 @@ public interface SQLStatement {
 		@Override
 		public String toString(){
 			StringBuilder retval = new StringBuilder();
-			retval.append(String.format("CREATE LOB TABLESPACE \"%s\" in \"%s\"" 
+			retval.append(String.format("CREATE LOB TABLESPACE \"%s\" IN \"%s\"" 
 					,auxTable.getAuxiliaryTablespace()
 					,auxTable.getAuxiliaryDatabase()
 					));
@@ -292,7 +292,7 @@ public interface SQLStatement {
 		public String toString() {
 //			return String.format("CREATE LOB TABLESPACE \"%s\" in \"%s\";" 
 //					,ts , db);
-			return String.format("CREATE LOB TABLESPACE \"%s\" in \"%s\";" 
+			return String.format("CREATE LOB TABLESPACE \"%s\" IN \"%s\";" 
 					,ts.getTablespace() , ts.getDatabase());
 		}
 		
@@ -375,6 +375,7 @@ public interface SQLStatement {
 		@Override
 		public String toString(){
 			StringBuilder retval = new StringBuilder();
+			UniqueConstraintType constraintType = index.getConstraintType();
 //			retval.append(String.format("ALTER TABLE %s \n\tADD CONSTRAINT \"%s\" PRIMARY KEY %s;"
 //					, table.getTableNameWithSchema()
 //					, pkName
@@ -393,14 +394,18 @@ public interface SQLStatement {
 //					index.getIndexedTable().getTableName()
 					index.getIndexedTable().getTableNameWithSchema()
 					));
-			retval.append(index.getIndexedTable().getPrimaryKeysStr()).append(";\n");
+//			retval.append(index.getIndexedTable().getPrimaryKeysStr()).append(";\n");
+			String columnsNameList = UniqueConstraintType.PRIMARY_KEY == constraintType ? 
+					index.getIndexedTable().getPrimaryKeysStr() :
+					index.getIndexedTable().getUniqueKeysStr();
+			retval.append(columnsNameList).append(";\n");
 			
-			UniqueConstraintType constraintType = index.getConstraintType();
 			retval.append(String.format("ALTER TABLE %s \n\tADD CONSTRAINT \"%s\" %s \n\t%s;"
 					, table.getTableNameWithSchema()
 					, UniqueConstraintType.PRIMARY_KEY == constraintType ? pkName : ukName
 					, constraintType.getValue()
-					, table.getPrimaryKeysStr()
+//					, table.getPrimaryKeysStr()
+					, columnsNameList
 					));
 			
 			

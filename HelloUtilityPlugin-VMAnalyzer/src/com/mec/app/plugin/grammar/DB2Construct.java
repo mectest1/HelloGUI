@@ -107,7 +107,9 @@ public interface DB2Construct {
 			CreateTable createSQL = getCreateSQL();
 			retval.add(createSQL);
 			
-			if(!getPrimaryKeys().isEmpty()){
+			List<Column> pkColumns = getPrimaryKeys();
+//			if(!getPrimaryKeys().isEmpty()){
+			if(!pkColumns.isEmpty()){
 //				CreatePrimaryKeyIndex createIndex = pkIndex.getCreateSQL();
 				UniqueConstraintIndex pkIndex = new UniqueConstraintIndex(this);
 //				CreatePrimaryKeyIndex createPKIndex = new CreatePrimaryKeyIndex(pkIndex);
@@ -119,11 +121,23 @@ public interface DB2Construct {
 				retval.add(addPrimaryKey);
 			}
 			
+			
 			if(!uniqueKeyColumns.isEmpty()){
-//				derp;
-				UniqueConstraintIndex ukIndex = new UniqueConstraintIndex(this, UniqueConstraintType.UNIQUE_KEY);
-				AlterTableAddUniqueConstraint addUniqueKey = ukIndex.getCreateSQL();
-				retval.add(addUniqueKey);
+//				boolean uniqueKeyInPKList =uniqueKeyColumns.stream().allMatch(ukCol -> 
+//					pkColumns.stream().anyMatch(pkCol -> 
+//						pkCol.getName().equals(ukCol.getName())
+//					)
+//				);
+//				if(uniqueKeyInPKList){
+				if(pkColumns.containsAll(uniqueKeyColumns) 
+					&& uniqueKeyColumns.containsAll(pkColumns)){
+					//primary key columns and unique key columns are the same.;
+					//in this case, only one index & constraint will be created
+				}else{
+					UniqueConstraintIndex ukIndex = new UniqueConstraintIndex(this, UniqueConstraintType.UNIQUE_KEY);
+					AlterTableAddUniqueConstraint addUniqueKey = ukIndex.getCreateSQL();
+					retval.add(addUniqueKey);
+				}
 			}
 			
 			if(!getLobColumns().isEmpty()){
@@ -222,11 +236,19 @@ public interface DB2Construct {
 			return columns.stream().filter(Column::isLobColumn).collect(Collectors.toList());
 		}
 		public String getPrimaryKeysStr(){
+			return getColumnsNameList(getPrimaryKeys());
+		}
+		
+		public String getUniqueKeysStr(){
+			return getColumnsNameList(uniqueKeyColumns);
+		}
+		
+		private static String getColumnsNameList(List<Column> columns){
 			StringBuilder retval = new StringBuilder();
 
-			List<Column> primaryKeys = getPrimaryKeys();
-			if(!(null == primaryKeys || primaryKeys.isEmpty())){
-				String pkStr = primaryKeys.stream()
+//			List<Column> primaryKeys = getPrimaryKeys();
+			if(!(null == columns || columns.isEmpty())){
+				String pkStr = columns.stream()
 					.map(c -> String.format("\"%s\"", c.getName()))
 					.collect(Collectors.joining(",\n\t", "(", ")"));
 				retval.append(pkStr);
@@ -263,7 +285,7 @@ public interface DB2Construct {
 //				throw new IllegalArgumentException(String.format("the primary key column %s doesn't exist in table", columnName));
 //			}
 			return column.orElseThrow(() -> 
-					new IllegalArgumentException(String.format("the primary key column %s doesn't exist in table", columnName))
+					new IllegalArgumentException(String.format("there is no such column with name %s in this table", columnName))
 				);
 		}
 
@@ -666,7 +688,7 @@ public interface DB2Construct {
 	}
 	static class UniqueConstraintIndex implements Index{
 		
-		public UniqueConstraintIndex(String indexName, Table table){
+		private UniqueConstraintIndex(String indexName, Table table){
 			Objects.requireNonNull(indexName);
 			Objects.requireNonNull(table);
 			this.name = indexName;
@@ -675,10 +697,10 @@ public interface DB2Construct {
 		
 		public UniqueConstraintIndex(Table table){
 //			String indexName = String.format("PK_%S", table.getTableName());
-			this(String.format("PK_%S", table.getTableName()), table);
+			this(String.format("PK_%s", table.getTableName()), table);
 		}
 		public UniqueConstraintIndex(Table table, UniqueConstraintType constraintType){
-			this(table);
+			this(String.format("UK_%s", table.getTableName()), table);
 			this.constraintType = constraintType;
 		}
 		
