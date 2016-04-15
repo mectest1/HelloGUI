@@ -529,7 +529,9 @@ public interface DB2Construct {
 			this.lobColumn = lobColumn;
 			auxiliaryTableName = String.format("%s_AUX_%s", table.getTableName(), lobColumn.getName());
 			auxiliaryTablespace = getNextLobTS();
-			auxIndexName = String.format("INDEX_%s", auxiliaryTableName);
+//			auxIndexName = String.format("INDEX_%s", auxiliaryTableName);
+			//In case different schemas have the same table
+			auxIndexName = String.format("INDEX_%s_%s", table.getSchema(), auxiliaryTableName);
 		}
 
 
@@ -602,7 +604,7 @@ public interface DB2Construct {
 		private String auxiliaryTableName;
 		private String auxIndexName;
 		private static int startIndex = 1;
-		public static final String NAME = "AUXILIARY";
+//		public static final String NAME = "AUXILIARY";
 		
 		private CreateAuxiliaryTable createSQL;
 		private DropAuxiliaryTable dropSQL;
