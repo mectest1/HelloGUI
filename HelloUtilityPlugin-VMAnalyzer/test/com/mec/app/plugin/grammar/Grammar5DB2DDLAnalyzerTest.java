@@ -210,7 +210,7 @@ public class Grammar5DB2DDLAnalyzerTest {
 	
 	
 	//---------------------------------------
-	@Ignore
+//	@Ignore
 	@Test
 	public void testParseTableSQL5(){
 		String ddlFile = "";
@@ -218,7 +218,12 @@ public class Grammar5DB2DDLAnalyzerTest {
 //		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original1000~2000.sql";
 //		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original2000~6000.sql";
 //		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original6000~10000.sql";
-		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original10000~20000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original10000~20000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original20000~30000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original30000~40000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original40000~50000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original50000~60000.sql";
+		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original00001~60000.sql";
 
 		Path inputDDL = Paths.get(ddlFile);
 		SQLFileLexer lexer = Lexer.scanSQLFile(inputDDL);
@@ -236,7 +241,7 @@ public class Grammar5DB2DDLAnalyzerTest {
 		}
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void testParseTableSQL5DropTable(){
 		String ddlFile = "";
@@ -244,7 +249,12 @@ public class Grammar5DB2DDLAnalyzerTest {
 //		String ddlFile = "data/ddl/2016-04-14_SampleDDL5_original1000~2000.sql";
 //		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original2000~6000.sql";
 //		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original6000~10000.sql";
-		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original10000~20000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original10000~20000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original20000~30000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original30000~40000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original40000~50000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original50000~60000.sql";
+		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original00001~60000.sql";
 		SQLFileLexer lexer = Lexer.scanSQLFile(Paths.get(ddlFile));
 		SQLParser sp = Parser.parseSQL(lexer);
 //		sp.printDropTableAndAuxTS(out);
