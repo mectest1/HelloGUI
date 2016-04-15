@@ -82,7 +82,7 @@ public interface SQLStatement {
 						.collect(Collectors.joining(" ,\n"))
 						;
 				retval.append(columnsSQL);
-				retval.append(")");
+				retval.append(" )");
 			}
 			
 //			retval.append(String.format("\n\tIN %s;", databaseAndTablespace));
@@ -199,8 +199,8 @@ public interface SQLStatement {
 		public String toString(){
 			StringBuilder retval = new StringBuilder();
 			
-			retval.append(String.format("DROP INDEX \"%s\";", auxTable.getAuxiliaryIndexName()));
-			retval.append(String.format("\nDROP TABLE \"%s\";", auxTable.getAuxiliaryTableNameWithSchema()));
+//			retval.append(String.format("DROP INDEX \"%s\";", auxTable.getAuxiliaryIndexName()));
+//			retval.append(String.format("\nDROP TABLE \"%s\";", auxTable.getAuxiliaryTableNameWithSchema()));
 			retval.append(String.format("DROP TABLESPACE \"%s\".\"%s\";"
 					, auxTable.getAuxiliaryDatabase()
 					, auxTable.getAuxiliaryTablespace()));
@@ -388,12 +388,15 @@ public interface SQLStatement {
 //				.collect(Collectors.joining(",", "(", ")"));
 //			retval.append(primaryKeys).append(";");
 			retval.append(String.format(
-					"CREATE UNIQUE INDEX \"%s\" ON %s", 
-					index.getName(), index.getIndexedTable().getTableName()));
+					"CREATE UNIQUE INDEX \"%s\" ON %s \n\t", 
+					index.getName(), 
+//					index.getIndexedTable().getTableName()
+					index.getIndexedTable().getTableNameWithSchema()
+					));
 			retval.append(index.getIndexedTable().getPrimaryKeysStr()).append(";\n");
 			
 			UniqueConstraintType constraintType = index.getConstraintType();
-			retval.append(String.format("ALTER TABLE %s \n\tADD CONSTRAINT \"%s\" %s %s;"
+			retval.append(String.format("ALTER TABLE %s \n\tADD CONSTRAINT \"%s\" %s \n\t%s;"
 					, table.getTableNameWithSchema()
 					, UniqueConstraintType.PRIMARY_KEY == constraintType ? pkName : ukName
 					, constraintType.getValue()

@@ -138,6 +138,30 @@ public interface DB2Construct {
 			return retval;
 		}
 		
+		/**
+		 * To drop a table cleanly, we only need to drop this table first, 
+		 * and then drop all the LOB tablespaces;
+		 * @return
+		 */
+		public List<SQLStatement> getDropTableAndTS(){
+			List<SQLStatement> retval = new ArrayList<>();
+			DropTable dropTable = getDropSQL();
+			retval.add(dropTable);
+			
+			//
+			List<Column> lobColumns = getLobColumns();
+			if(!lobColumns.isEmpty()){
+				lobColumns.forEach(lobCol -> {
+					AuxiliaryTable auxTable = new AuxiliaryTable(this, lobCol);
+//					CreateAuxiliaryTable createAuxTable = auxTable.getCreateSQL();
+					DropAuxiliaryTable dropAuxTable= auxTable.getDropSQL();
+					retval.add(dropAuxTable);
+				});
+			}
+			
+			return retval;
+		}
+		
 		public void addColumn(Column column){
 			Objects.requireNonNull(column);
 			columns.stream().filter(c -> c.getName().equals(column.getName())).findAny().ifPresent(c -> {
@@ -155,7 +179,11 @@ public interface DB2Construct {
 			return combinePrefixWithName(schema, tableName);
 		}
 		public String getDatabaseAndTablespace(){
-			return combinePrefixWithName(dbName, tablespace);
+			
+			
+//			return combinePrefixWithName(dbName, tablespace);
+			
+			return combinePrefixWithName(Grammar5DB2DDLAnalyzer.dbName, Grammar5DB2DDLAnalyzer.tablespace);
 		}
 		private String combinePrefixWithName(String optionalPrefix, String name){
 			String retval = null;
@@ -443,7 +471,7 @@ public interface DB2Construct {
 				String retval = columnAttrStr;
 				if(isLOBColumn()){
 					retval = retval.replaceAll("NOT LOGGED", "");
-					retval = retval.replaceAll("NOTE COMPACT", "");
+					retval = retval.replaceAll("NOT COMPACT", "");
 					retval = retval.replaceAll("LOGGED", "");
 					retval = retval.replaceAll("COMPACT", "");
 //				}else if(isTemporalColumn()){
@@ -504,6 +532,10 @@ public interface DB2Construct {
 			return dropSQL;
 		}
 		
+//		public DropTablespace getDropAuxiliaryTablespaceSQL(){
+//			DropTablespace dropTablespace = new DropTablespace(new Tablespace(dbName, tablespace))
+//		}
+		
 		public String getSchema(){
 			return table.getSchema();
 		}
@@ -517,6 +549,7 @@ public interface DB2Construct {
 		}
 		
 		public String getAuxiliaryDatabase(){
+//			return table.getDatabaseName();
 			return Grammar5DB2DDLAnalyzer.dbName;
 		}
 		

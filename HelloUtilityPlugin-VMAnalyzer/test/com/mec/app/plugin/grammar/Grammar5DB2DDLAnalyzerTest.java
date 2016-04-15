@@ -1,6 +1,7 @@
 package com.mec.app.plugin.grammar;
 
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
@@ -197,6 +198,7 @@ public class Grammar5DB2DDLAnalyzerTest {
 //		sp.printCreateSQL(out);
 		sp.printCreateUsableTable(out);
 	}
+	@Ignore
 	@Test
 	public void testParseTableSQL3(){
 		String ddlFile = "data/ddl/2016-04-14_SampleDDL3_2tables.sql";
@@ -204,6 +206,59 @@ public class Grammar5DB2DDLAnalyzerTest {
 		SQLParser sp = Parser.parseSQL(lexer);
 //		sp.printCreateSQL(out);
 		sp.printCreateUsableTable(out);
+	}
+	
+	
+	//---------------------------------------
+	@Ignore
+	@Test
+	public void testParseTableSQL5(){
+		String ddlFile = "";
+//		String ddlFile = "data/ddl/2016-04-14_SampleDDL5_original1~1000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original1000~2000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original2000~6000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original6000~10000.sql";
+		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original10000~20000.sql";
+
+		Path inputDDL = Paths.get(ddlFile);
+		SQLFileLexer lexer = Lexer.scanSQLFile(inputDDL);
+		SQLParser sp = Parser.parseSQL(lexer);
+//		sp.printCreateUsableTable(out);
+		
+		String inputDDLFileName = inputDDL.getFileName().toString();
+		Path createDDL = inputDDL.resolveSibling(
+				inputDDLFileName.substring(0, inputDDLFileName.lastIndexOf("."))
+				+ "_create.sql");
+		try(PrintStream ddlOutput = new PrintStream(Files.newOutputStream(createDDL))){
+			sp.printCreateUsableTable(ddlOutput);
+		}catch(Exception e){
+			e.printStackTrace(out);
+		}
+	}
+	
+//	@Ignore
+	@Test
+	public void testParseTableSQL5DropTable(){
+		String ddlFile = "";
+//		String ddlFile = "data/ddl/2016-04-14_SampleDDL5_original1~1000.sql";
+//		String ddlFile = "data/ddl/2016-04-14_SampleDDL5_original1000~2000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original2000~6000.sql";
+//		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original6000~10000.sql";
+		ddlFile = "data/ddl/2016-04-14_SampleDDL5_original10000~20000.sql";
+		SQLFileLexer lexer = Lexer.scanSQLFile(Paths.get(ddlFile));
+		SQLParser sp = Parser.parseSQL(lexer);
+//		sp.printDropTableAndAuxTS(out);
+
+		Path inputDDL = Paths.get(ddlFile);
+		String inputDDLFileName = inputDDL.getFileName().toString();
+		Path createDDL = inputDDL.resolveSibling(
+				inputDDLFileName.substring(0, inputDDLFileName.lastIndexOf("."))
+				+ "_drop.sql");
+		try(PrintStream ddlOutput = new PrintStream(Files.newOutputStream(createDDL))){
+			sp.printDropTableAndAuxTS(ddlOutput);
+		}catch(Exception e){
+			e.printStackTrace(out);
+		}
 	}
 	
 	private static final PrintStream out = System.out;

@@ -42,8 +42,27 @@ public interface Parser {
 		public void printCreateUsableTable(PrintStream out){
 			getParseResult().getConstructs().forEach(c -> {
 				Table table = (Table) c;
+				out.println("--================================================");
+				out.printf("-- Create table %s\n", table.getTableNameWithSchema());
+				out.println("--================================================");
 				table.getCreateUsableTableSQL().forEach(stmt -> {
 					out.println(stmt.toString());
+					out.println();
+				});
+				out.println("\n");
+			});
+		}
+		
+		public void printDropTableAndAuxTS(PrintStream out){
+			getParseResult().getConstructs().forEach(c -> {
+				Table table = (Table) c;
+				out.println("--================================================");
+				out.printf("-- Drop table %s\n", table.getTableNameWithSchema());
+				out.println("--================================================");
+//				table.getCreateUsableTableSQL().forEach(stmt -> {
+				table.getDropTableAndTS().forEach(stmt -> {
+					out.println(stmt.toString());
+					out.println();
 				});
 			});
 		}
@@ -208,17 +227,26 @@ public interface Parser {
 		private void scanAlterTable(){
 			String schemaAndTableName = lexer.nextWord();
 			Table table = createdTables.get(schemaAndTableName);
-			
-			lexer.mathWords(2, "ADD CONSTRAINT");;
-			lexer.nextWord();				//<- ADD CONSTRAINT constraint-name
-			String nextWord = lexer.nextWord();	//
 			UniqueConstraintType constraintType = UniqueConstraintType.PRIMARY_KEY;
-			if("PRIMARY".equals(nextWord)){
+			
+//			lexer.mathWords(2, "ADD CONSTRAINT");;
+			lexer.matchWord("ADD");
+			String nextWord = lexer.nextWord();
+			if("CONSTRAINT".equals(nextWord)){
+				
+				lexer.nextWord();				//<- ADD CONSTRAINT constraint-name
+				nextWord = lexer.nextWord();	//
+				if("PRIMARY".equals(nextWord)){
+					lexer.matchWord("KEY");
+				}else if("UNIQUE".equals(nextWord)){	//"UNIQUE"
+					constraintType = UniqueConstraintType.UNIQUE_KEY;
+				}else{
+					throw new IllegalArgumentException(String.format("Unrecognized constraint type: %s", nextWord));
+				}
+			}else if("PRIMARY".equals(nextWord)){
 				lexer.matchWord("KEY");
-			}else if("UNIQUE".equals(nextWord)){	//"UNIQUE"
-				constraintType = UniqueConstraintType.UNIQUE_KEY;
 			}else{
-				throw new IllegalArgumentException(String.format("Unrecognized constraint type: %s", nextWord));
+				throw new IllegalArgumentException("Unrecognized add type");
 			}
 //			else{	
 //				// nextWord is Primary Key name, ignored here, 

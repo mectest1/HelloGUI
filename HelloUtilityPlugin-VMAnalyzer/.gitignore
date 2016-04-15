@@ -1,4 +1,8 @@
 /bin/
 /.classpath
 /.project
-/data/
+
+data/*
+!data/ddl
+data/ddl/*
+!data/ddl/BPIDB_Look.ddl_original.sql
