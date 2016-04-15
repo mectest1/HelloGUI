@@ -3,6 +3,7 @@ package com.mec.app.plugin.grammar;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import org.junit.Ignore;
@@ -86,7 +87,7 @@ public class Grammar5DB2DDLAnalyzerTest {
 		Lexer lexer = Lexer.scanStr("\"C_CAL\" CLOB(524288) ,");
 		while(lexer.hasNext()){
 			out.println(lexer.nextToken());
-		}
+		}//Pattern.matches("", "");
 		out.println("-------------------------------------------");
 		lexer = Lexer.scanStr("\"C_CATA_TYPE\" VARCHAR(1) NOT NULL WITH DEFAULT 'S',");
 		while(lexer.hasNext()){
@@ -169,13 +170,40 @@ public class Grammar5DB2DDLAnalyzerTest {
 //		}
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testParseTableSpace(){
 		String ddlFile = "data/ddl/2016-04-14_SampleDDL.sql";
 		SQLFileLexer lexer = Lexer.scanSQLFile(Paths.get(ddlFile));
 		SQLParser sp = Parser.parseSQL(lexer);
 		sp.printCreateSQL(out);
+	}
+	
+	@Ignore
+	@Test
+	public void testParseTableSQL(){
+		String ddlFile = "data/ddl/2016-04-14_SampleDDL.sql";
+		SQLFileLexer lexer = Lexer.scanSQLFile(Paths.get(ddlFile));
+		SQLParser sp = Parser.parseSQL(lexer);
+		sp.printCreateUsableTable(out);
+	}
+	
+	@Ignore
+	@Test
+	public void testParseGeneratedSQL(){
+		String ddlFile = "data/ddl/2016-04-14_SampleDDL2_generated.sql";
+		SQLFileLexer lexer = Lexer.scanSQLFile(Paths.get(ddlFile));
+		SQLParser sp = Parser.parseSQL(lexer);
+//		sp.printCreateSQL(out);
+		sp.printCreateUsableTable(out);
+	}
+	@Test
+	public void testParseTableSQL3(){
+		String ddlFile = "data/ddl/2016-04-14_SampleDDL3_2tables.sql";
+		SQLFileLexer lexer = Lexer.scanSQLFile(Paths.get(ddlFile));
+		SQLParser sp = Parser.parseSQL(lexer);
+//		sp.printCreateSQL(out);
+		sp.printCreateUsableTable(out);
 	}
 	
 	private static final PrintStream out = System.out;

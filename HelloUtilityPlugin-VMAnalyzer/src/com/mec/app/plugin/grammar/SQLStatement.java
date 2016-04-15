@@ -5,10 +5,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.mec.app.plugin.grammar.DB2Construct.AuxiliaryTable;
-import com.mec.app.plugin.grammar.DB2Construct.PrimaryKeyIndex;
+import com.mec.app.plugin.grammar.DB2Construct.Index;
 import com.mec.app.plugin.grammar.DB2Construct.Table;
 import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
 import com.mec.app.plugin.grammar.DB2Construct.Tablespace;
+import com.mec.app.plugin.grammar.DB2Construct.UniqueConstraintIndex;
+import com.mec.app.plugin.grammar.DB2Construct.UniqueConstraintType;
 
 public interface SQLStatement {
 
@@ -62,6 +64,10 @@ public interface SQLStatement {
 		
 		@Override
 		public String toString(){
+//			StringBuilder retval = new StringBuilder();
+//			retval.append(getCreateTableSQL());
+//			return retval.toString();
+			
 			StringBuilder retval = new StringBuilder();
 			
 //			retval.append(String.format("CREATE TABLE %s ", tableNameWithSchema));
@@ -72,7 +78,8 @@ public interface SQLStatement {
 				retval.append("(\n");
 //				String columnsSQL = columns.stream().map(Table.Column::toString)
 				String columnsSQL = columns.stream().map(c -> "\t\t" + c.toString())
-						.collect(Collectors.joining(",\n"))
+//						.collect(Collectors.joining(",\n"))
+						.collect(Collectors.joining(" ,\n"))
 						;
 				retval.append(columnsSQL);
 				retval.append(")");
@@ -82,6 +89,36 @@ public interface SQLStatement {
 			retval.append(String.format("\n\tIN %s;", table.getDatabaseAndTablespace()));
 			return retval.toString();
 		}
+		
+//		private StringBuilder getCreateTableSQL(){
+//			StringBuilder retval = new StringBuilder();
+//			
+////			retval.append(String.format("CREATE TABLE %s ", tableNameWithSchema));
+//			retval.append(String.format("CREATE TABLE %s ", table.getTableNameWithSchema()));
+//			
+//			List<Column> columns = table.getColumns();
+//			if(!(null == columns || columns.isEmpty())){
+//				retval.append("(\n");
+////				String columnsSQL = columns.stream().map(Table.Column::toString)
+//				String columnsSQL = columns.stream().map(c -> "\t\t" + c.toString())
+////						.collect(Collectors.joining(",\n"))
+//						.collect(Collectors.joining(" ,\n"))
+//						;
+//				retval.append(columnsSQL);
+//				retval.append(")");
+//			}
+//			
+////			retval.append(String.format("\n\tIN %s;", databaseAndTablespace));
+//			retval.append(String.format("\n\tIN %s;", table.getDatabaseAndTablespace()));
+//			return retval;
+//		}
+		
+//		private StringBuilder getAddPrimaryKeySQL(){
+//			StringBuilder retval = new StringBuilder();
+//			table.getPrimaryKeys().forE
+//			
+//			return retval;
+//		}
 		
 		protected Table table;
 //		private String tableNameWithSchema;
@@ -109,6 +146,7 @@ public interface SQLStatement {
 					,auxTable.getAuxiliaryDatabase()
 					));
 			retval.append(";\n");
+			
 			retval.append(String.format("CREATE AUXILIARY TABLE %s"
 					,auxTable.getAuxiliaryTableNameWithSchema()
 					));
@@ -117,7 +155,7 @@ public interface SQLStatement {
 			retval.append(String.format("\n\tCOLUMN \"%s\"", auxTable.getNameOfColumnToAux()));
 			retval.append(";\n");
 			
-			retval.append(String.format("CREATE INDEX \"%s\"\n", auxTable.getAuxiliaryIndexName()));
+			retval.append(String.format("CREATE INDEX \"%s\"", auxTable.getAuxiliaryIndexName()));
 			retval.append(String.format("\n\tON %s", auxTable.getAuxiliaryTableNameWithSchema()));
 			retval.append(";");
 			
@@ -176,6 +214,30 @@ public interface SQLStatement {
 	
 	
 	
+	
+	
+	//----------------------------------------
+//	class CreateAuxiliaryIndex implements SQLStatement{
+//		
+//		public CreateAuxiliaryIndex(AuxiliaryIndex auxIndex){
+//			Objects.requireNonNull(auxIndex);
+//			this.auxIndex = auxIndex;
+//		}
+//		
+//		@Override
+//		public String toString(){
+//			StringBuilder retval = new StringBuilder();
+//			retval.append(String.format("", 
+//					
+//					
+//					));
+//			
+//			
+//			return retval.toString();
+//		}
+//		
+//		private AuxiliaryIndex auxIndex;
+//	}
 	//----------------------------------------
 	class CreateView implements SQLStatement{
 		
@@ -258,31 +320,98 @@ public interface SQLStatement {
 		private Tablespace ts;
 	}
 	//----------------------------------------
-	class CreatePrimaryKeyIndex implements SQLStatement{
-		public CreatePrimaryKeyIndex(PrimaryKeyIndex index){
+//	class CreatePrimaryKeyIndex implements SQLStatement{
+//		public CreatePrimaryKeyIndex(UniqueConstraintIndex index){
+//			Objects.requireNonNull(index);
+//			this.index = index;
+//		}
+//		
+//		@Override
+//		public String toString(){
+//			StringBuilder retval = new StringBuilder();
+//			retval.append(String.format(
+//					"CREATE UNIQUE INDEX \"%s\" ON %s", 
+//					index.getName(), index.getIndexedTable().getTableName()));
+////			String primaryKeys = index.getTable().getPrimaryKeys().stream()
+////				.map(c -> String.format("\"%s\"", c.getName()))
+////				.collect(Collectors.joining(",", "(", ")"));
+////			retval.append(primaryKeys).append(";");
+//			retval.append(index.getIndexedTable().getPrimaryKeysStr()).append(";");
+//			return retval.toString();
+//		}
+//		
+//		private UniqueConstraintIndex index;
+//	}
+	
+	class DropIndex implements SQLStatement{
+		public DropIndex(Index index){
+			Objects.requireNonNull(index);
 			this.index = index;
 		}
 		
 		@Override
 		public String toString(){
 			StringBuilder retval = new StringBuilder();
-			retval.append(String.format(
-					"CREATE UNIQUE INDEX \"%s\" ON %s", 
-					index.getName(), index.getTable().getTableName()));
+			
+			retval.append(String.format("DROP INDEX %s", 
+					index.getName()));
+			
+			return retval.toString();
+		}
+		
+		private Index index;
+	}
+	
+	//----------------------------------------
+	class AlterTableAddUniqueConstraint implements SQLStatement{
+//		public AlterTableAddUniqueConstraint(Table table){
+		public AlterTableAddUniqueConstraint(UniqueConstraintIndex constraintIndex){
+			Objects.requireNonNull(constraintIndex);
+			this.index = constraintIndex;
+			this.table = constraintIndex.getIndexedTable();
+			pkName = String.format("PK_%s", table.getTableName());
+			ukName = String.format("UK_%s", table.getTableName());
+		}
+		@Override
+		public String toString(){
+			StringBuilder retval = new StringBuilder();
+//			retval.append(String.format("ALTER TABLE %s \n\tADD CONSTRAINT \"%s\" PRIMARY KEY %s;"
+//					, table.getTableNameWithSchema()
+//					, pkName
+//					, table.getPrimaryKeysStr()
+//					));
+			
+//			CreatePrimaryKeyIndex createIndex = new CreatePrimaryKeyIndex(constraintIndex);
+//			retval.append(createIndex.toString()).append("\n");
 //			String primaryKeys = index.getTable().getPrimaryKeys().stream()
 //				.map(c -> String.format("\"%s\"", c.getName()))
 //				.collect(Collectors.joining(",", "(", ")"));
 //			retval.append(primaryKeys).append(";");
-			retval.append(index.getTable().getPrimaryKeysStr()).append(";");
+			retval.append(String.format(
+					"CREATE UNIQUE INDEX \"%s\" ON %s", 
+					index.getName(), index.getIndexedTable().getTableName()));
+			retval.append(index.getIndexedTable().getPrimaryKeysStr()).append(";\n");
+			
+			UniqueConstraintType constraintType = index.getConstraintType();
+			retval.append(String.format("ALTER TABLE %s \n\tADD CONSTRAINT \"%s\" %s %s;"
+					, table.getTableNameWithSchema()
+					, UniqueConstraintType.PRIMARY_KEY == constraintType ? pkName : ukName
+					, constraintType.getValue()
+					, table.getPrimaryKeysStr()
+					));
+			
+			
 			return retval.toString();
 		}
-		
-		private PrimaryKeyIndex index;
+			
+//		private CreateIndex createIndex;
+		private UniqueConstraintIndex index;
+		private String pkName;
+		private String ukName;
+		private Table table;
 	}
-	
-	//----------------------------------------
-	class AlterTableAddPrimaryKey implements SQLStatement{
-		public AlterTableAddPrimaryKey(Table table){
+	class AlterTableDropUniqueConstraint implements SQLStatement{
+		public AlterTableDropUniqueConstraint(Table table){
 			Objects.requireNonNull(table);
 			this.table = table;
 			pkName = String.format("PK_%s", table.getTableName());
@@ -290,7 +419,8 @@ public interface SQLStatement {
 		@Override
 		public String toString(){
 			StringBuilder retval = new StringBuilder();
-			retval.append(String.format("ALTER TABLE %s ADD CONSTRAINT \"%s\" PRIMARY KEY %s;"
+			retval.append(
+					String.format("ALTER TABLE %s DROP CONSTRAINT \"%s\";"
 					, table.getTableNameWithSchema()
 					, pkName
 					, table.getPrimaryKeysStr()
@@ -304,6 +434,9 @@ public interface SQLStatement {
 		private Table table;
 	}
 	//----------------------------------------
+
+	
+	
 	class CommentOn implements SQLStatement{
 		
 	}

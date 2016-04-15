@@ -2,6 +2,7 @@ package com.mec.app.plugin.grammar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
+import com.mec.app.plugin.grammar.SQLStatement.AlterTableAddUniqueConstraint;
+import com.mec.app.plugin.grammar.SQLStatement.AlterTableDropUniqueConstraint;
 import com.mec.app.plugin.grammar.SQLStatement.CreateAuxiliaryTable;
 import com.mec.app.plugin.grammar.SQLStatement.CreateTable;
 import com.mec.app.plugin.grammar.SQLStatement.CreateTablespace;
@@ -27,16 +30,12 @@ public interface DB2Construct {
 	SQLStatement getDropSQL();
 	
 //	String getName();
-	
-	static String strippedQuotes(String str){
-		Matcher m = QUOTED_STR.matcher(str);
-		m.matches();
-		return m.group(1);
+//-----------------------------------------
+	interface Indexable extends DB2Construct{
+		
 	}
-	
-	static final Pattern QUOTED_STR = Pattern.compile("\"?(\\w+)\"?"); 
-	//-----------------------------------------
-	class Table implements DB2Construct{
+//	class Table implements DB2Construct{
+	class Table implements Indexable{
 		public Table(String schema, String tableName, String dbName, String tablespace){
 			Objects.requireNonNull(tableName);
 			Objects.requireNonNull(tablespace);
@@ -58,7 +57,8 @@ public interface DB2Construct {
 		public Table(String schemaAndTableName, 
 				String dbNameAndTablespace){
 			Matcher m = NAME_COMBINE_PATTERN.matcher(schemaAndTableName);
-			boolean matches = m.matches();
+			m.matches();
+//			boolean matches = m.matches();
 //			this.schema = m.group(2);
 			this.schema = Optional.ofNullable(m.group(2)).orElse("");
 			this.tableName = m.group(3);
@@ -102,6 +102,42 @@ public interface DB2Construct {
 		}
 		
 		
+		public List<SQLStatement> getCreateUsableTableSQL(){
+			List<SQLStatement> retval = new ArrayList<>();
+			CreateTable createSQL = getCreateSQL();
+			retval.add(createSQL);
+			
+			if(!getPrimaryKeys().isEmpty()){
+//				CreatePrimaryKeyIndex createIndex = pkIndex.getCreateSQL();
+				UniqueConstraintIndex pkIndex = new UniqueConstraintIndex(this);
+//				CreatePrimaryKeyIndex createPKIndex = new CreatePrimaryKeyIndex(pkIndex);
+//				retval.add(createPKIndex);
+//				
+//				AlterTableAddUniqueConstraint addPrimaryKey = pkIndex.getCreateSQL();
+//				retval.add(addPrimaryKey);
+				AlterTableAddUniqueConstraint addPrimaryKey = pkIndex.getCreateSQL();
+				retval.add(addPrimaryKey);
+			}
+			
+			if(!uniqueKeyColumns.isEmpty()){
+//				derp;
+				UniqueConstraintIndex ukIndex = new UniqueConstraintIndex(this, UniqueConstraintType.UNIQUE_KEY);
+				AlterTableAddUniqueConstraint addUniqueKey = ukIndex.getCreateSQL();
+				retval.add(addUniqueKey);
+			}
+			
+			if(!getLobColumns().isEmpty()){
+				getLobColumns().forEach(lobCol -> {
+					AuxiliaryTable auxTable = new AuxiliaryTable(this, lobCol);
+					CreateAuxiliaryTable createAuxTable = auxTable.getCreateSQL();
+					retval.add(createAuxTable);
+//					AuxiliaryIndex auxIndex = new AuxiliaryIndex(this);
+				});
+			}
+			
+			return retval;
+		}
+		
 		public void addColumn(Column column){
 			Objects.requireNonNull(column);
 			columns.stream().filter(c -> c.getName().equals(column.getName())).findAny().ifPresent(c -> {
@@ -109,19 +145,16 @@ public interface DB2Construct {
 			});
 			columns.add(column);
 		}
+		public void addColumns(Collection<Column> columns){
+			Objects.requireNonNull(columns);
+			columns.stream().forEach(this::addColumn);
+		}
 		
 		public String getTableNameWithSchema(){
 //			return String.format("\"%s\".\"%s\"", schema, tableName);
 			return combinePrefixWithName(schema, tableName);
 		}
 		public String getDatabaseAndTablespace(){
-//			String databaseAndTablespace = null;
-//			if(!dbName.isEmpty()){
-//				databaseAndTablespace = String.format("\"%s\".\"%s\"", dbName, tablespace);
-//			}else{
-//				databaseAndTablespace = String.format("\"%s\"", tablespace);
-//			}
-//			return databaseAndTablespace;
 			return combinePrefixWithName(dbName, tablespace);
 		}
 		private String combinePrefixWithName(String optionalPrefix, String name){
@@ -167,16 +200,55 @@ public interface DB2Construct {
 			if(!(null == primaryKeys || primaryKeys.isEmpty())){
 				String pkStr = primaryKeys.stream()
 					.map(c -> String.format("\"%s\"", c.getName()))
-					.collect(Collectors.joining(",", "(", ")"));
+					.collect(Collectors.joining(",\n\t", "(", ")"));
 				retval.append(pkStr);
 			}
 			
 			return retval.toString();
 		}
+		public void addUniqueConstraintKey(String columnName, UniqueConstraintType constraintType){
+//			String colName = Lexer.stripQuotes(columnName);
+//			Optional<Column> column = getColumns().stream().filter(c -> colName.equals(c.getName())).findFirst();
+//			if(!column.isPresent()){
+//				throw new IllegalArgumentException(String.format("the primary key column %s doesn't exist in table", columnName));
+//			}else{
+//				column.get().setPrimaryKey(true);
+//			}
+			Column col = getAvailableColumn(columnName);
+			if(UniqueConstraintType.PRIMARY_KEY == constraintType){
+				col.setPrimaryKey(true);
+			}else{
+				uniqueKeyColumns.add(col);
+			}
+		}
+		
+		private void addPrimaryKey(String columnName){}
+		private void addUniqueKey(String columnName){
+			Column col = getAvailableColumn(columnName);
+			uniqueKeyColumns.add(col);
+		}
+		
+		private Column getAvailableColumn(String columnName){
+			String colName = Lexer.stripQuotes(columnName);
+			Optional<Column> column = getColumns().stream().filter(c -> colName.equals(c.getName())).findFirst();
+//			if(!column.isPresent()){
+//				throw new IllegalArgumentException(String.format("the primary key column %s doesn't exist in table", columnName));
+//			}
+			return column.orElseThrow(() -> 
+					new IllegalArgumentException(String.format("the primary key column %s doesn't exist in table", columnName))
+				);
+		}
 
 		public String getSchema(){
 			return schema;
 		}
+		
+		
+		public List<Column> getUniqueKeyColumns() {
+			return uniqueKeyColumns;
+		}
+
+		private List<Column> uniqueKeyColumns = new ArrayList<>();;
 		private String schema = "";
 		private String tableName;
 		
@@ -189,7 +261,7 @@ public interface DB2Construct {
 		 
 		private CreateTable createSQL;
 		private DropTable dropTable;
-		public static final String NAME = "TABLE";
+//		public static final String NAME = "TABLE";
 	
 		
 		
@@ -200,7 +272,8 @@ public interface DB2Construct {
 			public Column(String name, String dataType) {
 				Objects.requireNonNull(name);
 				Objects.requireNonNull(dataType);
-				this.name = name;
+//				this.name = name;
+				this.name = Lexer.stripQuotes(name);
 				this.typeAndLength = ColumnDataTypeAndLength.of(dataType);
 //				this.attrs = "";
 			}
@@ -209,12 +282,13 @@ public interface DB2Construct {
 			public Column(String name, String dataType, String attrs) {
 				this(name, dataType);
 				Optional.ofNullable(attrs).ifPresent(a -> this.attrs = a);
-				this.attrs = attrs;
+				this.attrs = attrs.trim();
 			}
 			
 			@Override
 			public String toString(){
-				return String.format("\"%s\" %s %s", name, typeAndLength, attrs);
+//				return String.format("\"%s\" %s %s", name, typeAndLength, attrs);
+				return String.format("\"%s\" %s %s", name, typeAndLength, typeAndLength.getDataType().resolveAttrs(attrs));
 			}
 			
 			
@@ -361,6 +435,26 @@ public interface DB2Construct {
 				return Stream.of(CLOB, BLOB).anyMatch(t -> t == this);
 			}
 			
+			public boolean isTemporalColumn(){
+				return Stream.of(DATE, TIME, TIMESTAMP).anyMatch(t -> t == this);
+			}
+			
+			public String resolveAttrs(String columnAttrStr){
+				String retval = columnAttrStr;
+				if(isLOBColumn()){
+					retval = retval.replaceAll("NOT LOGGED", "");
+					retval = retval.replaceAll("NOTE COMPACT", "");
+					retval = retval.replaceAll("LOGGED", "");
+					retval = retval.replaceAll("COMPACT", "");
+//				}else if(isTemporalColumn()){
+				}else if(DATE == this){
+					retval = retval.replaceAll("CURRENT DATE", "");
+				}else if(TIMESTAMP == this){
+					retval = retval.replaceAll("CURRENT TIMESTAMP", "");
+				}
+				return retval.trim();
+			}
+			
 			private static Map<String, ColumnDataType> nameToType;	//= new HashMap<>();
 			static{
 				nameToType = new HashMap<>();
@@ -369,20 +463,23 @@ public interface DB2Construct {
 		}
 	}
 	
-	class AuxiliaryTable implements DB2Construct{
+//	class AuxiliaryTable implements DB2Construct{
+	class AuxiliaryTable implements Indexable{
 
 //		public AuxiliaryTable(String schemaAndTableName, String dbNameAndTablespace) {
 //			super(schemaAndTableName, dbNameAndTablespace);
 //		}
 		public AuxiliaryTable(Table table, Column lobColumn){
+			Objects.requireNonNull(table);
 			Objects.requireNonNull(lobColumn);
-			if(lobColumn.getColumnType().getDataType().isLOBColumn()){
+			if(!lobColumn.getColumnType().getDataType().isLOBColumn()){
 				throw new IllegalArgumentException(String.format("Column %s is not *LOB column", lobColumn));
 			}
+			this.table = table;
+			this.lobColumn = lobColumn;
 			auxiliaryTableName = String.format("%s_AUX_%s", table.getTableName(), lobColumn.getName());
 			auxiliaryTablespace = getNextLobTS();
 			auxIndexName = String.format("INDEX_%s", auxiliaryTableName);
-			this.lobColumn = lobColumn;
 		}
 
 
@@ -470,8 +567,8 @@ public interface DB2Construct {
 			//dropSQL = new DropTablespace(dbName, tablespace);
 //			this.database = dbName;
 //			this.tablespace = tablespace;
-			this.database = strippedQuotes(dbName);
-			this.tablespace = strippedQuotes(tablespace);
+			this.database = Lexer.stripQuotes(dbName);
+			this.tablespace = Lexer.stripQuotes(tablespace);
 		}
 
 
@@ -531,29 +628,44 @@ public interface DB2Construct {
 	//----------------------------------------------------------
 	interface Index extends DB2Construct{
 		String getName();
-		Table getTable();
+//		Table getTable();
+		Indexable getIndexedTable();
 	}
-	static class PrimaryKeyIndex implements Index{
-		public PrimaryKeyIndex(String indexName, Table table){
+	static class UniqueConstraintIndex implements Index{
+		
+		public UniqueConstraintIndex(String indexName, Table table){
 			Objects.requireNonNull(indexName);
 			Objects.requireNonNull(table);
 			this.name = indexName;
 			this.table = table;
 		}
 		
-		public PrimaryKeyIndex(Table table){
+		public UniqueConstraintIndex(Table table){
 //			String indexName = String.format("PK_%S", table.getTableName());
 			this(String.format("PK_%S", table.getTableName()), table);
 		}
+		public UniqueConstraintIndex(Table table, UniqueConstraintType constraintType){
+			this(table);
+			this.constraintType = constraintType;
+		}
 		
 		@Override
-		public SQLStatement getCreateSQL() {
-			return null;
+		public AlterTableAddUniqueConstraint getCreateSQL() {
+			if(null == createSQL){
+//				createSQL = new CreatePrimaryKeyIndex(this);
+				createSQL = new AlterTableAddUniqueConstraint(this);
+			}
+			return createSQL;
 		}
 
 		@Override
-		public SQLStatement getDropSQL() {
-			return null;
+		public AlterTableDropUniqueConstraint getDropSQL() {
+			if(null == dropSQL){
+//				dropSQL = new DropIndex(this);
+				dropSQL = new AlterTableDropUniqueConstraint(table);
+			}
+			return dropSQL;
+			
 		}
 
 		@Override
@@ -561,27 +673,82 @@ public interface DB2Construct {
 			return name;
 		}
 		@Override
-		public Table getTable(){
+		public Table getIndexedTable(){
 			return table;
 		}
 //		public String getTableName(){
 //			return table.getTableName();
 //		}
 		
+		public UniqueConstraintType getConstraintType() {
+			return constraintType;
+		}
+		
+		
+		private AlterTableAddUniqueConstraint createSQL;
+		private AlterTableDropUniqueConstraint dropSQL;
 
 		private String name;
 		private Table table;
-		public static final String NAME = "LOB";
+		private UniqueConstraintType constraintType = UniqueConstraintType.PRIMARY_KEY;
+//		public static final String NAME = "LOB";
 	}
 	
-	
-	static class AuxiliaryIndex extends PrimaryKeyIndex{
-
-		public AuxiliaryIndex(Table table) {
-			super(table);
+	enum UniqueConstraintType{
+		PRIMARY_KEY("PRIMARY KEY")
+		,UNIQUE_KEY("UNIQUE")
+		;
+		
+		
+		private UniqueConstraintType(String value){
+			this.value = value;
 		}
 		
+		public String getValue() {
+			return value;
+		}
+
+		private String value;
 	}
+	
+	
+//	static class AuxiliaryIndex implements Index{
+//
+//		public AuxiliaryIndex(Table table, AuxiliaryTable auxiliaryTable) {
+//			Objects.requireNonNull(table);
+//			Objects.requireNonNull(auxiliaryTable);
+//			this.table = table;
+//			this.auxiliaryTable = auxiliaryTable;
+//			this.name = String.format("INDEX_%s", auxiliaryTable.getAuxiliaryTableName());
+//		}
+//		
+//		
+//		
+//		@Override
+//		public CreateAuxiliar getCreateSQL() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//		@Override
+//		public SQLStatement getDropSQL() {
+//			return null;
+//		}
+//		@Override
+//		public String getName() {
+//			return name;
+//		}
+//		@Override
+//		public AuxiliaryTable getIndexedTable() {
+//			// TODO Auto-generated method stub
+//			return auxiliaryTable;
+//		}
+//
+//
+//		private String name;
+//		private Table table;
+//		private AuxiliaryTable auxiliaryTable;
+//		
+//	}
 	
 	//----------------------------------------------------------
 	//----------------------------------------------------------

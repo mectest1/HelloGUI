@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //import com.mec.app.plugin.grammar.Grammar5DB2DDLAnalyzer.FileLexer;
@@ -13,6 +14,58 @@ import java.util.regex.Pattern;
 //import com.mec.app.plugin.grammar.Grammar5DB2DDLAnalyzer.StringLexer;
 
 public interface Lexer{
+	
+	/**
+	 * Count the pattern in <code>str</code>
+	 * @param str
+	 * @param patternToFound
+	 * @return
+	 */
+	static int countMatch(String str, Pattern patternToFound){
+		int retval = 0;
+		Matcher m = patternToFound.matcher(str);
+		while(m.find()) ++retval;
+		return retval;
+	}
+	
+	static String getPatternMatch(Pattern pattern, String str, int groupIndex){
+		Matcher m = pattern.matcher(str);
+		m.matches();
+		return m.group(groupIndex);
+	}
+	
+	static String stripQuotes(String str){
+//		Matcher m = QUOTED_STR.matcher(str);
+//		m.matches();
+//		return m.group(1);
+		return getPatternMatch(QUOTED_STR, str, 1);
+	}
+	
+	static String stripEndParenthesis(String str){
+//		Matcher m = ENDS_WITH_PARENTHESIS.matcher(str);
+//		m.matches();
+//		return m.group(1);
+		return getPatternMatch(ENDS_WITH_PARENTHESIS, str, 1);
+	}
+	
+	static String stripEndSemiColon(String str){
+		return getPatternMatch(ENDS_WITH_SEMICOLON, str, 1);
+	}
+	
+	static String stripEndComma(String str){
+		return getPatternMatch(ENDS_WITH_COMMA, str, 1);
+	}
+	
+	static final Pattern LEFT_PARENTHESIS = Pattern.compile("\\(");
+	static final Pattern RIGHT_PARENTHESIS = Pattern.compile("\\)");
+//	static final Pattern QUOTED_STR = Pattern.compile("\"?(\\w+)\"?"); 
+	static Pattern QUOTED_STR = Pattern.compile("^\"?(\\w+)\"?$"); 
+//	static final Pattern ENDS_WITH_PARENTHESIS = Pattern.compile("(\\w+)\\)?");
+	static Pattern ENDS_WITH_PARENTHESIS = Pattern.compile("(.+?)\\)?$");
+//	static final Pattern ENDS_WITH_COLON = Pattern.compile("(\\w+)\\;?");
+	static final Pattern ENDS_WITH_SEMICOLON = Pattern.compile("(.+?);?$");
+	static final Pattern ENDS_WITH_COMMA = Pattern.compile("(.+?),?");
+	
 	
 	static Lexer scanFile(Path file){
 //		Objects.requireNonNull(file);
@@ -63,13 +116,13 @@ public interface Lexer{
 //			scanWord();
 		}
 		
-		private void scanChar(){
-			lineScanner.useDelimiter(CHAR_DELIMITER);
-		}
-		private void scanWord(){
-//			lineScanner.reset();
-			lineScanner.useDelimiter(WORD_DELIMITER);
-		}
+//		private void scanChar(){
+//			lineScanner.useDelimiter(CHAR_DELIMITER);
+//		}
+//		private void scanWord(){
+////			lineScanner.reset();
+//			lineScanner.useDelimiter(WORD_DELIMITER);
+//		}
 		
 		/* 
 		 * Use nextChar() or nextWord() instead;
@@ -109,14 +162,59 @@ public interface Lexer{
 //		}
 		
 		public String nextWord(){
-			scanWord();
-			return super.nextToken();
+//			scanWord();
+//			return super.nextToken();
+//			return lineScanner.useDelimiter(WORD_DELIMITER).next();
+			return nextTokenUsingDelimiter(WORD_DELIMITER);
 		}
 		
-		public String nextNonSpaceChar(){
-			scanChar();
+		public String nextWordsByCount(int count){
+			if(count <= 0){
+				throw new IllegalArgumentException("invalid count number");
+			}
+			StringBuilder retval = new StringBuilder();
+			for(; 0 < count; --count){
+				retval.append(nextWord()).append(" ");
+			}
+			return retval.toString().trim();
+		}
+		
+		private String nextNonSpaceChar(){
+//			scanChar();
 			skipWhitespace();
-			return super.nextToken();
+//			return super.nextToken();
+//			return lineScanner.useDelimiter(CHAR_DELIMITER).next();
+			return nextChar();
+		}
+		
+		protected String nextChar(){
+//			scanChar();
+//			return super.nextToken();
+//			return lineScanner.useDelimiter(CHAR_DELIMITER).next();
+			return nextTokenUsingDelimiter(CHAR_DELIMITER);
+		}
+		
+		private String nextTokenUsingDelimiter(Pattern scanDelimiter){
+			if(!hasNext()){
+				throw new IllegalArgumentException("No more element to scan");
+			}
+			return lineScanner.useDelimiter(scanDelimiter).next();
+		}
+		
+		/**
+		 * Marks a table start
+		 * @return schema.tableName
+		 */
+		public String nextTableStart(){
+			StringBuilder retval = new StringBuilder();
+			for(String nextChar = nextChar();
+					!"(".equals(nextChar);
+					nextChar = nextChar()
+					){
+				retval.append(nextChar);
+			}
+			
+			return retval.toString().trim();
 		}
 		
 		public void matchChar(String ch){
@@ -131,6 +229,9 @@ public interface Lexer{
 		public void matchWord(String word){
 //			Objects.requireNonNul
 			match(this::nextWord, word);
+		}
+		public void mathWords(int readCount, String wordsToMatch){
+			match(() -> nextWordsByCount(readCount), wordsToMatch);
 		}
 		
 		
