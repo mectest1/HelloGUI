@@ -5,6 +5,9 @@ public interface SQLAction {
 	
 	SQLStatement getAction();
 	
+	default void execute(){
+		//run the SQLStatemen from getAction();
+	}
 	
 	class CreateTableAction implements SQLAction{
 		
