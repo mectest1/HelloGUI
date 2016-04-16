@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.stream.IntStream;
 
 import org.junit.Ignore;
@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.mec.app.plugin.grammar.DB2Construct.AuxiliaryTable;
 import com.mec.app.plugin.grammar.DB2Construct.Table;
 import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
+import com.mec.app.plugin.grammar.DB2Construct.Table.ColumnDataType;
 import com.mec.app.plugin.grammar.DB2Construct.Table.ColumnDataTypeAndLength;
 import com.mec.app.plugin.grammar.Lexer.SQLFileLexer;
 import com.mec.app.plugin.grammar.Parser.SQLParser;
@@ -210,6 +211,14 @@ public class Grammar5DB2DDLAnalyzerTest {
 	
 	
 	//---------------------------------------
+	@Ignore
+	@Test
+	public void testDefaultValuePattern(){
+		String colAttr = "NOT NULL WITH DEFAULT '0000000000 '";
+		Matcher m = Column.WITH_DEFAULT_STR.matcher(colAttr);
+		m.matches();
+		out.println(m.group(1));
+	}
 //	@Ignore
 	@Test
 	public void testParseTableSQL5(){

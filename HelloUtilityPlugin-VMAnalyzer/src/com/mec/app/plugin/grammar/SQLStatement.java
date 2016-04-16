@@ -58,10 +58,18 @@ public interface SQLStatement {
 //			this.columns = columns;
 //		}
 		
-		public CreateTable(Table table){
+		private CreateTable(Table table){
 			this.table = table;
 		}
 		
+		public static CreateTable forTable(Table table){
+			return new CreateTable(table);
+		}
+		
+
+//		protected static CreateTable newEmpty(){
+//			return null;
+//		}
 		@Override
 		public String toString(){
 //			StringBuilder retval = new StringBuilder();
@@ -128,7 +136,7 @@ public interface SQLStatement {
 	
 	class CreateAuxiliaryTable implements SQLStatement{
 
-		public CreateAuxiliaryTable(AuxiliaryTable auxTable) {
+		private CreateAuxiliaryTable(AuxiliaryTable auxTable) {
 //			super(table);
 //			Objects.requireNonNull(lobColumn);
 //			if(lobColumn.getColumnType().getDataType().isLOBColumn()){
@@ -136,6 +144,10 @@ public interface SQLStatement {
 //			}
 //			auxiliaryTableName = String.format("%s_AUX_%s", table.getTableName(), lobColumn.getName());
 			this.auxTable = auxTable;
+		}
+		
+		public static CreateAuxiliaryTable forAuxTable(AuxiliaryTable auxTable){
+			return new CreateAuxiliaryTable(auxTable);
 		}
 		
 		@Override
@@ -174,8 +186,12 @@ public interface SQLStatement {
 //			this.tableNameWithSchema = tableNameWithSchema;
 //		}
 		
-		public DropTable(Table table){
+		private DropTable(Table table){
 			this.table = table;
+		}
+		
+		public static DropTable forTable(Table table){
+			return new DropTable(table);
 		}
 		
 		
@@ -192,9 +208,14 @@ public interface SQLStatement {
 	
 	
 	class DropAuxiliaryTable implements SQLStatement{
-		public DropAuxiliaryTable(AuxiliaryTable auxTable){
+		private DropAuxiliaryTable(AuxiliaryTable auxTable){
 			this.auxTable = auxTable;
 		}
+		
+		public static DropAuxiliaryTable forAuxTable(AuxiliaryTable auxTable){
+			return new DropAuxiliaryTable(auxTable);
+		}
+		
 		@Override
 		public String toString(){
 			StringBuilder retval = new StringBuilder();
@@ -261,8 +282,12 @@ public interface SQLStatement {
 //			db = dbName;
 //			ts = tablespace;
 //		}
-		public CreateTablespace(Tablespace ts){
+		private CreateTablespace(Tablespace ts){
 			this.ts = ts;
+		}
+		
+		public static CreateTablespace forTablespace(Tablespace ts){
+			return new CreateTablespace(ts);
 		}
 		@Override
 		public String toString(){
@@ -284,10 +309,15 @@ public interface SQLStatement {
 //		public CreateLobTablespace(String dbName, String tablespace) {
 //			super(dbName, tablespace);
 //		}
-		public CreateLobTablespace(Tablespace ts){
+		private CreateLobTablespace(Tablespace ts){
 			super(ts);
 		}
 
+		public static CreateLobTablespace forLobTablespace(Tablespace ts){
+			return new CreateLobTablespace(ts);
+		}
+		
+		
 		@Override
 		public String toString() {
 //			return String.format("CREATE LOB TABLESPACE \"%s\" in \"%s\";" 
@@ -303,8 +333,12 @@ public interface SQLStatement {
 //			db = dbName;
 //			ts = tablespace;
 //		}
-		public DropTablespace(Tablespace ts){
+		private DropTablespace(Tablespace ts){
 			this.ts = ts;
+		}
+		
+		public static DropTablespace forTablespace(Tablespace ts){
+			return new DropTablespace(ts);
 		}
 		
 		@Override
@@ -344,9 +378,13 @@ public interface SQLStatement {
 //	}
 	
 	class DropIndex implements SQLStatement{
-		public DropIndex(Index index){
+		private DropIndex(Index index){
 			Objects.requireNonNull(index);
 			this.index = index;
+		}
+		
+		public static DropIndex forIndex(Index indexToDrop){
+			return new DropIndex(indexToDrop);
 		}
 		
 		@Override
@@ -365,12 +403,17 @@ public interface SQLStatement {
 	//----------------------------------------
 	class AlterTableAddUniqueConstraint implements SQLStatement{
 //		public AlterTableAddUniqueConstraint(Table table){
-		public AlterTableAddUniqueConstraint(UniqueConstraintIndex constraintIndex){
+		private AlterTableAddUniqueConstraint(UniqueConstraintIndex constraintIndex){
 			Objects.requireNonNull(constraintIndex);
 			this.index = constraintIndex;
 			this.table = constraintIndex.getIndexedTable();
 			pkName = String.format("PK_%s", table.getTableName());
 			ukName = String.format("UK_%s", table.getTableName());
+		}
+		
+		
+		public static AlterTableAddUniqueConstraint forUniqueConstraintIndex(UniqueConstraintIndex constraintIndex){
+			return new AlterTableAddUniqueConstraint(constraintIndex);
 		}
 		@Override
 		public String toString(){
@@ -419,11 +462,16 @@ public interface SQLStatement {
 		private Table table;
 	}
 	class AlterTableDropUniqueConstraint implements SQLStatement{
-		public AlterTableDropUniqueConstraint(Table table){
+		private AlterTableDropUniqueConstraint(Table table){
 			Objects.requireNonNull(table);
 			this.table = table;
 			pkName = String.format("PK_%s", table.getTableName());
 		}
+		
+		public static AlterTableDropUniqueConstraint forTable(Table tableToAlter){
+			return new AlterTableDropUniqueConstraint(tableToAlter);
+		}
+		
 		@Override
 		public String toString(){
 			StringBuilder retval = new StringBuilder();

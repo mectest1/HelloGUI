@@ -17,6 +17,7 @@ import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
 import com.mec.app.plugin.grammar.SQLStatement.AlterTableAddUniqueConstraint;
 import com.mec.app.plugin.grammar.SQLStatement.AlterTableDropUniqueConstraint;
 import com.mec.app.plugin.grammar.SQLStatement.CreateAuxiliaryTable;
+import com.mec.app.plugin.grammar.SQLStatement.CreateLobTablespace;
 import com.mec.app.plugin.grammar.SQLStatement.CreateTable;
 import com.mec.app.plugin.grammar.SQLStatement.CreateTablespace;
 import com.mec.app.plugin.grammar.SQLStatement.DropAuxiliaryTable;
@@ -87,7 +88,8 @@ public interface DB2Construct {
 //				String tableNameWithSchema = getTableNameWithSchema();
 //				String databaseAndTablespace = getDatabaseAndTablespace();
 //				createSQL = new CreateTable(tableNameWithSchema, databaseAndTablespace, columns);
-				createSQL = new CreateTable(this);
+//				createSQL = new CreateTable(this);
+				createSQL = CreateTable.forTable(this);
 			}
 			return createSQL;
 		}
@@ -96,7 +98,8 @@ public interface DB2Construct {
 		public DropTable getDropSQL() {
 			if(null == dropTable){
 //				dropTable = new DropTable(getTableNameWithSchema());
-				dropTable = new DropTable(this);
+//				dropTable = new DropTable(this);
+				dropTable = DropTable.forTable(this);
 			}
 			return dropTable;
 		}
@@ -133,6 +136,8 @@ public interface DB2Construct {
 					&& uniqueKeyColumns.containsAll(pkColumns)){
 					//primary key columns and unique key columns are the same.;
 					//in this case, only one index & constraint will be created
+					//or simply reports error
+					throw new IllegalArgumentException("primary key columns and the unique constrainted columns are the same");
 				}else{
 					UniqueConstraintIndex ukIndex = new UniqueConstraintIndex(this, UniqueConstraintType.UNIQUE_KEY);
 					AlterTableAddUniqueConstraint addUniqueKey = ukIndex.getCreateSQL();
@@ -333,6 +338,7 @@ public interface DB2Construct {
 				this(name, dataType);
 				Optional.ofNullable(attrs).ifPresent(a -> this.attrs = a);
 				this.attrs = attrs.trim();
+				verifyDefaultValue();
 			}
 			
 			@Override
@@ -361,13 +367,36 @@ public interface DB2Construct {
 				return typeAndLength.getDataType().isLOBColumn();
 			}
 
-
+			private void verifyDefaultValue(){
+				if(typeAndLength.getDataType().isStringColumn()){
+					Matcher m = WITH_DEFAULT_STR.matcher(attrs);
+					if(m.matches()){
+						String defaultValue = m.group(1);
+						int length = typeAndLength.getLength();
+						if(length < defaultValue.length()){
+							String newDefaultVal = defaultValue.trim();	//try to trim the redundant spaces
+							if(length < newDefaultVal.length()){	//stil an invalid default value
+								throw new IllegalArgumentException(
+										String.format("default value %s is too long for permitted length %s"
+												,defaultValue, length));
+							}else{
+								attrs = attrs.replace(String.format("'%s'", defaultValue), String.format("'%s'", newDefaultVal));
+							}
+						}
+					}
+				}
+			}
+			
 
 			private String name;
 //			private String dataType;
 			private ColumnDataTypeAndLength typeAndLength;
 			private String attrs = "";
 			private boolean primaryKey = false;
+			
+
+			//Match the default value for *CHAR columns, e.g: NOT NULL WITH DEFAULT '0000000000 '
+			static final Pattern WITH_DEFAULT_STR = Pattern.compile("(?:\\w+\\s)*?WITH DEFAULT '(\\w+\\s?)'");
 		}
 		
 		public static class ColumnDataTypeAndLength{
@@ -410,6 +439,7 @@ public interface DB2Construct {
 			
 			@Override
 			public String toString(){
+//				verifyDefaultValue();
 				StringBuilder retval = new StringBuilder(dataType.name());
 				if(INIT == fractionScale){
 					if(INIT == length){
@@ -427,9 +457,16 @@ public interface DB2Construct {
 				return retval.toString();
 			}
 			
-			
 			public ColumnDataType getDataType() {
 				return dataType;
+			}
+			
+			public int getLength(){
+				return length;
+			}
+			
+			protected int getFractionScale(){
+				return fractionScale;
 			}
 
 			private ColumnDataType dataType;
@@ -489,6 +526,11 @@ public interface DB2Construct {
 				return Stream.of(DATE, TIME, TIMESTAMP).anyMatch(t -> t == this);
 			}
 			
+			public boolean isStringColumn(){
+				return Stream.of(VARCHAR, CHAR).anyMatch(t -> t == this);
+			}
+			
+			
 			public String resolveAttrs(String columnAttrStr){
 				String retval = columnAttrStr;
 				if(isLOBColumn()){
@@ -543,7 +585,8 @@ public interface DB2Construct {
 		@Override
 		public CreateAuxiliaryTable getCreateSQL() {
 			if(null == createSQL){
-				createSQL = new CreateAuxiliaryTable(this);
+//				createSQL = new CreateAuxiliaryTable(this);
+				createSQL = CreateAuxiliaryTable.forAuxTable(this);
 			}
 			return createSQL;
 		}
@@ -551,7 +594,8 @@ public interface DB2Construct {
 		@Override
 		public DropAuxiliaryTable getDropSQL() {
 			if(null == dropSQL){
-				dropSQL = new DropAuxiliaryTable(this);
+//				dropSQL = new DropAuxiliaryTable(this);
+				dropSQL = DropAuxiliaryTable.forAuxTable(this);
 			}
 			return dropSQL;
 		}
@@ -637,7 +681,8 @@ public interface DB2Construct {
 		public CreateTablespace getCreateSQL() {
 			if(null == createSQL){
 //				createSQL = new CreateTablespace(dbName, tablespace);
-				createSQL = new CreateTablespace(this);
+//				createSQL = new CreateTablespace(this);
+				createSQL = CreateTablespace.forTablespace(this);
 			}
 			return createSQL;
 		}
@@ -646,7 +691,8 @@ public interface DB2Construct {
 		public DropTablespace getDropSQL() {
 			if(null == dropSQL){
 //				dropSQL = new DropTablespace(dbName, tablespace);
-				dropSQL = new DropTablespace(this);
+//				dropSQL = new DropTablespace(this);
+				dropSQL = DropTablespace.forTablespace(this);
 			}
 			return dropSQL;
 		}
@@ -675,7 +721,8 @@ public interface DB2Construct {
 		public CreateTablespace getCreateSQL() {
 			if(null == createSQL){
 //				createSQL = new SQLStatement.CreateLobTablespace(dbName, tablespace);
-				createSQL = new SQLStatement.CreateLobTablespace(this);
+//				createSQL = new SQLStatement.CreateLobTablespace(this);
+				createSQL = CreateLobTablespace.forLobTablespace(this);
 			}
 			return createSQL;
 		}
@@ -710,7 +757,8 @@ public interface DB2Construct {
 		public AlterTableAddUniqueConstraint getCreateSQL() {
 			if(null == createSQL){
 //				createSQL = new CreatePrimaryKeyIndex(this);
-				createSQL = new AlterTableAddUniqueConstraint(this);
+//				createSQL = new AlterTableAddUniqueConstraint(this);
+				createSQL = AlterTableAddUniqueConstraint.forUniqueConstraintIndex(this);
 			}
 			return createSQL;
 		}
@@ -719,7 +767,8 @@ public interface DB2Construct {
 		public AlterTableDropUniqueConstraint getDropSQL() {
 			if(null == dropSQL){
 //				dropSQL = new DropIndex(this);
-				dropSQL = new AlterTableDropUniqueConstraint(table);
+//				dropSQL = new AlterTableDropUniqueConstraint(table);
+				dropSQL = AlterTableDropUniqueConstraint.forTable(table);
 			}
 			return dropSQL;
 			
