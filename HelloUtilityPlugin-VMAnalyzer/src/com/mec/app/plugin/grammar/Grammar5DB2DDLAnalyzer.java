@@ -6,11 +6,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,6 +76,7 @@ public class Grammar5DB2DDLAnalyzer{
 //			Connection destSession = null;
 			try(Connection sourceSession = importFrom.getConnection();
 				Connection destSession = insertInto.getConnection()){
+				Statement selectStmt = sourceSession.createStatement();
 				
 				for(Table table : importTables){
 					StringBuilder selectAll = new StringBuilder("SELECT ");
@@ -86,27 +85,76 @@ public class Grammar5DB2DDLAnalyzer{
 					selectAll.append(" FROM ");
 					selectAll.append(table.getTableNameWithSchema());
 					
-					logger.log("Try to extract/import records for table: %s\n", table.getTableNameWithSchema());
+					logger.log("Try to extract/import records for table: %s", table.getTableNameWithSchema());
 					
 					
-					StringBuilder insertSQL = null;
+					StringBuilder insertSQL = new StringBuilder("INSERT INTO ").append(table.getTableNameWithSchema());
+					insertSQL.append(table.getColumnsStr());
+//						insertSQL.append(" VALUES(");
+					insertSQL.append(" VALUES");
+					insertSQL.append(table.getColumns().stream().map(c -> "?").collect(Collectors.joining(",", "(", ")")));
+//						insertSQL.append(")");
 //					new StringBuilder("INSERT INTO ").append(table.getTableNameWithSchema());
 //					insertSQL.append(" VALUES(");
 //					insertSQL.append(")");
-					PreparedStatement insertStmt = null;
+					PreparedStatement insertStmt = destSession.prepareStatement(insertSQL.toString());
 					
-					PreparedStatement selectStmt = sourceSession.prepareStatement(selectAll.toString());
-					ResultSet selectResult = selectStmt.executeQuery();
+//					PreparedStatement selectStmt = sourceSession.prepareStatement(selectAll.toString());
+//					ResultSet selectResult = selectStmt.executeQuery();
+					ResultSet selectResult = selectStmt.executeQuery(selectAll.toString());
+					
+					StringBuilder recordsAlreadyExsistsSQL = new StringBuilder("SELECT count(*) FROM ");
+					recordsAlreadyExsistsSQL.append(table.getTableNameWithSchema());
+//					recordsAlreadyExsistsSQL.append(" WHERE ");
+//					List<Column> pkCols = table.getPrimaryKeys();
+//					if(!pkCols.isEmpty()){
+//					recordsAlreadyExsistsSQL.append(pkCols.stream().map(c -> c.getName() + " = ?").collect(Collectors.joining(" AND ", " WHERE ", "")));
+//					}
+					recordsAlreadyExsistsSQL.append(";");
+					PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistsSQL.toString()); 
+					int recordsAlreadyExistedCount = 0;
+//					if(pkCols.isEmpty()){
+//						ResultSet recordsAlreadyExistsRS = recordsAlreadyExsists.executeQuery();
+//						if(recordsAlreadyExistsRS.next()){
+//							int recordsCount = recordsAlreadyExistsRS.getInt(1);
+//							if(0 < recordsCount){
+//								continue;
+//							}
+//						}
+						recordsAlreadyExistedCount = executeSQLAndGetCount(recordsAlreadyExsists);
+//					}
+					for(; 0 < recordsAlreadyExistedCount; --recordsAlreadyExistedCount){
+						selectResult.next();
+					}
+					WHILE_SOURCE_RECORDS:
 					while(selectResult.next()){
-//						selectResult.logger.
-						insertSQL = new StringBuilder("INSERT INTO ").append(table.getTableNameWithSchema());
-						insertSQL.append(table.getColumnsStr());
-//						insertSQL.append(" VALUES(");
-						insertSQL.append(" VALUES");
-						insertSQL.append(table.getColumns().stream().map(c -> "?").collect(Collectors.joining(",", "(", ")")));
-//						insertSQL.append(")");
 						
-						insertStmt = destSession.prepareStatement(insertSQL.toString());
+						//----------------
+						//---Check for existed records
+//						if(!pkCols.isEmpty()){
+//							for(int i = 0; i < table.getPrimaryKeys().size(); ++i){
+////							Column pkColumn = table.getPrimaryKeys.get(i);
+//								setPreparedStatementParams(recordsAlreadyExsists, selectResult, pkCols.get(i).getColumnType().getDataType(), i + 1);
+//							}
+////							ResultSet recordsAlreadyExistsRS = recordsAlreadyExsists.executeQuery();
+////							if(recordsAlreadyExistsRS.next()){
+////								int recordsCount = recordsAlreadyExistsRS.getInt(1);
+////								if(0 < recordsCount){
+////									continue;
+////								}
+////							}
+//							int recordExisted = executeSQLAndGetCount(recordsAlreadyExsists);
+//							if(0 < recordExisted){
+//								continue;
+//							}
+//						}else{
+//							
+//						}
+						//---------------
+						
+						
+						
+						
 						ColumnDataType colType = null;
 						Column column; 
 //						int prepIndex = 1;
@@ -125,50 +173,47 @@ public class Grammar5DB2DDLAnalyzer{
 //								default:
 //									throw new IllegalArgumentException("unrecgonized column data type");
 //							}
+							setPreparedStatementParams(insertStmt, selectResult, colType, colIndex);
 //							if(ColumnDataType.VARCHAR == colType){
-							if(colType.isStringColumn()){
-								insertStmt.setString(colIndex, selectResult.getString(colIndex));
-							}
-							else if(ColumnDataType.INTEGER == colType){
-								insertStmt.setInt(colIndex, selectResult.getInt(colIndex));
-							}else if(ColumnDataType.SMALLINT == colType){
-								insertStmt.setShort(colIndex, selectResult.getShort(colIndex));
-							}else if(ColumnDataType.BIGINT == colType){
-								insertStmt.setLong(colIndex, selectResult.getLong(colIndex));
-							}
-							else if(ColumnDataType.DECIMAL == colType){
-								insertStmt.setBigDecimal(colIndex, selectResult.getBigDecimal(colIndex));
-							}else if(ColumnDataType.DOUBLE == colType){
-								insertStmt.setDouble(colIndex, selectResult.getDouble(colIndex));
-							}
-							else if(ColumnDataType.CLOB == colType){
-								insertStmt.setClob(colIndex, selectResult.getClob(colIndex));
-							}else if(ColumnDataType.BLOB == colType){
-								insertStmt.setBlob(colIndex, selectResult.getBlob(colIndex));
-							}
-							else if(ColumnDataType.TIME == colType){
-								insertStmt.setTime(colIndex, selectResult.getTime(colIndex));
-							}else if(ColumnDataType.DATE == colType){
-								insertStmt.setDate(colIndex, selectResult.getDate(colIndex));
-							}else if(ColumnDataType.TIMESTAMP == colType){
-								insertStmt.setTimestamp(colIndex, selectResult.getTimestamp(colIndex));
-							}
-							else{
-								throw new IllegalArgumentException("unrecgonized column data type");
-							}
+//							if(colType.isStringColumn()){
+//								insertStmt.setString(colIndex, selectResult.getString(colIndex));
+//							}
+//							else if(ColumnDataType.INTEGER == colType){
+//								insertStmt.setInt(colIndex, selectResult.getInt(colIndex));
+//							}else if(ColumnDataType.SMALLINT == colType){
+//								insertStmt.setShort(colIndex, selectResult.getShort(colIndex));
+//							}else if(ColumnDataType.BIGINT == colType){
+//								insertStmt.setLong(colIndex, selectResult.getLong(colIndex));
+//							}
+//							else if(ColumnDataType.DECIMAL == colType){
+//								insertStmt.setBigDecimal(colIndex, selectResult.getBigDecimal(colIndex));
+//							}else if(ColumnDataType.DOUBLE == colType){
+//								insertStmt.setDouble(colIndex, selectResult.getDouble(colIndex));
+//							}
+//							else if(ColumnDataType.CLOB == colType){
+//								insertStmt.setClob(colIndex, selectResult.getClob(colIndex));
+//							}else if(ColumnDataType.BLOB == colType){
+//								insertStmt.setBlob(colIndex, selectResult.getBlob(colIndex));
+//							}
+//							else if(ColumnDataType.TIME == colType){
+//								insertStmt.setTime(colIndex, selectResult.getTime(colIndex));
+//							}else if(ColumnDataType.DATE == colType){
+//								insertStmt.setDate(colIndex, selectResult.getDate(colIndex));
+//							}else if(ColumnDataType.TIMESTAMP == colType){
+//								insertStmt.setTimestamp(colIndex, selectResult.getTimestamp(colIndex));
+//							}
+//							else{
+//								throw new IllegalArgumentException("unrecgonized column data type");
+//							}
 						}
 						
 //						logger.log("Execute insert SQL: %s\n", insertSQL);
 						insertStmt.execute();
-						insertStmt.close();
 					}
+					insertStmt.close();
 					selectResult.close();
-					selectStmt.close();
-					
 				}
-				
-				
-				
+				selectStmt.close();
 				
 			} catch (SQLException e) {
 				throw new IllegalArgumentException(e);
@@ -181,6 +226,50 @@ public class Grammar5DB2DDLAnalyzer{
 //						
 //				});
 //			}
+		}
+		
+		private int executeSQLAndGetCount(PreparedStatement stmt) throws SQLException{
+			int retval = 0;
+			ResultSet recordsAlreadyExistsRS = stmt.executeQuery();
+			if(recordsAlreadyExistsRS.next()){
+				retval = recordsAlreadyExistsRS.getInt(1);
+//				if(0 < recordsCount){
+					
+//				}
+			}
+			return retval;
+		}
+		private void setPreparedStatementParams(PreparedStatement prepStmt, ResultSet resultSet, ColumnDataType colType, int colIndex) throws SQLException{
+			if(colType.isStringColumn()){
+				prepStmt.setString(colIndex, resultSet.getString(colIndex));
+			}
+			else if(ColumnDataType.INTEGER == colType){
+				prepStmt.setInt(colIndex, resultSet.getInt(colIndex));
+			}else if(ColumnDataType.SMALLINT == colType){
+				prepStmt.setShort(colIndex, resultSet.getShort(colIndex));
+			}else if(ColumnDataType.BIGINT == colType){
+				prepStmt.setLong(colIndex, resultSet.getLong(colIndex));
+			}
+			else if(ColumnDataType.DECIMAL == colType){
+				prepStmt.setBigDecimal(colIndex, resultSet.getBigDecimal(colIndex));
+			}else if(ColumnDataType.DOUBLE == colType){
+				prepStmt.setDouble(colIndex, resultSet.getDouble(colIndex));
+			}
+			else if(ColumnDataType.CLOB == colType){
+				prepStmt.setClob(colIndex, resultSet.getClob(colIndex));
+			}else if(ColumnDataType.BLOB == colType){
+				prepStmt.setBlob(colIndex, resultSet.getBlob(colIndex));
+			}
+			else if(ColumnDataType.TIME == colType){
+				prepStmt.setTime(colIndex, resultSet.getTime(colIndex));
+			}else if(ColumnDataType.DATE == colType){
+				prepStmt.setDate(colIndex, resultSet.getDate(colIndex));
+			}else if(ColumnDataType.TIMESTAMP == colType){
+				prepStmt.setTimestamp(colIndex, resultSet.getTimestamp(colIndex));
+			}
+			else{
+				throw new IllegalArgumentException("unrecgonized column data type");
+			}
 		}
 		
 		private MsgLogger logger = MsgLogger.defaultLogger();
