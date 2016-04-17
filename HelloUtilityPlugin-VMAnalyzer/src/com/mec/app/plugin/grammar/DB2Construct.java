@@ -240,9 +240,15 @@ public interface DB2Construct {
 //					.collect(Collectors.toList());
 			return columns.stream().filter(Column::isLobColumn).collect(Collectors.toList());
 		}
+		
 		public String getPrimaryKeysStr(){
 			return getColumnsNameList(getPrimaryKeys());
 		}
+		public String getColumnsStr(){
+			return getColumnsNameList(getColumns());
+		}
+		
+		
 		
 		public String getUniqueKeysStr(){
 			return getColumnsNameList(uniqueKeyColumns);

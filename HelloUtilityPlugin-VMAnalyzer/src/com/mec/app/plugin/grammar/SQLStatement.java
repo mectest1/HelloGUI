@@ -491,6 +491,44 @@ public interface SQLStatement {
 	}
 	//----------------------------------------
 
+	class InsertStatement implements SQLStatement{
+		
+		private InsertStatement(Table table){
+			Objects.requireNonNull(table);
+			this.table = table;
+		}
+//		private InsertStatement(Table table, List<Column> insertColumns, List<String> values){
+//			Objects.requireNonNull(table);
+//			this.table = table;
+//		}
+		
+		public static InsertStatement forTable(Table table){
+			return new InsertStatement(table);
+		}
+		
+		
+		@Override
+		public String toString(){
+			StringBuilder retval = new StringBuilder("INSERT INTO ");
+			
+			retval.append(table.getTableNameWithSchema()).append(" ");
+			retval.append(table.getColumnsStr());
+			
+			retval.append(" VALUES(");
+			
+			//TODO:
+			
+			retval.append(")");
+			
+			
+			return retval.toString();
+		}
+		
+		private Table table;
+//		private List<Column> 
+	}
+	
+	//----------------------------------------
 	
 	
 	class CommentOn implements SQLStatement{

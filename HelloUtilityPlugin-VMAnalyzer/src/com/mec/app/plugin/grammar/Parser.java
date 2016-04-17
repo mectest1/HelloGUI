@@ -2,9 +2,12 @@ package com.mec.app.plugin.grammar;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.mec.app.plugin.grammar.DB2Construct.Table;
 import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
@@ -34,6 +37,16 @@ public interface Parser {
 			return result;
 		}
 		
+		public List<Table> getMatchingTables(Collection<String> tableNameWithSchema){
+			return getParseResult().getConstructs().stream()
+				.filter(c -> c instanceof Table)
+				.map(c -> (DB2Construct.Table)c)
+				.filter(t -> 
+//					t.getTableNameWithSchema().equals(tableNameWithSchema)
+					tableNameWithSchema.contains(t.getTableNameWithSchema())
+				).collect(Collectors.toList());
+		}
+		
 		
 		public void printCreateSQL(PrintStream out){
 			getParseResult().getConstructs().forEach(c -> out.println(c.getCreateSQL().toString()));
@@ -50,6 +63,20 @@ public interface Parser {
 					out.println();
 				});
 				out.println("\n");
+			});
+		}
+		
+		protected void printTableList(PrintStream out){
+			getParseResult().getConstructs().forEach(c -> {
+				Table table = (Table) c;
+				out.println(table.getTableNameWithSchema());
+			});
+		}
+		
+		protected void printDeleteFromTable(PrintStream out){
+			getParseResult().getConstructs().forEach(c -> {
+				Table table = (Table) c;
+				out.printf("DELETE FROM %s\n", table.getTableNameWithSchema());
 			});
 		}
 		

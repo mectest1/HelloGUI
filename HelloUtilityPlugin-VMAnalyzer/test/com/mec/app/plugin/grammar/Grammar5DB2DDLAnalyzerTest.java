@@ -1,10 +1,13 @@
 package com.mec.app.plugin.grammar;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.Ignore;
@@ -13,8 +16,9 @@ import org.junit.Test;
 import com.mec.app.plugin.grammar.DB2Construct.AuxiliaryTable;
 import com.mec.app.plugin.grammar.DB2Construct.Table;
 import com.mec.app.plugin.grammar.DB2Construct.Table.Column;
-import com.mec.app.plugin.grammar.DB2Construct.Table.ColumnDataType;
 import com.mec.app.plugin.grammar.DB2Construct.Table.ColumnDataTypeAndLength;
+import com.mec.app.plugin.grammar.Grammar5DB2DDLAnalyzer.DB2Importer;
+import com.mec.app.plugin.grammar.Grammar5DB2DDLAnalyzer.DBConfig;
 import com.mec.app.plugin.grammar.Lexer.SQLFileLexer;
 import com.mec.app.plugin.grammar.Parser.SQLParser;
 
@@ -219,7 +223,7 @@ public class Grammar5DB2DDLAnalyzerTest {
 		m.matches();
 		out.println(m.group(1));
 	}
-//	@Ignore
+	@Ignore
 	@Test
 	public void testParseTableSQL5(){
 		String ddlFile = "";
@@ -279,6 +283,63 @@ public class Grammar5DB2DDLAnalyzerTest {
 			e.printStackTrace(out);
 		}
 	}
+	
+	//-----------------------------------
+	@Ignore
+	@Test
+	public void testGetTableList(){
+		String ddlFile = "data/ddl/2016-04-14_SampleDDL5_original00001~60000.sql";
+
+		Path inputDDL = Paths.get(ddlFile);
+		SQLFileLexer lexer = Lexer.scanSQLFile(inputDDL);
+		SQLParser sp = Parser.parseSQL(lexer);
+//		sp.printCreateUsableTable(out);
+		
+		String inputDDLFileName = inputDDL.getFileName().toString();
+		Path createDDL = inputDDL.resolveSibling(
+				inputDDLFileName.substring(0, inputDDLFileName.lastIndexOf("."))
+				+ "_tableList.sql");
+		try(PrintStream ddlOutput = new PrintStream(Files.newOutputStream(createDDL))){
+			sp.printTableList(ddlOutput);
+		}catch(Exception e){
+			e.printStackTrace(out);
+		}
+		Path deleteSQL = inputDDL.resolveSibling(
+				inputDDLFileName.substring(0, inputDDLFileName.lastIndexOf("."))
+				+ "_deleteFrom.sql");
+		try(PrintStream ddlOutput = new PrintStream(Files.newOutputStream(deleteSQL))){
+			sp.printDeleteFromTable(ddlOutput);
+		}catch(Exception e){
+			e.printStackTrace(out);
+		}
+	}
+	
+//	@Ignore
+	@Test
+	public void testExtractAndInsertTable() throws IOException{
+		String ddlFile = "data/ddl/2016-04-14_SampleDDL5_original00001~60000.sql";
+
+		Path inputDDL = Paths.get(ddlFile);
+		SQLFileLexer lexer = Lexer.scanSQLFile(inputDDL);
+		SQLParser sp = Parser.parseSQL(lexer);
+		
+//		String tableName = "\"EXIMMETA\".\"ECD_AUTH_RULE_BU\"";
+//		Set<String> tables = Stream.of(tableName).collect(Collectors.toSet());
+		
+		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList2.sql");
+		List<String> tables = Files.readAllLines(tableFile).stream().filter(l -> !(l.startsWith("--") || l.startsWith("//"))).collect(Collectors.toList());
+		
+		
+		
+		DBConfig importFrom = DBConfig.conf("jdbc:db2://10.39.105.239:50000/BPIDB"
+						, "db2admin", "db2admin");
+		DBConfig insertInto = DBConfig.conf(
+						"jdbc:db2://192.86.32.35:5030/DALLASA:retrieveMessagesFromServerOnGetMessage=true;emulateParameterMetaDataForZCalls=1;"
+						, "EXIM", "EXIM1");
+		DB2Importer imp = DB2Importer.from(importFrom, insertInto, sp.getMatchingTables(tables));
+		imp.extractAndImport();
+	}
+	
 	
 	private static final PrintStream out = System.out;
 	private static final Path ddlFile = Paths.get("data/ddl/BPIDB_Look.ddl_original.sql");
