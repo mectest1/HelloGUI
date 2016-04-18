@@ -78,6 +78,10 @@ public class Grammar5DB2DDLAnalyzer{
 				Connection destSession = insertInto.getConnection()){
 				Statement selectStmt = sourceSession.createStatement();
 				
+				StringBuilder recordsAlreadyExsistedSQL = new StringBuilder("SELECT count(*) FROM ?;");
+//				recordsAlreadyExsistsSQL.append(table.getTableNameWithSchema());
+				
+				PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistedSQL.toString()); 
 				for(Table table : importTables){
 					StringBuilder selectAll = new StringBuilder("SELECT ");
 //					selectAll.append(table.getColumnsStr());
@@ -103,16 +107,19 @@ public class Grammar5DB2DDLAnalyzer{
 //					ResultSet selectResult = selectStmt.executeQuery();
 					ResultSet selectResult = selectStmt.executeQuery(selectAll.toString());
 					
-					StringBuilder recordsAlreadyExsistsSQL = new StringBuilder("SELECT count(*) FROM ");
-					recordsAlreadyExsistsSQL.append(table.getTableNameWithSchema());
 //					recordsAlreadyExsistsSQL.append(" WHERE ");
 //					List<Column> pkCols = table.getPrimaryKeys();
 //					if(!pkCols.isEmpty()){
 //					recordsAlreadyExsistsSQL.append(pkCols.stream().map(c -> c.getName() + " = ?").collect(Collectors.joining(" AND ", " WHERE ", "")));
 //					}
-					recordsAlreadyExsistsSQL.append(";");
-					PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistsSQL.toString()); 
-					int recordsAlreadyExistedCount = 0;
+					
+					
+//					StringBuilder recordsAlreadyExsistsSQL = new StringBuilder("SELECT count(*) FROM ?");
+////					recordsAlreadyExsistsSQL.append(table.getTableNameWithSchema());
+//					
+//					PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistsSQL.toString());
+//					recordsAlreadyExsistsSQL.append(";");
+//					int recordsAlreadyExistedCount = 0;
 //					if(pkCols.isEmpty()){
 //						ResultSet recordsAlreadyExistsRS = recordsAlreadyExsists.executeQuery();
 //						if(recordsAlreadyExistsRS.next()){
@@ -121,7 +128,8 @@ public class Grammar5DB2DDLAnalyzer{
 //								continue;
 //							}
 //						}
-						recordsAlreadyExistedCount = executeSQLAndGetCount(recordsAlreadyExsists);
+					recordsAlreadyExsists.setString(1, table.getTableNameWithSchema());
+					int recordsAlreadyExistedCount = executeSQLAndGetCount(recordsAlreadyExsists);
 //					}
 					for(; 0 < recordsAlreadyExistedCount; --recordsAlreadyExistedCount){
 						selectResult.next();
@@ -213,6 +221,7 @@ public class Grammar5DB2DDLAnalyzer{
 					insertStmt.close();
 					selectResult.close();
 				}
+				recordsAlreadyExsists.close();
 				selectStmt.close();
 				
 			} catch (SQLException e) {
