@@ -295,17 +295,33 @@ public class Plugins {
 			}
 		}
 		
+		/**
+		 * Load classes from the plug-in Jars first, so some functions can be overwritten by plug-in itself.
+		 * @param className
+		 * @return
+		 * @throws ClassNotFoundException
+		 */
 		private Class<?> loadClass(String className) throws ClassNotFoundException{
+//			try{
+//				Optional<Plugin> parent = getParent();
+////				parent.ifPresent(p -> p.loadClass(className));
+////				if(null != parent){
+//				if(parent.isPresent()){
+//					return parent.get().loadClass(className);
+//				}
+//			}catch(ClassNotFoundException e){}
+//			
+//			return ucl.loadClass(className);
 			try{
-				Optional<Plugin> parent = getParent();
-//				parent.ifPresent(p -> p.loadClass(className));
-//				if(null != parent){
-				if(parent.isPresent()){
-					return parent.get().loadClass(className);
-				}
+				return ucl.loadClass(className);
 			}catch(ClassNotFoundException e){}
 			
-			return ucl.loadClass(className);
+			Optional<Plugin> parent = getParent();
+			if(parent.isPresent()){
+				return parent.get().loadClass(className);
+			}else{
+				throw new ClassNotFoundException(className);
+			}
 		}
 	
 		protected Optional<Plugin> getParent(){
