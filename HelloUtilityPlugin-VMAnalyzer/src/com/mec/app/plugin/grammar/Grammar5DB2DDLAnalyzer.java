@@ -78,10 +78,11 @@ public class Grammar5DB2DDLAnalyzer{
 				Connection destSession = insertInto.getConnection()){
 				Statement selectStmt = sourceSession.createStatement();
 				
-				StringBuilder recordsAlreadyExsistedSQL = new StringBuilder("SELECT count(*) FROM ?;");
+//				StringBuilder recordsAlreadyExsistedSQL = new StringBuilder("SELECT count(*) FROM ?;");
 //				recordsAlreadyExsistsSQL.append(table.getTableNameWithSchema());
 				
-				PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistedSQL.toString()); 
+//				PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistedSQL.toString()); 
+				Statement recordsAlreadyExsists = destSession.createStatement();
 				for(Table table : importTables){
 					StringBuilder selectAll = new StringBuilder("SELECT ");
 //					selectAll.append(table.getColumnsStr());
@@ -115,6 +116,8 @@ public class Grammar5DB2DDLAnalyzer{
 					
 					
 //					StringBuilder recordsAlreadyExsistsSQL = new StringBuilder("SELECT count(*) FROM ?");
+					StringBuilder recordsAlreadyExsistsSQL = new StringBuilder("SELECT count(*) FROM ")
+																.append(table.getTableNameWithSchema());
 ////					recordsAlreadyExsistsSQL.append(table.getTableNameWithSchema());
 //					
 //					PreparedStatement recordsAlreadyExsists = destSession.prepareStatement(recordsAlreadyExsistsSQL.toString());
@@ -128,9 +131,13 @@ public class Grammar5DB2DDLAnalyzer{
 //								continue;
 //							}
 //						}
-					recordsAlreadyExsists.setString(1, table.getTableNameWithSchema());
-					int recordsAlreadyExistedCount = executeSQLAndGetCount(recordsAlreadyExsists);
+//					recordsAlreadyExsists.setString(1, table.getTableNameWithSchema());
+//					int recordsAlreadyExistedCount = executeSQLAndGetCount(recordsAlreadyExsists);
+					int recordsAlreadyExistedCount = executeSQLAndGetCount(recordsAlreadyExsists, recordsAlreadyExsistsSQL.toString());
 //					}
+					if(0 < recordsAlreadyExistedCount){
+						logger.log(String.format("%s records already exist in table %s", recordsAlreadyExistedCount, table.getTableNameWithSchema()));
+					}
 					for(; 0 < recordsAlreadyExistedCount; --recordsAlreadyExistedCount){
 						selectResult.next();
 					}
@@ -172,7 +179,7 @@ public class Grammar5DB2DDLAnalyzer{
 //							int i = 0;
 							column = table.getColumns().get(i);
 							colIndex = i + 1;
-							colType = column.getColumnType().getDataType();
+							colType = column.getTypeAndLength().getType();
 //							switch(colType){
 //								ColumnDataType.VARCHAR:
 //									
@@ -237,9 +244,11 @@ public class Grammar5DB2DDLAnalyzer{
 //			}
 		}
 		
-		private int executeSQLAndGetCount(PreparedStatement stmt) throws SQLException{
+//		private int executeSQLAndGetCount(PreparedStatement stmt) throws SQLException{
+		private int executeSQLAndGetCount(Statement stmt, String querySQL) throws SQLException{
 			int retval = 0;
-			ResultSet recordsAlreadyExistsRS = stmt.executeQuery();
+//			ResultSet recordsAlreadyExistsRS = stmt.executeQuery();
+			ResultSet recordsAlreadyExistsRS = stmt.executeQuery(querySQL);
 			if(recordsAlreadyExistsRS.next()){
 				retval = recordsAlreadyExistsRS.getInt(1);
 //				if(0 < recordsCount){

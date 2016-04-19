@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -233,13 +234,24 @@ public interface DB2Construct {
 //		}
 
 		protected List<Column> getPrimaryKeys(){
-			return columns.stream().filter(Column::isPrimaryKey).collect(Collectors.toList());
+//			return columns.stream().filter(Column::isPrimaryKey).collect(Collectors.toList());
+			return filterColumns(Column::isPrimaryKey);
 		}
 		protected List<Column> getLobColumns(){
 //			return columns.stream().filter(c -> c.getColumnType().getDataType().isLOBColumn())
 //					.collect(Collectors.toList());
-			return columns.stream().filter(Column::isLobColumn).collect(Collectors.toList());
+//			return columns.stream().filter(Column::isLobColumn).collect(Collectors.toList());
+			return filterColumns(Column::isLobColumn);
 		}
+		/**
+		 * Filer table columns according to the predicate <code>filter</code>
+		 * @param filter
+		 * @return
+		 */
+		private List<Column> filterColumns(Predicate<Column> filter){
+			return columns.stream().filter(filter).collect(Collectors.toList());
+		}
+		
 		
 		public String getPrimaryKeysStr(){
 			return getColumnsNameList(getPrimaryKeys());
@@ -350,7 +362,7 @@ public interface DB2Construct {
 			@Override
 			public String toString(){
 //				return String.format("\"%s\" %s %s", name, typeAndLength, attrs);
-				return String.format("\"%s\" %s %s", name, typeAndLength, typeAndLength.getDataType().resolveAttrs(attrs));
+				return String.format("\"%s\" %s %s", name, typeAndLength, typeAndLength.getType().resolveAttrs(attrs));
 			}
 			
 			
@@ -366,15 +378,15 @@ public interface DB2Construct {
 				this.primaryKey = primaryKey;
 			}
 
-			public ColumnDataTypeAndLength getColumnType(){
+			public ColumnDataTypeAndLength getTypeAndLength(){
 				return typeAndLength;
 			}
 			public boolean isLobColumn(){
-				return typeAndLength.getDataType().isLOBColumn();
+				return typeAndLength.getType().isLOBColumn();
 			}
 
 			private void verifyDefaultValue(){
-				if(typeAndLength.getDataType().isStringColumn()){
+				if(typeAndLength.getType().isStringColumn()){
 					Matcher m = WITH_DEFAULT_STR.matcher(attrs);
 					if(m.matches()){
 						String defaultValue = m.group(1);
@@ -463,7 +475,7 @@ public interface DB2Construct {
 				return retval.toString();
 			}
 			
-			public ColumnDataType getDataType() {
+			public ColumnDataType getType() {
 				return dataType;
 			}
 			
@@ -519,6 +531,13 @@ public interface DB2Construct {
 			,TIMESTAMP
 			;
 			
+			
+			//illegal modifier for the enum constructor,
+			//only private is permitted;
+//			private final ColumnDataType(){
+//				
+//			}
+			
 			public static ColumnDataType forName(String dataTypeName){
 				return Optional.ofNullable(nameToType.get(dataTypeName))
 						.orElseThrow(() -> new IllegalArgumentException(String.format("Unrecognized column data type name: %s", dataTypeName)));
@@ -570,7 +589,7 @@ public interface DB2Construct {
 		public AuxiliaryTable(Table table, Column lobColumn){
 			Objects.requireNonNull(table);
 			Objects.requireNonNull(lobColumn);
-			if(!lobColumn.getColumnType().getDataType().isLOBColumn()){
+			if(!lobColumn.getTypeAndLength().getType().isLOBColumn()){
 				throw new IllegalArgumentException(String.format("Column %s is not *LOB column", lobColumn));
 			}
 			this.table = table;
