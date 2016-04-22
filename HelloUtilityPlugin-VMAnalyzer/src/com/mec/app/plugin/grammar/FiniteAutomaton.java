@@ -7,12 +7,24 @@ package com.mec.app.plugin.grammar;
  * @author MEC
  *
  */
-public interface DFA {
-
-	AcceptResult accept(String input);
+public interface FiniteAutomaton {
 	
 	
-	abstract class DFABase implements DFA{
+	interface DFA extends FiniteAutomaton{
+		AcceptResult accept(String input);
+	}
+	interface NFA extends FiniteAutomaton{
+		DFA toDFA();
+	}
+	
+	
+	
+	
+	
+	class DFABase implements DFA{
+		private DFABase(){
+			
+		}
 
 		@Override
 		public AcceptResult accept(String input) {
@@ -33,9 +45,10 @@ public interface DFA {
 		}
 		
 		
-		abstract boolean isFinalState(int state);
-		abstract char nextChar();
-		abstract int move(int currentState, char inputChar);
+		//To be implemented:
+		boolean isFinalState(int state){return false;};
+		char nextChar(){return '\0';};
+		int move(int currentState, char inputChar){return 0;};
 		
 //		int state;
 		char c;
@@ -54,6 +67,25 @@ public interface DFA {
 		,NO
 		;
 		
+		
+	}
+	
+	//----------------------------------------------------------
+	class NFABase implements NFA{
+		private NFABase(){
+			
+		}
+
+		
+		public NFA fromRegExp(String regularExpression){
+			return null;
+		}
+		
+		//To be implemented
+		@Override
+		public DFA toDFA() {
+			return null;
+		}
 		
 	}
 }
