@@ -42,11 +42,14 @@ public interface DB2Construct {
 			Objects.requireNonNull(tableName);
 			Objects.requireNonNull(tablespace);
 			this.tableName = tableName;
-			this.tablespace = tablespace;
+//			this.tablespace = tablespace;
+			this.tableName = Grammar5DB2DDLAnalyzer.tablespace;
 			
 			//
 			Optional.ofNullable(schema).ifPresent(s -> this.schema = s);
-			Optional.ofNullable(dbName).ifPresent(d -> this.dbName = d);
+			
+//			Optional.ofNullable(dbName).ifPresent(d -> this.dbName = d);
+			this.dbName = Grammar5DB2DDLAnalyzer.dbName;
 		}
 
 		
@@ -69,8 +72,12 @@ public interface DB2Construct {
 			m = NAME_COMBINE_PATTERN.matcher(dbNameAndTablespace);
 //			if(m.matches()){
 			m.matches();
-			this.dbName = Optional.ofNullable(m.group(2)).orElse("");
-			this.tablespace = m.group(3);
+			
+//			this.dbName = Optional.ofNullable(m.group(2)).orElse("");
+			this.dbName = Grammar5DB2DDLAnalyzer.dbName;
+			
+//			this.tablespace = m.group(3);
+			this.tableName = Grammar5DB2DDLAnalyzer.tablespace;
 //			}else{
 //				m = NAME_SINGLE_PATTERN.matcher(dbNameAndTablespace);
 //				this.dbName = "";
@@ -203,7 +210,8 @@ public interface DB2Construct {
 			
 //			return combinePrefixWithName(dbName, tablespace);
 			
-			return combinePrefixWithName(Grammar5DB2DDLAnalyzer.dbName, Grammar5DB2DDLAnalyzer.tablespace);
+//			return combinePrefixWithName(Grammar5DB2DDLAnalyzer.dbName, Grammar5DB2DDLAnalyzer.tablespace);
+			return combinePrefixWithName(dbName, tablespace);
 		}
 		private String combinePrefixWithName(String optionalPrefix, String name){
 			String retval = null;
@@ -319,6 +327,11 @@ public interface DB2Construct {
 		
 		public List<Column> getUniqueKeyColumns() {
 			return uniqueKeyColumns;
+		}
+		
+		public String getDatabaseName(){
+			return dbName;
+//			return Grammar5DB2DDLAnalyzer.dbName;
 		}
 
 		private List<Column> uniqueKeyColumns = new ArrayList<>();;
@@ -642,8 +655,8 @@ public interface DB2Construct {
 		}
 		
 		public String getAuxiliaryDatabase(){
-//			return table.getDatabaseName();
-			return Grammar5DB2DDLAnalyzer.dbName;
+			return table.getDatabaseName();
+//			return Grammar5DB2DDLAnalyzer.dbName;
 		}
 		
 		private String getAuxiliaryTableName(){
