@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.mec.application.beans.PluginInfo.PluginContext;
 import com.mec.application.beans.PluginInfo.PluginStart;
+import com.mec.application.beans.PluginService.ViewService;
 //import com.mec.application.beans.PluginAnnotations.Start;
 import com.mec.resources.Config.ConfigEndpoint;
 
@@ -31,18 +32,51 @@ import com.mec.resources.Config.ConfigEndpoint;
 public class Plugins {
 
 	
-	protected static void loadSync(String pluginName){
+	private static void loadSync(String pluginName){
 		loadPlugin(pluginName);
 	}
-	protected static void unloadSync(String pluginName){
+	private static void unloadSync(String pluginName){
 		unloadPlugin(pluginName);
 	}
+	
+	public static List<String> listPlugins(){
+		List<String> retval = Arrays.asList(Plugin.PLUGIN_ROOT_DIR.toFile().list());
+		return retval;
+	}
+	
+//	public static Optional<String> getDispName(String pluginName){
+//		Plugin plugin = plugins.computeIfAbsent(pluginName, Plugin::new);
+//		Optional<String> retval = Optional.ofNullable(plugin).map(p -> 
+//			Optional.ofNullable(p.getDispName()).orElse(p.getDispName())
+//		);
+//		return retval;
+//	}
+	
+	public static void load(String pluginName){
+		Plugin plugin = plugins.computeIfAbsent(pluginName, Plugin::new);
+		if(plugin.isAsynchronousLoad()){
+			loadAsync(pluginName);
+		}else{
+			loadSync(pluginName);
+		}
+	}
+	
+	public static void unload(String pluginName){
+		Plugin plugin = plugins.computeIfAbsent(pluginName, Plugin::new);
+		if(plugin.isAsynchronousLoad()){
+			unloadAsync(pluginName);
+		}else{
+			unloadSync(pluginName);
+		}
+	}
+	
 	//
 	/**
 	 * Load plugin with the specified name asynchronously.
 	 * @param pluginName
 	 */
-	public static void load(String pluginName){
+//	@Deprecated
+	private static void loadAsync(String pluginName){
 		CompletableFuture.runAsync(() -> Plugins.loadPlugin(pluginName))
 //			.whenCompleteAsync((v, error) -> Plugins.startPlugin(entryObj, entryMethod, pc));
 			;
@@ -52,7 +86,8 @@ public class Plugins {
 	 * Unload plugin with the specified name asynchronously.
 	 * @param pluginName
 	 */
-	public static void unload(String pluginName){
+//	@Deprecated
+	private static void unloadAsync(String pluginName){
 		CompletableFuture.runAsync(() -> Plugins.unloadPlugin(pluginName));
 	}
 	/**
@@ -174,20 +209,76 @@ public class Plugins {
 	@XmlRootElement(name="pluginConfig")
 	static class PluginConfigBean{
 		private String entryClass;
+//		private String dispName;
+		/**
+		 * Set if this plugin will be loaded asynchronous;
+		 * <p>
+		 * Note that if FX Stage is required for this plugin, then set <code>loadAsync</code>
+		 * to <code>true</false> will result into this error message:
+		 * <dd>
+		 * IllegalStateException: Not on FX application thread;
+		 * </dd>
+		 * Thus you may need to set this flag only when no FX Stage is needed, which means
+		 * you may barely needs to use it at all.
+		 * </p>
+		 */
+		private boolean loadAsync = false;	//load asynchronous
 		public String getEntryClass() {
 			return entryClass;
 		}
 		public void setEntryClass(String entryClass) {
 			this.entryClass = entryClass;
 		}
+//		public String getDispName() {
+//			return dispName;
+//		}
+//		public void setDispName(String name) {
+//			this.dispName = name;
+//		}
+		public boolean isLoadAsync() {
+			return loadAsync;
+		}
 		@Override
 		public String toString() {
-			return "PluginConfigBean [entryClass=" + entryClass + "]";
+			return "PluginConfigBean [entryClass=" + entryClass + ", loadAsync=" + loadAsync + "]";
+		}
+		public void setLoadAsync(boolean loadAsync) {
+			this.loadAsync = loadAsync;
 		}
 	}
 	
 	
 	private static class PluginContextImpl implements PluginContext{
+
+		Plugin plugin;
+		ViewService vs;
+		PluginContextImpl(Plugin plugin){
+			this.plugin = plugin;
+			vs = new ViewServiceForPlugin(plugin);
+		}
+		@Override
+		public ViewService getViewService(){
+			return vs;
+		}
+		
+	}
+	
+	private static class ViewServiceForPlugin implements ViewService{
+		
+		Plugin plugin;
+		ViewServiceForPlugin(Plugin plugin){
+			this.plugin = plugin;
+		}
+		@Override
+		public void showNewStage(String viewURL, String title) {
+			ViewFactory.showNewStage(plugin.getClassLoader(), viewURL, title);
+		}
+
+//		@Override
+//		public <ViewRoot, Controller> LoadViewResult<ViewRoot, Controller> loadView(String viewURL) {
+//			return ViewFactory.loadViewDeluxe(plugin.getClassLoader(), viewURL);
+//		}
+//		
 		
 	}
 	
@@ -230,15 +321,24 @@ public class Plugins {
 	 * @author MEC
 	 *
 	 */
-	static class Plugin {
+	public static class Plugin {
 
-		public Plugin(String pluginName){
+		private Plugin(String pluginName){
 			this(PLUGIN_ROOT_DIR.resolve(pluginName));
 		}
 		
 		private Plugin(Path pluginPath){
 			this(pluginPath, PLUGIN_ROOT);
 			setName(pluginPath.getFileName().toString());
+			configBean = PluginConfig.of(name).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+//					PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
+					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), name)));
+//			if(null != configBean.getDispName() && !configBean.getDispName().isEmpty()){
+//				setName(configBean.getDispName());
+//			}else{
+//				setName(pluginPath.getFileName().toString());
+//			}
+//			setName(pluginPath.getFileName().toString());
 		}
 		
 		protected Plugin(Path pluginPath, Plugin parentPlugin){
@@ -289,6 +389,8 @@ public class Plugins {
 					jarURLs.add(jarFile.toUri().toURL());
 				}
 				ucl = new URLClassLoader(jarURLs.toArray(new URL[0]), parent);
+				
+				setLogger(Plugins.logger);
 			} catch (IOException e) {
 				logger.log(e);
 				throw new IllegalArgumentException(e);
@@ -336,9 +438,7 @@ public class Plugins {
 		 * @throws ClassNotFoundException
 		 */
 		public void load() throws ClassNotFoundException{
-			PluginConfigBean configBean = PluginConfig.of(name).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
-//					PluginConfigBean configBean = Config.of(pluginName).load(Plugin.PLUGIN_CONFIG_FILE, PluginConfigBean.class)
-					.orElseThrow(() -> new IllegalArgumentException(String.format(Msg.get(Plugins.class, "exception.pluginConfig.notFound"), name)));
+			
 			entryClass = loadClass(configBean.getEntryClass());
 //					Method entryMethod = Arrays.stream(entryClass.getMethods())	//<- return all the public methods
 		}
@@ -399,12 +499,21 @@ public class Plugins {
 //		}
 		
 		protected PluginContext getPluginContext(){
-			return new PluginContextImpl();
+//			return new PluginContextImpl(this);
+			if(null == pctx){
+				pctx = new PluginContextImpl(this);
+			}
+			return pctx;
 		}
 		private void setName(String name){
 			this.name = name;
 		}
-		
+		public boolean isAsynchronousLoad(){
+			return configBean.isLoadAsync();
+		}
+//		public String getDispName(){
+//			return configBean.getDispName();
+//		}
 		//-----------------------------
 		
 		@Override
@@ -417,11 +526,14 @@ public class Plugins {
 			this.logger = logger;
 		}
 
+		private PluginConfigBean configBean;
+		private PluginContext pctx;
 		private Optional<Plugin> parentPlugin = Optional.empty();
 		private MsgLogger logger = MsgLogger.defaultLogger();
 		private URLClassLoader ucl;
 		private String name;
 		private Class<?> entryClass;
+//		private List<Plugin> pluginList;
 		//
 		private static final Plugin PLUGIN_ROOT = new Plugin(Paths.get(Msg.get(Plugin.class, "lib.dir")), ClassLoader.getSystemClassLoader());
 		private static final Path PLUGIN_ROOT_DIR = Paths.get(Msg.get(Plugin.class, "plugin.root.dir")); 

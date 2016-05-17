@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.mec.application.beans.PluginService.ViewService;
+
 public interface PluginInfo {
 
 	
@@ -35,8 +37,8 @@ public interface PluginInfo {
 	 * @author MEC
 	 *
 	 */
-	public interface PluginContext{
-		
+	interface PluginContext{
+		ViewService getViewService();
 	}
 	
 }

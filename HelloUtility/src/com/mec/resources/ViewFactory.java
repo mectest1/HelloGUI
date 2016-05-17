@@ -3,11 +3,13 @@ package com.mec.resources;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Supplier;
+
+import com.mec.application.beans.PluginService.LoadViewResult;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -35,13 +37,21 @@ public class ViewFactory {
 		LoadViewResult<T, ?> loadResult = loadViewDeluxe(viewURL);
 		return (T) loadResult.getViewRoot();
 	}
+	public static <T> T loadView(ClassLoader cl, String viewURL){
+		LoadViewResult<T, ?> loadResult = loadViewDeluxe(cl, viewURL);
+		return (T) loadResult.getViewRoot();
+	}
 	
-	@SuppressWarnings("unchecked")
 	public static <V, C> LoadViewResult<V, C> loadViewDeluxe(String viewURL){
+		return loadViewDeluxe(ViewFactory.class.getClassLoader(), viewURL);
+	}
+	@SuppressWarnings("unchecked")
+	public static <V, C> LoadViewResult<V, C> loadViewDeluxe(ClassLoader cl, String viewURL){
 		V retval = null;
 		C controller = null;
 		try {
-			URL view = ViewFactory.class.getResource(viewURL);
+			viewURL = JarTool.trimLeading(viewURL, JarTool.NIX_PATH);
+			URL view = cl.getResource(viewURL);
 			Objects.requireNonNull(view);
 //			retval = (T) FXMLLoader.load(ViewFactory.class.getResource(viewURL));
 //			ResourceBundle viewBundle = ResourceBundle.getBundle(Msg.get(ViewFactory.class, "viewMessages"));
@@ -49,8 +59,10 @@ public class ViewFactory {
 			String bundleBase = JarTool.trimLeadingSlash(JarTool.trimTrailing(viewURL, FXML_SUFFIX));
 			ResourceBundle viewBundle;
 			try {
-				viewBundle = ResourceBundle.getBundle(bundleBase);
+//				viewBundle = ResourceBundle.getBundle(bundleBase);
+				viewBundle = ResourceBundle.getBundle(bundleBase, Locale.getDefault(), cl);
 				FXMLLoader loader = new FXMLLoader(view, viewBundle);
+				loader.setClassLoader(cl);
 				retval = loader.load();
 				controller = loader.getController();
 			} catch (MissingResourceException e) {
@@ -76,7 +88,11 @@ public class ViewFactory {
 	}
 	
 	public static Optional<Stage> showNewStage(String viewUrl, String stageTitle){
-		Pane viewPane = ViewFactory.loadView(viewUrl);
+		return showNewStage(ViewFactory.class.getClassLoader(), viewUrl, stageTitle);
+	}
+	public static Optional<Stage> showNewStage(ClassLoader cl, String viewUrl, String stageTitle){
+//		Pane viewPane = ViewFactory.loadView(viewUrl);
+		Pane viewPane = ViewFactory.loadView(cl, viewUrl);
 		if(null == viewPane){
 			log(new IllegalArgumentException(String.format(Msg.get(ViewFactory.class, "exception.loadViewError"), viewUrl)));
 			return Optional.empty();
@@ -155,29 +171,6 @@ public class ViewFactory {
 		ViewFactory.showNewStage(view, title);
 	}
 	
-	
-	
-	public static class LoadViewResult<ViewRoot, Controller>{
-		ViewRoot viewRoot;
-		Controller controller;
-		public LoadViewResult(ViewRoot viewRoot, Controller controller) {
-			super();
-			this.viewRoot = viewRoot;
-			this.controller = controller;
-		}
-		public ViewRoot getViewRoot() {
-			return viewRoot;
-		}
-		public void setViewRoot(ViewRoot viewRoot) {
-			this.viewRoot = viewRoot;
-		}
-		public Controller getController() {
-			return controller;
-		}
-		public void setController(Controller controller) {
-			this.controller = controller;
-		}
-	}
 //	private static PrintWriter out;
 	private static MsgLogger logger;
 	private static final String FXML_SUFFIX = Msg.get(ViewFactory.class, "fxml.suffix");

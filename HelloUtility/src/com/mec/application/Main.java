@@ -1,8 +1,8 @@
 package com.mec.application;
 	
+import com.mec.application.beans.PluginService.LoadViewResult;
 import com.mec.resources.Msg;
 import com.mec.resources.ViewFactory;
-import com.mec.resources.ViewFactory.LoadViewResult;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

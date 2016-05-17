@@ -77,7 +77,7 @@ public interface DB2Construct {
 			this.dbName = Grammar5DB2DDLAnalyzer.dbName;
 			
 //			this.tablespace = m.group(3);
-			this.tableName = Grammar5DB2DDLAnalyzer.tablespace;
+			this.tablespace = Grammar5DB2DDLAnalyzer.tablespace;
 //			}else{
 //				m = NAME_SINGLE_PATTERN.matcher(dbNameAndTablespace);
 //				this.dbName = "";

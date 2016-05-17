@@ -1,8 +1,13 @@
 package com.mec.resources;
 
+import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mec.resources.Config.BeanMarshal;
 import com.mec.resources.Config.ConfigEndpoint;
 import com.mec.resources.Plugins.Plugin;
 import com.mec.resources.Plugins.PluginConfig;
@@ -39,7 +44,7 @@ public class PluginTest {
 //		Plugins.load(fmPlugin);
 //		Thread.sleep(10000L);
 		
-		Plugins.loadSync(fmPlugin);
+		Plugins.load(fmPlugin);
 	}
 	
 	
@@ -55,14 +60,22 @@ public class PluginTest {
 		PluginConfig.of(fmPlugin).save(Plugin.PLUGIN_CONFIG_FILE, configBean);
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void testLoadPlugin2(){
 		final String fmPlugin = "SQLParser";
 //		Plugins.load(fmPlugin);
-		Plugins.loadSync(fmPlugin);
+//		Plugins.loadSync(fmPlugin);
+		Plugins.load(fmPlugin);
 		
-		
+	}
+	
+	
+	@Test
+	public void testLoadPluginConfig() throws Exception{
+		Path configFile = Paths.get("plugins/XMLParamComparator/pluginConfig.xml");
+		PluginConfigBean config = BeanMarshal.loadFromXML(PluginConfigBean.class, configFile);
+		out.println(config);
 	}
 	//-------------------------------------------------
 	
@@ -76,4 +89,7 @@ public class PluginTest {
 		}
 		
 	}
+	
+	
+	private static final PrintStream out = System.out;
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="consoleOut" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="consoleErr" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.err"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
+	
+	
+	
+	<appender name="logFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="logs/plugin-logger.log"/>
+		<param name="MaxFileSize" value="1MB"/>
+		<param name="MaxBackupIndex" value="1"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d][%t][%m]%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="socketServerLog" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="logs/socketServer.log"/>
+		<param name="MaxFileSize" value="1MB"/>
+		<param name="MaxBackupIndex" value="1"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d][%t][%m]%n"/>
+		</layout>
+	</appender>
+	
+	
+	
+	<logger name="HelloLogger">
+		<level value="INFO" />
+		<appender-ref ref="consoleOut"/>
+	</logger>
+	<logger name="ErrorLogger">
+		<level value="ERROR" />
+		<appender-ref ref="consoleErr"/>
+	</logger>
+	
+	
+	
+	<!-- Logger for the SocketServer -->
+	<logger name="org.apache.log4j.net.SimpleSocketServer">
+		<level value="DEBUG" />
+		<appender-ref ref="socketServerLog"/>
+		<appender-ref ref="consoleOut"/>
+	</logger>
+	
+	<root>
+		<priority value="DEBUG" />
+		<!-- <appender-ref ref="consoleOut"/> -->
+	</root>
+</log4j:configuration>

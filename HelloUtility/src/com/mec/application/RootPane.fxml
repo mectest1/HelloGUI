@@ -83,6 +83,9 @@
                       </MenuItem>
                     </items>
                   </Menu>
+                <Menu mnemonicParsing="false" text="%menu.plugins" fx:id="pluginsMenu">
+                	
+                </Menu>
                 <Menu mnemonicParsing="false" text="%menu.help">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#onAbout" text="%menu.help.about" />
