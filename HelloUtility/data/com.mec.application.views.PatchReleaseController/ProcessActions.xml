@@ -9,7 +9,8 @@
         <attributes/>
         <name>WriteReadMe</name>
         <toggledOn>false</toggledOn>
-    </actionsConfig><actionsConfig>
+    </actionsConfig>
+	<actionsConfig>
         <attributes/>
         <!--<name>com.mec.application.beans.PatchProcessAction.RemoveStashedOldFiles</name>-->
         <name>com.mec.application.beans.RemoveStashedOldFiles</name>

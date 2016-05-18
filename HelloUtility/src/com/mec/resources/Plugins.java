@@ -356,7 +356,9 @@ public class Plugins {
 		private Plugin(Path pluginPath, ClassLoader parent){
 			try {
 				if(parent.equals(ClassLoader.getSystemClassLoader())){	//If it's PLUGIN_ROOT, then create ./lib if it doesn't exist;
-					Config.of(this).createIfNotExists(pluginPath, Files::createDirectories);
+//					Config.of(this).createIfNotExists(pluginPath, Files::createDirectories);
+					Config.defaultData().createIfNotExists(pluginPath, Files::createDirectories);
+					
 				}
 				if (!(Files.exists(pluginPath)
 //					|| parent.equals(ClassLoader.getSystemClassLoader())	//PLUGIN_ROOT.parent: system class loader

@@ -1,5 +1,6 @@
 package com.mec.application.beans;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,7 +30,10 @@ public interface PatchProcessAction {
 	/**
 	 * Simple action name of this process action for build-in actions (RelocateJars, WriteReadMe, etc), 
 	 * or the full class name for this PatchProcessAction, which should provide a constructor 
-	 * that accepts {@link MsgLogger} as the only parameter
+	 * that accepts {@link MsgLogger} as the only parameter. 
+	 * <pre>
+	 * If no such constructor exists, then the default constructor will be invoked.
+	 * </pre>
 	 * @return
 	 */
 	String getName();
@@ -57,10 +62,15 @@ public interface PatchProcessAction {
 						@SuppressWarnings("rawtypes")
 						Constructor actionConstructor;
 						try {
-							actionConstructor = Class.forName(actionClassName).getConstructor(MsgLogger.class);
-							PatchProcessAction actionInst = (PatchProcessAction) actionConstructor.newInstance(logger);
+							PatchProcessAction actionInst = null;
+							try{
+								actionConstructor = Class.forName(actionClassName).getConstructor(MsgLogger.class);
+								actionInst = (PatchProcessAction) actionConstructor.newInstance(logger);
+							}catch(NoSuchMethodException e){
+								actionInst = (PatchProcessAction) Class.forName(actionClassName).newInstance();
+							}
 							return actionInst;
-						} catch (ClassNotFoundException | NoSuchMethodException 
+						} catch (ClassNotFoundException 
 								| InvocationTargetException | InstantiationException
 								| IllegalAccessException
 								e) {
@@ -203,7 +213,8 @@ public interface PatchProcessAction {
 			Path readMe = patchReleaseDir.resolve(Msg.get(PatchReleaseController.class, "path.README"));
 //			JarTool.tryMoveOldToDelDirectory(readMe, getDelPath());
 			JarTool.tryMoveOldToDelDirectory(readMe, stashDirectory);
-			Config.of(PatchReleaseController.class).createIfNotExists(readMe, Files::createFile);
+//			Config.of(PatchReleaseController.class).createIfNotExists(readMe, Files::createFile);
+			Config.defaultData().createIfNotExists(readMe, Files::createFile);
 			Files.write(readMe, contentLines);
 		}
 
@@ -213,7 +224,6 @@ public interface PatchProcessAction {
 		}
 		
 	}
-
 	
 	public static interface PatchProcessContext{
 		Path getWorkspaceDirectory();
@@ -221,7 +231,7 @@ public interface PatchProcessAction {
 		List<String> getModifyList();
 		/**
 		 * Move old patch files into this directory. Note that this 
-		 * may be a relative path 
+		 * may be a <strong>relative</strong> path 
 		 * @return
 		 */
 		Path getStashDirectory();	//
@@ -251,6 +261,7 @@ public interface PatchProcessAction {
 			public List<String> getModifyList() {
 				return modifyList;
 			}
+			
 			public Path getStashDirectory() {
 				return stashDirectory;
 			}
