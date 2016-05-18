@@ -45,6 +45,7 @@ public class RemoveStashedOldFilesAction implements PatchProcessAction{
 			if (!Files.isDirectory(path)) {
 				Files.deleteIfExists(path);
 				logger.log(Msg.get(this, "info.deleteFile"), path.toString());
+//				logger.ln(Msg.get(this, "info.deleteFile"), path.toString());
 			} else {
 //				Stream<Path> subPaths = Files.walk(path);
 				Stream<Path> subPaths = Files.list(path);
@@ -57,11 +58,16 @@ public class RemoveStashedOldFilesAction implements PatchProcessAction{
 			logger.log(e);
 		}
 	}
-	
 
 	@Override
-	public String getName() {
-		return this.getClass().getName();
+	public String toString() {
+		return "RemoveStashedOldFilesAction [name=" + getName() + "]";
 	}
+	
+
+//	@Override
+//	public String getName() {
+//		return this.getClass().getName();
+//	}
 	
 }

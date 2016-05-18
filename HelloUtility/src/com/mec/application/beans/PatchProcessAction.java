@@ -34,10 +34,20 @@ public interface PatchProcessAction {
 	 * <pre>
 	 * If no such constructor exists, then the default constructor will be invoked.
 	 * </pre>
+	 * 
+	 * @return name of current process action, defult to full class name
+	 */
+	default String getName(){
+		return getClass().getName();
+	};
+	
+	/**
+	 * Get all the patch process actions as specified in <code>data/{PatchReleaseController}/ProcessActions.xml</code>.
+	 * If such config file doesn't exist, then a default </code>ProcessActions.xml</code> that bears <em>RelocateJars</em>
+	 * and <em>WriteReadMe</em> in it will be generated automatically.
+	 * @param logger
 	 * @return
 	 */
-	String getName();
-	
 	static List<PatchProcessAction> getPatchProcessActions(final MsgLogger logger){
 		List<PatchProcessAction> retval = new ArrayList<PatchProcessAction>();
 		retval.add(newWriteToFilesToJarAction(logger));
