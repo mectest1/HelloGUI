@@ -13,9 +13,9 @@ import com.mec.resources.MsgLogger;
  * @author MEC
  *
  */
-public class RemoveStashedOldFiles implements PatchProcessAction{
+public class RemoveStashedOldFilesAction implements PatchProcessAction{
 	private MsgLogger logger;
-	public RemoveStashedOldFiles(MsgLogger logger){
+	public RemoveStashedOldFilesAction(MsgLogger logger){
 		this.logger = logger;
 	}
 	

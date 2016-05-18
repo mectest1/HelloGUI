@@ -13,7 +13,7 @@
 	<actionsConfig>
         <attributes/>
         <!--<name>com.mec.application.beans.PatchProcessAction.RemoveStashedOldFiles</name>-->
-        <name>com.mec.application.beans.RemoveStashedOldFiles</name>
+        <name>com.mec.application.beans.RemoveStashedOldFilesAction</name>
         <toggledOn>true</toggledOn>
     </actionsConfig>
 </patchProcessActionConfigs>
