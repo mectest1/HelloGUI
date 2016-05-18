@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<patchProcessActionConfigs>
+    <actionsConfig>
+        <attributes/>
+        <name>RelocateJars</name>
+        <toggledOn>false</toggledOn>
+    </actionsConfig>
+    <actionsConfig>
+        <attributes/>
+        <name>WriteReadMe</name>
+        <toggledOn>false</toggledOn>
+    </actionsConfig>
+</patchProcessActionConfigs>

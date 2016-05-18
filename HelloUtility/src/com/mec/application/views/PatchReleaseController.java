@@ -158,17 +158,25 @@ public class PatchReleaseController implements MsgLogger{
 //				jarTool.writeFilesToJar(workspaceDir, projectName, sourceFileList, patchReleaseDir, getDelPath());
 //				log(FileParser.NEWLINE);
 //			}
-			PatchProcessAction writeToJarAction = PatchProcessAction.newWriteToFilesToJarAction(this);
-			writeToJarAction.proceed(ppContext);
+//			PatchProcessAction writeToJarAction = PatchProcessAction.newWriteToFilesToJarAction(this);
+//			writeToJarAction.proceed(ppContext);
+//			
+////			relocateJars(patchReleaseDir);
+//			PatchProcessAction relocateJarsAction = PatchProcessAction.newRelocateJarsAction(this);
+//			relocateJarsAction.proceed(ppContext);
+//			
+//			
+////			writeReadMe(patchReleaseDir, modifyList);
+//			PatchProcessAction writeReadMeAction = PatchProcessAction.newWriteReadMeAction(this);
+//			writeReadMeAction.proceed(ppContext);
 			
-//			relocateJars(patchReleaseDir);
-			PatchProcessAction relocateJarsAction = PatchProcessAction.newRelocateJarsAction(this);
-			relocateJarsAction.proceed(ppContext);
+			List<PatchProcessAction> actions = PatchProcessAction.getPatchProcessActions(this);
+			for(PatchProcessAction action : actions){
+				action.proceed(ppContext);
+			}
 			
 			
-//			writeReadMe(patchReleaseDir, modifyList);
-			PatchProcessAction writeReadMeAction = PatchProcessAction.newWriteReadMeAction(this);
-			writeReadMeAction.proceed(ppContext);
+			
 			log(Msg.get(this, "info.patchEnd"), LocalDateTime.now());
 			
 //			if(delPath.isPresent()){

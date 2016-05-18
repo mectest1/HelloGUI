@@ -26,7 +26,7 @@ public interface PatchProcessAction {
 //	PatchProcessAction from(MsgLogger logger, Path actionConfig);
 	void proceed(PatchProcessContext ppctx) throws Exception;
 	/**
-	 * Simple name of this process action for build-in actions (RelocateJars, WriteReadMe, etc), 
+	 * Simple action name of this process action for build-in actions (RelocateJars, WriteReadMe, etc), 
 	 * or the full class name for this PatchProcessAction, which should provide a constructor 
 	 * that accepts {@link MsgLogger} as the only parameter
 	 * @return
@@ -271,6 +271,10 @@ public interface PatchProcessAction {
 		public void setActionsConfig(List<PatchProcessActionConfig> actionsConfig) {
 			this.actionsConfig = actionsConfig;
 		}
+		@Override
+		public String toString() {
+			return "PatchProcessActionConfigs [actionsConfig=" + actionsConfig + "]";
+		}
 	}
 	
 //	@XmlRootElement
@@ -296,7 +300,11 @@ public interface PatchProcessAction {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+		@Override
+		public String toString() {
+			return "PatchProcessActionConfig [toggledOn=" + toggledOn + ", name=" + name + ", attributes=" + attributes
+					+ "]";
+		}
 		static PatchProcessActionConfig from(PatchProcessAction action){
 			PatchProcessActionConfig retval = new PatchProcessActionConfig();
 			retval.setName(action.getName());
