@@ -122,10 +122,18 @@ public class Config {
 //		}
 //		return retval;
 	}
+	/**
+	 * Return <code>ConfigEndpoint</code> that locates in "data/"
+	 * @return
+	 */
 	public static ConfigEndpoint defaultData(){
 //		return to(Msg.get(Config.class, "data.path"));
 		return DEFAULT_CONFIG_DATA;
 	}
+	/**
+	 * Return <code>ConfigEndpoint</code> that locates in "plugin/"
+	 * @return
+	 */
 	public static ConfigEndpoint pluginData(){
 		return to(Msg.get(Plugin.class, "plugin.root.dir"));
 	}
@@ -138,18 +146,21 @@ public class Config {
 	 * @param componentObj
 	 * @return
 	 */
+	@Deprecated
 	public static ConfigEndpoint of(Object componentObj){
 		return defaultData().component(componentObj.getClass().getName());
 	}
 	/**
 	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(Class)}. 
 	 */
+	@Deprecated
 	public static ConfigEndpoint of(Class<?> componentClass){
 		return defaultData().component(componentClass.getName());
 	}
 	/**
 	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(componentConfigDirStr)}. 
 	 */
+	@Deprecated
 	public static ConfigEndpoint of(String componentConfigDirStr){
 		return defaultData().component(componentConfigDirStr);
 	}
@@ -252,6 +263,8 @@ public class Config {
 		}
 		
 		/**
+		 * In case config file doesn't exist, or parse config XML file failed, 
+		 * empty value will be returned.
 		 * @param tag
 		 * @param configObjClass
 		 * @return

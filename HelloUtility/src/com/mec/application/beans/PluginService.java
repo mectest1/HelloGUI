@@ -11,6 +11,10 @@ public interface PluginService {
 		void showNewStage(String viewURL, String title);
 	}
 	
+	interface LogService extends PluginService{
+		
+	}
+	
 
 	/**
 	 * @author MEC
