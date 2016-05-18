@@ -38,7 +38,7 @@ public class JarTool {
 		JarTool retval = new JarTool();
 		retval.setLogger(logger);
 //		Config.of(retval).setLogger(logger);
-		Config.defaultData().component(retval).setLogger(logger);
+		Config.data().of(retval).setLogger(logger);
 		return retval;
 	}
 	

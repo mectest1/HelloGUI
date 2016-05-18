@@ -96,7 +96,7 @@ public class PatchReleaseController implements MsgLogger{
 		
 		//
 //		Config.of(this).setLogger(this);
-		Config.defaultData().component(this).setLogger(this);
+		Config.data().of(this).setLogger(this);
 //		Callback<ListView<PatchReleaseConfigBean>, ListCell<PatchReleaseConfigBean>> favCellFactory= l -> 
 //			new ListCell<PatchReleaseConfigBean>(){
 //				@Override
@@ -206,7 +206,7 @@ public class PatchReleaseController implements MsgLogger{
 		Path patchReleaseDir = Paths.get(patchReleaseDirStr);
 		if(!(Files.exists(patchReleaseDir))){
 //			Config.of(this).createIfNotExists(patchReleaseDir, Files::createDirectories);
-			Config.defaultData().createIfNotExists(patchReleaseDir, Files::createDirectories);
+			Config.data().createIfNotExists(patchReleaseDir, Files::createDirectories);
 			log(String.format(Msg.get(this, "info.patchReleaseDir.create"), patchReleaseDir));
 		}
 		
@@ -343,7 +343,7 @@ public class PatchReleaseController implements MsgLogger{
 	private void saveFavoriteListToFile(){
 		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(favList.getItems());
 //		Config.of(this).save(Msg.get(this, "config.favorites"), configs);
-		Config.defaultData().component(this).save(Msg.get(this, "config.favorites"), configs);
+		Config.data().of(this).save(Msg.get(this, "config.favorites"), configs);
 	}
 	private void saveHistoryList(){
 		String name = configName.getText();
@@ -362,7 +362,7 @@ public class PatchReleaseController implements MsgLogger{
 		}
 		PatchReleaseConfigBeans configs = new PatchReleaseConfigBeans(historyRecords);
 //		Config.of(this).save(Msg.get(this, "config.history"), configs);
-		Config.defaultData().component(this).save(Msg.get(this, "config.history"), configs);
+		Config.data().of(this).save(Msg.get(this, "config.history"), configs);
 	}
 
 //	private ChangeListener<? super Number> onListItemSelected(ListView<PatchReleaseConfigBean> listView){

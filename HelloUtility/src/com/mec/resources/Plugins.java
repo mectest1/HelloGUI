@@ -298,7 +298,7 @@ public class Plugins {
 //		}
 		public static ConfigEndpoint of(String pluginName){
 //			return Config.pluginData();
-			return Config.pluginData().component(pluginName);
+			return Config.plugins().of(pluginName);
 		}
 
 //		@Override
@@ -357,7 +357,7 @@ public class Plugins {
 			try {
 				if(parent.equals(ClassLoader.getSystemClassLoader())){	//If it's PLUGIN_ROOT, then create ./lib if it doesn't exist;
 //					Config.of(this).createIfNotExists(pluginPath, Files::createDirectories);
-					Config.defaultData().createIfNotExists(pluginPath, Files::createDirectories);
+					Config.data().createIfNotExists(pluginPath, Files::createDirectories);
 					
 				}
 				if (!(Files.exists(pluginPath)

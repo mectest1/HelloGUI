@@ -126,21 +126,23 @@ public class Config {
 	 * Return <code>ConfigEndpoint</code> that locates in "data/"
 	 * @return
 	 */
-	public static ConfigEndpoint defaultData(){
+	//public static ConfigEndpoint defaultData()
+	public static ConfigEndpoint data(){
 //		return to(Msg.get(Config.class, "data.path"));
 		return DEFAULT_CONFIG_DATA;
 	}
 	/**
-	 * Return <code>ConfigEndpoint</code> that locates in "plugin/"
+	 * Return <code>ConfigEndpoint</code> that locates in "plugins/"
 	 * @return
 	 */
-	public static ConfigEndpoint pluginData(){
+	//public static ConfigEndpoint pluginData()
+	public static ConfigEndpoint plugins(){
 		return to(Msg.get(Plugin.class, "plugin.root.dir"));
 	}
 	
 	//---------------------------------------------------
 	/**
-	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(Object)}. 
+	 * Use {@link #data()} for this configuration, shorthand for {@link #data()}.component(Object)}. 
 	 * 
 	 * <h4>Note: For compatible usage.</h4> 
 	 * @param componentObj
@@ -148,21 +150,21 @@ public class Config {
 	 */
 	@Deprecated
 	public static ConfigEndpoint of(Object componentObj){
-		return defaultData().component(componentObj.getClass().getName());
+		return data().of(componentObj.getClass().getName());
 	}
 	/**
-	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(Class)}. 
+	 * Use {@link #data()} for this configuration, shorthand for {@link #data()}.component(Class)}. 
 	 */
 	@Deprecated
 	public static ConfigEndpoint of(Class<?> componentClass){
-		return defaultData().component(componentClass.getName());
+		return data().of(componentClass.getName());
 	}
 	/**
-	 * Use {@link #defaultData()} for this configuration, shorthand for {@link #defaultData()}.component(componentConfigDirStr)}. 
+	 * Use {@link #data()} for this configuration, shorthand for {@link #data()}.component(componentConfigDirStr)}. 
 	 */
 	@Deprecated
 	public static ConfigEndpoint of(String componentConfigDirStr){
-		return defaultData().component(componentConfigDirStr);
+		return data().of(componentConfigDirStr);
 	}
 	
 	@Override
@@ -299,24 +301,27 @@ public class Config {
 		 * @param componentObj
 		 * @return
 		 */
-		public ConfigEndpoint component(Object componentObj){
-			return component(componentObj.getClass().getName());
+		//public ConfigEndpoint component(Object componentObj){
+		public ConfigEndpoint of(Object componentObj){
+			return of(componentObj.getClass().getName());
 		}
 		/**
 		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentClass</code>'s name
 		 * @param componentClass
 		 * @return
 		 */
-		public ConfigEndpoint component(Class<?> componentClass){
-			return component(componentClass.getName());
+//		public ConfigEndpoint component(Class<?> componentClass){
+		public ConfigEndpoint of(Class<?> componentClass){
+			return of(componentClass.getName());
 		}
 		/**
 		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentConfigDirStr</code>
 		 * @param componentConfigDirStr
 		 * @return
 		 */
-		public ConfigEndpoint component(String componentConfigDirStr){
-			return component(Paths.get(componentConfigDirStr));
+//		public ConfigEndpoint component(String componentConfigDirStr){
+		public ConfigEndpoint of(String componentConfigDirStr){
+			return forComponent(Paths.get(componentConfigDirStr));
 		}
 		/**
 		 * Retrieve {@link ConfigEndpoint} for <em>component</em> specified by <code>componentConfigDir</code>, 
@@ -324,7 +329,7 @@ public class Config {
 		 * @param componentConfigDir data file will be saved in/load from configChain.dataPath/<strong><code>componentConfigDir</code></strong>/tag.xml
 		 * @return
 		 */
-		private ConfigEndpoint component(Path componentConfigDir){
+		private ConfigEndpoint forComponent(Path componentConfigDir){
 			Objects.requireNonNull(componentConfigDir);
 //			setComponentConfigDir(componentConfigDir);
 //			ConfigEndpoint retval = Optional.ofNullable(componentConfigs.get(getComponentConfigKey(componentConfigDir)))
@@ -350,7 +355,7 @@ public class Config {
 		//----------------------------------------------
 		private void setComponentConfigDir(Path componentConfigDir){
 //			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElse(Config.defaultData().configChain.getDataPath());
-			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElseGet(() -> Config.defaultData().configChain.getDataPath());
+			this.componentConfigDir = Optional.ofNullable(componentConfigDir).orElseGet(() -> Config.data().configChain.getDataPath());
 			Optional.ofNullable(configChain.getDataPath())
 				.ifPresent(p -> this.componentConfigDir = p.resolve(this.componentConfigDir));
 //			return this;

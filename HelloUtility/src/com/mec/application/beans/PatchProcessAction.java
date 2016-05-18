@@ -67,7 +67,7 @@ public interface PatchProcessAction {
 		
 		String configTag = Msg.get(PatchReleaseController.class, "config.processActions");
 		Optional<PatchProcessActionConfigs> actionsConfigOpt =
-				Config.defaultData().component(PatchReleaseController.class)
+				Config.data().of(PatchReleaseController.class)
 				.load(configTag, PatchProcessActionConfigs.class);
 		
 		if(actionsConfigOpt.isPresent()){
@@ -113,7 +113,7 @@ public interface PatchProcessAction {
 			
 			PatchProcessActionConfigs actionsConfig = new PatchProcessActionConfigs();
 			actionsConfig.setActionsConfig(actionsFromConfig.stream().map(PatchProcessActionConfig::from).collect(Collectors.toList()));
-			Config.defaultData().component(PatchReleaseController.class).save(configTag, actionsConfig);
+			Config.data().of(PatchReleaseController.class).save(configTag, actionsConfig);
 			
 			retval.addAll(actionsFromConfig);
 		}
@@ -238,7 +238,7 @@ public interface PatchProcessAction {
 //			JarTool.tryMoveOldToDelDirectory(readMe, getDelPath());
 			JarTool.tryMoveOldToDelDirectory(readMe, stashDirectory);
 //			Config.of(PatchReleaseController.class).createIfNotExists(readMe, Files::createFile);
-			Config.defaultData().createIfNotExists(readMe, Files::createFile);
+			Config.data().createIfNotExists(readMe, Files::createFile);
 			Files.write(readMe, contentLines);
 		}
 
