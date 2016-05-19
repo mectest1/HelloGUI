@@ -56,7 +56,8 @@ public class XMLStructComparator {
 	public boolean isXMLFilesEqual(Path xml1, Path xml2){
 		requireNonNull(xml1, xml2);
 		if(!(Files.exists(xml1) && Files.exists(xml2))){
-			logger.ln("One of the files doesn't esit: %s, %s", xml1, xml2);
+//			logger.ln("One of the files doesn't esit: %s, %s", xml1, xml2);
+			logger.ln(Msg.get(this, "info.fileNotExist"), xml1, xml2);
 			return false;
 		}
 		
@@ -93,7 +94,8 @@ public class XMLStructComparator {
 				return false;
 			}
 		}else{
-			logger.ln("One of the documents is null", XMLTools.inst().nodeToStr(dom1), XMLTools.inst().nodeToStr(dom2));
+//			logger.ln("One of the documents is null", XMLTools.inst().nodeToStr(dom1), XMLTools.inst().nodeToStr(dom2));
+			logger.ln(Msg.get(this, "info.nullDocument"), XMLTools.inst().nodeToStr(dom1), XMLTools.inst().nodeToStr(dom2));
 			return false;
 		}
 		
@@ -121,7 +123,8 @@ public class XMLStructComparator {
 		boolean retval = true;
 		
 		if(node1.getNodeType() != node2.getNodeType()){
-			logger.ln("Different node types, %s, %s", XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+//			logger.ln("Different node types, %s, %s", XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+			logger.ln(Msg.get(this, "info.differentNodeTypes"), XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
 			return false;
 		}
 		
@@ -129,7 +132,8 @@ public class XMLStructComparator {
 //				|| Node.ATTRIBUTE_NODE == node1.getNodeType()
 				){
 			if(!node1.getNodeName().equals(node2.getNodeName())){
-				logger.ln("Different node names: %s, %s", node1.getNodeName(), node2.getNodeName());
+//				logger.ln("Different node names: %s, %s", node1.getNodeName(), node2.getNodeName());
+				logger.ln(Msg.get(this, "info.differentNodeNames"), node1.getNodeName(), node2.getNodeName());
 				return false;
 			}
 			if(!isNodeAttributesEqual(node1, node2)){
@@ -164,7 +168,8 @@ public class XMLStructComparator {
 		Set<String> attrs1Name = extractNames(attrs1);
 		Set<String> attrs2Name = extractNames(attrs2);
 		if(!attrs1Name.equals(attrs2Name)){
-			logger.ln("Node attributes not equal: \n%s,\n%s", XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+//			logger.ln("Node attributes not equal: \n%s,\n%s", XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+			logger.ln(Msg.get(this, "info.attributeNotEqual"), XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
 			return false;
 		}
 		
@@ -199,7 +204,8 @@ public class XMLStructComparator {
 		
 		while(null != node1Next){
 			if(null == node2Next){
-				logger.ln("One of the nodes is null: %s, %s", XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+//				logger.ln("One of the nodes is null: %s, %s", XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
 				return false;
 			}
 			
@@ -213,7 +219,8 @@ public class XMLStructComparator {
 		
 		//null == node1Next
 		if(null != node2Next){
-			logger.ln("One of the nodes is null: %s, %s", XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+//			logger.ln("One of the nodes is null: %s, %s", XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+			logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
 			return false;
 		}
 		
@@ -250,11 +257,10 @@ public class XMLStructComparator {
 			//Ignore TEXT_NODE
 			if(Node.ELEMENT_NODE == nonEmptyChild.getNodeType()){
 				
-				logger.ln("One of the node is null: %s, %s", XMLTools.inst().nodeToStr(node1Child), XMLTools.inst().nodeToStr(node2Child));
+//				logger.ln("One of the node is null: %s, %s", XMLTools.inst().nodeToStr(node1Child), XMLTools.inst().nodeToStr(node2Child));
+				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Child), XMLTools.inst().nodeToStr(node2Child));
 				return false;
 			}
-			
-			
 		}
 		
 		return retval;
