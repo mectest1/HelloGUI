@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VCH>
+    <HEADINFO>
+        <MODULE desc="Hello" id="World" name="what">TEST</MODULE>
+        <DESC>Test Move Money</DESC>
+        <OP_TYPE>S</OP_TYPE>
+        <DC_VALID_TYPE>11</DC_VALID_TYPE>
+        <STPCODE>aaa</STPCODE>
+        <COPYNUMS>1</COPYNUMS>
+        <PRINTERNAME/>
+        <PCOPYNUMS>0</PCOPYNUMS>
+        <PPRINTERNAME/>
+        <PRINTSTATE>R</PRINTSTATE>
+        <MAILID/>
+        <PT/>
+        <FAXID/>
+        <GAPIRULE/>
+        <FLDLIST/>
+    </HEADINFO>
+    <VCH_MAPPING>
+	</VCH_MAPPING>
+</VCH>
