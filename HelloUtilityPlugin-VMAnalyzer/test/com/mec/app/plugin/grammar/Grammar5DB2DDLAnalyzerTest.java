@@ -329,7 +329,8 @@ public class Grammar5DB2DDLAnalyzerTest {
 //		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList2.sql");
 //		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList_EXIMSYS.sql");
 //		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList_EXIMUSER.sql");
-		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList_EXIMTRX_IMCO.sql");
+//		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList_EXIMTRX_IMCO.sql");
+		Path tableFile = Paths.get("data/ddl/2016-04-14_SampleDDL5_original00001~60000_tableList_EXIMUSER_SEC.sql");
 		List<String> tables = Files.readAllLines(tableFile).stream().filter(l -> !(l.startsWith("--") || l.startsWith("//"))).collect(Collectors.toList());
 		
 		

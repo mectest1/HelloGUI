@@ -6,14 +6,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mec.app.plugin.filemanager.resources.Msg;
 import com.mec.app.plugin.filemanager.resources.MsgLogger;
@@ -183,6 +187,27 @@ public class XMLParamComparatorController {
 		
 		
 		/**
+		 * Get the normalized string representation of this list of grouped sets. e.g.:
+		 * <quote>
+		 * [{1,2,3},{4,5,6},{7,8,9},{10}}]
+		 * </quote>
+		 * @param groupedNumDirs
+		 * @return
+		 */
+		public String groupedNumDirsToStr(List<Set<Path>> groupedNumDirs){
+			String groupedNumDirsStr = groupedNumDirs.stream()
+					.map(sp -> sp.stream()
+							.sorted(Comparator.comparingInt(p -> Integer.parseInt(p.getFileName().toString())))
+							.map(p -> p.getFileName().toString())
+//							.collect(Collectors.joining(",", "{", "}"))
+							.collect(Collectors.joining(CHAR_ITEM_DELIMITER, CHAR_SET_START, CHAR_SET_END))
+//					).collect(Collectors.joining(",", "[", "]"));
+					).collect(Collectors.joining(CHAR_ITEM_DELIMITER, CHAR_LIST_START, CHAR_LIST_END));
+//			logger.log(groupedNumDirsStr);
+			return groupedNumDirsStr;
+		}
+		
+		/**
 		 * Group each descendant XML file in this <code>characteristicPath</code>
 		 * according to their structures. Final result would look like this:
 		 * <dl>
@@ -196,40 +221,97 @@ public class XMLParamComparatorController {
 		 * </dl>
 		 * 
 		 *  
-		 * 
 		 * @param characteristicPath
+		 * @return List of sets of <code>numDirs</code> grouped by struct of
+		 * 		<code>xmlParamFiles</code> in each <code>numDirs</code> 
 		 */
-		Map<Path, Set<Set<Path>>> groupNumDirContents(Path characteristicPath){
-			Map<Path, Set<Set<Path>>> retval = new HashMap<>();
+//		Map<Path, Set<Set<Path>>> groupNumDirContents(Path characteristicPath){
+		Map<Path, List<Set<Path>>> groupNumDirContents(Path characteristicPath){
+//			Map<Path, Set<Set<Path>>> retval = new HashMap<>();
+			Map<Path, List<Set<Path>>> retval = new HashMap<>();
 			Objects.requireNonNull(characteristicPath);
 			if(!Files.exists(characteristicPath)
 				|| !Files.isDirectory(characteristicPath)){
 				logger.log(Msg.get(XMLParamComparatorController.class, "error.invalidCharacteristicPath")
 						, characteristicPath.toString());
 				return retval;
+//				return;
 			}
 			
-			try {
-				List<Path> numDirs = Files.list(characteristicPath)
-						.filter(this::isNumDir)
-						.collect(Collectors.toList());
-				
+//			try {
+//				List<Path> numDirs = Files.list(characteristicPath)
+//						.filter(this::isNumDir)
+//						.collect(Collectors.toList());
+				List<Path> numDirs = listChildNumDirs(characteristicPath);
 //				numDirs.stream().collect(Collectors.groupingBy(classifier))
 				for(Path numDir : numDirs){
-					walkXmlFilesInNumDir(numDir, numDirs);
+//					walkXmlFilesInNumDir(numDir, numDirs);
+					List<Path> xmlParamFiles = listXmlParamFiles(numDir);
+					for(Path xmlPathRelativeToNumDir : xmlParamFiles){
+//						List<Set<Path>> xmlStructSets = groupXmlFiles(xmlPathRelativeToNumDir, numDirs);
+//						retval.computeIfAbsent(xmlPathRelativeToNumDir, key -> xmlStructSets);
+						retval.computeIfAbsent(xmlPathRelativeToNumDir, key -> 
+							groupXmlFiles(key, numDirs)
+						);
+					}
 				}
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+//			} catch (IOException e) {
+//				logger.log(e);
+//			}
+			
+			return retval;
+		}
+		
+		
+//		private Map<Path, Set<Set<Path>>> walkXmlFilesInNumDir(Path currentNumDir, List<Path> siblingNumDirs){
+//		private void walkXmlFilesInNumDir(Path currentNumDir, List<Path> siblingNumDirs){
+//			Map<Path, Set<Set<Path>>> retval = new HashMap<>();
+			
+			
+//			return retval;
+			
+//		}
+		
+		/**
+		 * List all direct child <code>numDirs</code> in this <code>characteristicPath</code> 
+		 * @param characteristicPath
+		 * @return
+		 */
+		List<Path> listChildNumDirs(Path characteristicPath){
+			List<Path> numDirs = null;
+			if(Files.isDirectory(characteristicPath)){
+				try {
+					numDirs = Files.list(characteristicPath)
+							.filter(this::isNumDir)
+							.collect(Collectors.toList());
+				} catch (IOException e) {
+					logger.log(e);
+					
+				}
+			}
+			if(null == numDirs){
+				numDirs = new ArrayList<>();
+			}
+			return numDirs;
+		}
+		
+		/**
+		 * List all the descendant parameter XML file paths <strong>relative</strong> to <code>numDir</code>
+		 * will be returned.
+		 * @param numDir
+		 * @return
+		 */
+		List<Path> listXmlParamFiles(Path numDir){
+			List<Path> retval = new ArrayList<>();
+			Stream<Path> descendantPaths;
+			try {
+				descendantPaths = Files.walk(numDir);
+				descendantPaths.filter(p -> !Files.isDirectory(p))
+						.filter(this::isXmlFile).forEach(xmlFile -> {
+							retval.add(numDir.relativize(xmlFile));
+						});
+				descendantPaths.close();
 			} catch (IOException e) {
 				logger.log(e);
 			}
@@ -238,17 +320,51 @@ public class XMLParamComparatorController {
 		}
 		
 		
-		private Map<Path, Set<Set<Path>>> walkXmlFilesInNumDir(Path currentNumDir, List<Path> siblingNumDirs){
-			Map<Path, Set<Set<Path>>> retval = new HashMap<>();
-			
-			
-			return retval;
-			
+		/**
+		 * Grouping <code>curAndSiblingNumDirs</code> according to different structures of the xml file as 
+		 * specified by <code>xmlPathRelativeToNumDir</code>
+		 * @param xmlPathRelativeToNumDir
+		 * @param curAndSiblingNumDirs
+		 */
+//		private void groupXmlFiless(Path xmlPathRelativeToNumDir, Path currentNumDir, List<Path> curAndSiblingNumDirs){
+		private List<Set<Path>> groupXmlFiles(Path xmlPathRelativeToNumDir, List<Path> curAndSiblingNumDirs){
+//			Map<>
+//			Set<Path> numDirSet = new HashSet<>();
+			List<Set<Path>> numDirSetGroup = new ArrayList<>();
+//			Set<XMLParamFile> xmlParamFileSet = new HashSet<>();
+//			Path xmlFile = null;
+			for(Path numDir : curAndSiblingNumDirs){
+//				xmlFile = numDir.resolve(xmlPathRelativeToNumDir);
+//				XMLParamFile paramFile = new XMLParamFile(xmlPathRelativeToNumDir, numDir);
+//				if
+				Optional<Set<Path>> numDirWithSameStruct = numDirSetGroup.stream()
+						.filter(numDirSet -> isWithSameXmlStruct(xmlPathRelativeToNumDir, numDir, numDirSet))
+						.findAny();
+				if(numDirWithSameStruct.isPresent()){
+					numDirWithSameStruct.get().add(numDir);
+				}else{
+					Set<Path> newXmlStructSet = new HashSet<>();
+					newXmlStructSet.add(numDir);
+					numDirSetGroup.add(newXmlStructSet);
+				}
+				
+			}
+			return numDirSetGroup;
+//			curAndSiblingNumDirs.stream().collect(Collectors.);
 		}
 		
-		
-		
-		
+		private boolean isWithSameXmlStruct(Path xmlPathRelativeToNumDir, Path numDirNew, Set<Path> numDirWithSameStruct){
+			if(null == numDirWithSameStruct){
+				return false;
+			}
+			boolean retval = false;
+			retval = numDirWithSameStruct.stream().anyMatch(numDirOld -> {
+				Path xml1 = numDirNew.resolve(xmlPathRelativeToNumDir);
+				Path xml2 = numDirOld.resolve(xmlPathRelativeToNumDir);
+				return XMLStructComparator.inst().isXMLFilesEqual(xml1, xml2);
+			});
+			return retval;
+		}
 		
 		private boolean isNumDir(Path subDir){
 			Matcher m = NUM_SUB_DIR_PATTERN.matcher(subDir.getFileName().toString());
@@ -258,11 +374,75 @@ public class XMLParamComparatorController {
 //		public void setLogger(MsgLogger logger) {
 //			this.logger = logger;
 //		}
+		
+		private boolean isXmlFile(Path xmlFile){
+			return xmlFile.getFileName().toString().toLowerCase().endsWith(XML_SUFFIX);
+		}
+		
 
-
+		
 		private MsgLogger logger = MsgLogger.defaultLogger();
 		static final Pattern NUM_SUB_DIR_PATTERN = Pattern.compile(Msg.get(XMLParamComparatorController.class, "pattern.numSubDir"));
+		static final String XML_SUFFIX = Msg.get(XMLParamComparatorController.class, "suffix.xml");
+		static final String CHAR_SET_START= Msg.get(XMLParamComparatorController.class, "char.set.start");
+		static final String CHAR_SET_END= Msg.get(XMLParamComparatorController.class, "char.set.end");
+		static final String CHAR_LIST_START= Msg.get(XMLParamComparatorController.class, "char.list.start");
+		static final String CHAR_LIST_END= Msg.get(XMLParamComparatorController.class, "char.list.end");
+		static final String CHAR_ITEM_DELIMITER= Msg.get(XMLParamComparatorController.class, "char.item.delimiter");
 	}
+	
+//	static class XMLParamFile{
+//		Path xmlPathRelativeToNumDir;
+//		Path numDir;
+//		Document domStruct;
+//		Path xmlFileFullPath;
+//		public XMLParamFile(Path xmlPathRelativeToNumDir, Path numDir) {
+//			super();
+//			this.xmlPathRelativeToNumDir = xmlPathRelativeToNumDir;
+//			this.numDir = numDir;
+//			this.xmlFileFullPath = numDir.relativize(xmlPathRelativeToNumDir);
+//		}
+//		public Path getXmlPathRelativeToNumDir() {
+//			return xmlPathRelativeToNumDir;
+//		}
+//		public void setXmlPathRelativeToNumDir(Path xmlPathRelativeToNumDir) {
+//			this.xmlPathRelativeToNumDir = xmlPathRelativeToNumDir;
+//		}
+//		public Path getNumDir() {
+//			return numDir;
+//		}
+//		public void setNumDir(Path numDir) {
+//			this.numDir = numDir;
+//		}
+//		public Document getDomStruct() {
+//			return domStruct;
+//		}
+//		public void setDomStruct(Document domStruct) {
+//			this.domStruct = domStruct;
+//		}
+//		public Path getXmlFileFullPath() {
+//			return xmlFileFullPath;
+//		}
+//		@Override
+//		public int hashCode() {
+//			final int prime = 31;
+//			int result = 1;
+//			result = prime * result + ((domStruct == null) ? 0 : domStruct.hashCode());
+//			result = prime * result + ((xmlPathRelativeToNumDir == null) ? 0 : xmlPathRelativeToNumDir.hashCode());
+//			return result;
+//		}
+//		@Override
+//		public boolean equals(Object obj) {
+//			if(!(obj instanceof XMLParamFile)){
+//				return false;
+//			}
+//			
+//			Path xml1 = getXmlFileFullPath();
+//			Path xml2 = ((XMLParamFile)obj).getXmlFileFullPath();
+//			return XMLStructComparator.inst().isXMLFilesEqual(xml1, xml2);
+//		}
+//		
+//	}
 
 //	static final PrintStream out = System.out;
 	MsgLogger logger = MsgLogger.defaultLogger();

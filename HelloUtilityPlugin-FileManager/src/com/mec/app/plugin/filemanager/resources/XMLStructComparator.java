@@ -55,12 +55,17 @@ public class XMLStructComparator {
 	
 	public boolean isXMLFilesEqual(Path xml1, Path xml2){
 		requireNonNull(xml1, xml2);
-		if(!(Files.exists(xml1) && Files.exists(xml2))){
+		if(!Files.exists(xml1) && !Files.exists(xml2)){
+			return true;
+		}else if(Files.exists(xml1) && !Files.exists(xml2)
+				|| !Files.exists(xml1) && Files.exists(xml2)
+				){
+//		if(!(Files.exists(xml1) && Files.exists(xml2))){
 //			logger.ln("One of the files doesn't esit: %s, %s", xml1, xml2);
 			logger.ln(Msg.get(this, "info.fileNotExist"), xml1, xml2);
 			return false;
 		}
-		
+		//else Files.exists(xml1) && Files.exists(xml2);
 		boolean retval = true;
 		Document dom1 = XMLTools.inst().fileToDom(xml1);
 		Document dom2 = XMLTools.inst().fileToDom(xml2);
