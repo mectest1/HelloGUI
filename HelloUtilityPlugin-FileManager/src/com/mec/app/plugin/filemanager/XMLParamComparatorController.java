@@ -1,10 +1,13 @@
 package com.mec.app.plugin.filemanager;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,9 +28,29 @@ import com.mec.app.plugin.filemanager.resources.XMLStructComparator;
 
 import javafx.fxml.FXML;
 
-public class XMLParamComparatorController {
+public class XMLParamComparatorController implements MsgLogger{
 	
-	
+	ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(this);
+//	XMLStructComparator diff = XMLStructComparator.inst();
+	/**
+	 * A map from each characteristic path to its grouped NumDirs;
+	 * <ul>
+	 * 	<li>cpsWithNumDirsParams: Characteristic Path => Grouped NumDirs by XML Struct</li>
+	 * 	<li>Grouped NumDirs by XML Struct: Param File Name => List of Grouped NumDirs</li>
+	 * 	<li>List of Grouped NumDirs: Grouped NumDirs *</li>
+	 * 	<li>Grouped NumDirs: Set of NuMDirs</li>
+	 * </ul>
+	 * <h4>For example:</h4>
+	 * <pre>
+	 * {Func_Group_1 => {Param_File_1.xml => [{num1, num2}, {num3, num4}]
+	 * 			,Param_File_2.xml => [{num1, num3}, {num2, num4}]}
+	 * ,Func_Group_2 => {Param_File_3.xml => [{num1, num2, num5}, {num3, num4}]
+	 * 			,Param_File_4.xml => [{num1, num3}, {num2, num4, num5}]}
+	 * }
+	 * </pre>
+	 */
+	Map<Path, Map<Path, List<Set<Path>>>> cpsWithNumDirParams;
+	Path paramRootDir;
 	
 	@FXML
 	private void initialize(){
@@ -41,7 +64,120 @@ public class XMLParamComparatorController {
 		}
 	}
 	
+	/**
+	 * Parse XML Param Files stored in descendant NumDirs of this <code>paraRootDir</code>, 
+	 * and store the parsing result in {@link #cpsWithNumDirParams}.
+	 * 
+	 * <p>
+	 * <strong>Note:</strong> this method should be invoked before 
+	 * </p>
+	 * @param paramRootDir
+	 */
+	void parseParamXmlStruct(Path paramRootDir) {
+		Stream.of(paramRootDir).forEach(Objects::requireNonNull);
+		
+		this.paramRootDir = paramRootDir;
+		cpsWithNumDirParams = new HashMap<>();
+//		ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(this);
+//			BufferedWriter outputWriter = Files.newBufferedWriter(outputLogFile, StandardOpenOption.CREATE,
+//					StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+			List<Path> cps = pe.getCharacteristicPath(paramRootDir);
+			for(Path cp : cps){
+//				logAndWrite(outputWriter, Msg.get(this, "info.funcGroup"), paraRootDir.relativize(cp).toString());
+				Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = pe.groupNumDirContents(cp);
+				cpsWithNumDirParams.put(cp, groupedNumDirsByXmlStruct);
+				//Reserver only paramFiles from HSBC/US when multiple bankGroups and countryCodes are involved 
+//				Set<Path> filteredParamFiles = groupedNumDirsByXmlStruct.keySet().stream().filter(paramFile -> {
+//					if(PATH_NAME_COUNT > paramFile.getNameCount()){
+//						return true;
+//					}else{
+//						String bankGroup = paramFile.getName(0).getFileName().toString();
+//						String countryCode = paramFile.getName(1).getFileName().toString();
+////						if(DEFAULT_BANK_GROUP.equals(bankGroup)
+////							&& DEFAULT_COUNTRY_CODE.equals(countryCode)
+////							){
+////							return true;
+////						}else{
+////							return false;
+////						}
+//						if(DEFAULT_BANK_GROUP.equals(bankGroup)
+//								&& !DEFAULT_COUNTRY_CODE.equals(countryCode)
+//								){
+//							return false;
+//						}else{
+//							return true;
+//						}
+//					}
+//				}).collect(Collectors.toSet());
+				
+			}
+	}
 	
+	/**
+	 * Record the XMLParamFiles difference into log file. 
+	 * <p>
+	 * <strong>Note: </strong> invoke {@link #parseParamXmlStruct(Path)} before invoking this method
+	 * </p>
+	 * @param outputLogFile
+	 */
+	void outputDifferenceLog(Path outputLogFile){
+		Objects.requireNonNull(outputLogFile);
+		
+		try(BufferedWriter outputWriter = Files.newBufferedWriter(outputLogFile, StandardOpenOption.CREATE,
+					StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)){
+			
+//			Set<Path> cps = cpsWithNumDirParams.keySet();
+			for(Path cp : cpsWithNumDirParams.keySet()){
+				logAndWrite(outputWriter, Msg.get(this, "info.funcGroup"), this.paramRootDir.relativize(cp).toString());
+				Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = cpsWithNumDirParams.get(cp);
+				
+				//Get only paramFiles that start with "HSBC/US", or not start with "HSBC" at all
+				List<Path> filteredParamFiles = groupedNumDirsByXmlStruct.keySet().stream()
+						.filter(pe::isStartsWithBankGroundAndCountryCode).collect(Collectors.toList());
+				
+				for(Path paramFile : filteredParamFiles){
+					List<Set<Path>> groupedNumDirs = groupedNumDirsByXmlStruct.get(paramFile);
+					groupedNumDirs = ParamDirectoryExtractor.getFirstElementOfEachSet(groupedNumDirs);
+					
+					String groupedNumDirsStr = ParamDirectoryExtractor.listOfSetsToStr(groupedNumDirs);
+					logAndWrite(outputWriter, Msg.get(this, "info.paramFileToNumDirsGroup")
+							, paramFile.toString(), groupedNumDirsStr);
+					
+					
+					if(1 < groupedNumDirs.size()){
+						StringPrefixLogger sl = new StringPrefixLogger(Msg.get(this, "info.xmlStructDiffPattern"));
+						String diffReport = pe.getDiffReport(paramRootDir, groupedNumDirs, paramFile, sl);
+						if(!diffReport.isEmpty()){
+							logAndWrite(outputWriter, NEW_LINE);
+							logAndWrite(outputWriter, diffReport);
+						}
+					}
+					
+				}
+			}
+		} catch (IOException e) {
+			log(e);
+		}
+		
+	}
+	
+	void logAndWrite(Writer writer, String format, Object ... args) throws IOException{
+		String content = String.format(format, args);
+		logger.log(content);
+		writer.append(content);
+	}
+	
+	void logAndWrite(Writer writer, String content) throws IOException{
+		logger.log(content);
+		writer.append(content);
+	}
+	
+	@Override
+	public void log(String msg) {
+		logger.log(msg);
+	}
+	
+
 	/**
 	 * <h3>Consider the structure in XML Param parent directory</h3>
 	 * <p>PARAM_ROOT_DIRECTORY/</p>
@@ -186,6 +322,51 @@ public class XMLParamComparatorController {
 		}
 		
 		
+
+		/**
+		 * If <code>paramFile</code> name starts with <em>HSBC</em>, then filter only those <em>HSBC/US</em>, 
+		 * otherwise simply return this paramFile; 
+		 * @param paramFile
+		 * @return
+		 */
+		boolean isStartsWithBankGroundAndCountryCode(Path paramFile){
+			if(PATH_NAME_COUNT > paramFile.getNameCount()){
+				return true;
+			}else{
+				String bankGroup = paramFile.getName(0).getFileName().toString();
+				String countryCode = paramFile.getName(1).getFileName().toString();
+//				if(DEFAULT_BANK_GROUP.equals(bankGroup)
+//					&& DEFAULT_COUNTRY_CODE.equals(countryCode)
+//					){
+//					return true;
+//				}else{
+//					return false;
+//				}
+//				if(DEFAULT_BANK_GROUP.equals(bankGroup)
+//						&& !DEFAULT_COUNTRY_CODE.equals(countryCode)
+//						){
+//					return false;
+//				}else{
+//					return true;
+//				}
+				if(DEFAULT_BANK_GROUP.equals(bankGroup)){
+					if(DEFAULT_COUNTRY_CODE.equals(countryCode)){
+						return true;
+					}else{
+						return false;
+					}
+				}else{	//!DEFAULT_BANK_GROUP.equals(bankGroup)
+					if(bankGroup.startsWith(DEFAULT_BANK_GROUP)	//directories like HSBCD, HSBCN, etc.
+						|| bankGroup.startsWith(IGNORE_BANK_GROUP)
+						){	
+						return false;
+					}else{
+						return true;
+					}
+				}
+			}
+		}
+		
 		/**
 		 * Get the normalized string representation of this list of grouped sets. e.g.:
 		 * <quote>
@@ -194,7 +375,8 @@ public class XMLParamComparatorController {
 		 * @param groupedNumDirs
 		 * @return
 		 */
-		public String groupedNumDirsToStr(List<Set<Path>> groupedNumDirs){
+//		public String groupedNumDirsToStr(List<Set<Path>> groupedNumDirs){
+		public static String listOfSetsToStr(List<Set<Path>> groupedNumDirs){
 			String groupedNumDirsStr = groupedNumDirs.stream()
 					.map(sp -> sp.stream()
 							.sorted(Comparator.comparingInt(p -> Integer.parseInt(p.getFileName().toString())))
@@ -208,13 +390,155 @@ public class XMLParamComparatorController {
 		}
 		
 		/**
+		 * Grouped NumDirs are displayed by only it representative element. e.g.:
+		 * The original
+		 * <quote>
+		 * 	[{1,2,3},{4,5,6},{7,8,9},{10}}]
+		 * </quote>
+		 * would be displayed as:
+		 * <quote>
+		 * [{1},{4},{7},{10}}]
+		 * </quote>
+		 * @param groupedNumDirs
+		 * @return
+		 */
+		public String listOfSetsToStrWithOnlyRepresentativeElement(List<Set<Path>> groupedNumDirs){
+			
+//		public String groupedNumDirsToStrWithOnlyRepresentativeElement(List<Set<Path>> groupedNumDirs){
+//			String groupedNumDirsStr = groupedNumDirs.stream()
+//					.map(sp -> 
+////						{
+////						Set<Path> elementsSortedSet = 
+//						sp.stream()
+//							.sorted(Comparator.comparingInt(p -> Integer.parseInt(p.getFileName().toString())))
+////							.collect(Collectors.toSet())
+////							;
+////							.findFirst().map
+////							.map(this::getFirst)
+////						Set<Path> firstElemSet = getFirst(elementsSortedSet);
+////						return firstElemSet.stream()
+//							.map(p -> p.getFileName().toString())
+//////							.map
+//////							.collect(Collectors.joining(",", "{", "}"))
+//							.collect(Collectors.joining(CHAR_ITEM_DELIMITER, CHAR_SET_START, CHAR_SET_END))
+////							;
+////						}
+////					).collect(Collectors.joining(",", "[", "]"));
+//					).collect(Collectors.joining(CHAR_ITEM_DELIMITER, CHAR_LIST_START, CHAR_LIST_END));
+////			logger.log(groupedNumDirsStr);
+//			return groupedNumDirsStr;
+//		}
+			List<Set<Path>> listOfSetsWithOnlyRepresentativeElement = groupedNumDirs.stream()
+					.map(s -> getFirst(s)).collect(Collectors.toList());
+			return listOfSetsToStr(listOfSetsWithOnlyRepresentativeElement);
+		}
+		
+		/**
+		 * Get a list of sets with only the first element of the original set, e.g.:
+		 * <dl>
+		 * 	<dt>INPUT</dt>
+		 * 	<dd>[{1, 2, 3}, {4, 5}, {6}]</dd>
+		 * 	<dt>OUTPUT</dt>
+		 * 	<dd>[{1}, {2}, {3}]</dd>
+		 * </dl>
+		 * @param listOfElements
+		 * @return
+		 */
+		static <T> List<Set<T>> getFirstElementOfEachSet(List<Set<T>> listOfElements){
+			return listOfElements.stream().map(s -> getFirst(s)).collect(Collectors.toList());
+		}
+		/**
+		 * Return the first element as the representative element of this set, e.g.:
+		 * <dl>
+		 * 	<dt>INPUT</dt>
+		 * 	<dd>{1, 2, 3}</dd>
+		 * 	<dt>OUTPUT</dt>
+		 * 	<dd>{1}</dd>
+		 * </dl>
+		 * @param elements
+		 * @return
+		 */
+		static <T> Set<T> getFirst(Set<T> elements){
+//		static <T> Stream<T> getFirst(Stream<T> elements){
+			if(elements.isEmpty() || 1 == elements.size()){
+//			if(elements.is || 1 == elements.size()){
+				return elements;
+			}
+			Set<T> retval = new HashSet<>(1);
+			retval.add(elements.stream().findFirst().get());
+//			retval.add(elements.findFirst().get());
+			return retval;
+		}
+		
+		
+		/**
+		 * Compare XMlParamFiles from different NumDir groups in the <code>groupedNumDirs</code>,
+		 * and generate the difference report. 
+		 * 
+		 * <p>
+		 * Report result will be collected by {@link StringLogger} <code>sl</code>
+		 * </p>
+		 * @param rootDir
+		 * @param groupedNumDirs
+		 * @param xmlFileRelativePath
+		 * @param sl
+		 * @return
+		 */
+		String getDiffReport(Path rootDir, List<Set<Path>> groupedNumDirs, Path xmlFileRelativePath,
+				StringLogger sl){
+			Stream.of(rootDir, groupedNumDirs, xmlFileRelativePath).forEach(Objects::requireNonNull);
+
+//			StringPrefixLogger sl = new StringPrefixLogger(Msg.get(XMLParamComparatorController.class, "info.xmlStructDiffPattern"));
+			groupedNumDirs = getFirstElementOfEachSet(groupedNumDirs);
+			XMLStructComparator diff = XMLStructComparator.newInst(sl);
+			
+			//[{1,2},{3,4},{5,6}] -> [1, 3, 5]
+			List<Path> representativeNumDirList = groupedNumDirs.stream()
+					.map(s -> s.stream().findFirst().get())
+					.collect(Collectors.toList());
+			
+//			for(Path numDir : representativeNumDirList){
+//				representativeNumDirList.stream().filter(r -> !numDir.equals(r))
+//					.forEach(r -> {
+//						Path xml1 = rootDir.resolve(numDir).resolve(xmlFileRelativePath);
+//						Path xml2 = rootDir.resolve(r).resolve(xmlFileRelativePath);
+//						diff.isXMLFilesEqual(xml1, xml2);
+//					});
+//			}
+			Path numDir1 = null;
+			Path numDir2 = null;
+			for(int i = 0; i < representativeNumDirList.size(); ++i){
+				for(int j = i + 1; j < representativeNumDirList.size(); ++j){
+					numDir1 = representativeNumDirList.get(i);
+					numDir2 = representativeNumDirList.get(j);
+//					Path xml1 = rootDir.resolve(numDir1).resolve(xmlFileRelativePath);
+//					Path xml2 = rootDir.resolve(numDir2).resolve(xmlFileRelativePath);
+					Path xml1 = numDir1.resolve(xmlFileRelativePath);
+					Path xml2 = numDir2.resolve(xmlFileRelativePath);
+					sl.log(Msg.get(XMLParamComparatorController.class, "info.compareFiles"), 
+//							rootDir.relativize(numDir1).toString(), 
+//							rootDir.relativize(numDir2).toString());
+							numDir1.getFileName().toString(), 
+							numDir2.getFileName().toString());
+					diff.isXMLFilesEqual(xml1, xml2);
+				}
+			}
+			
+			return sl.toString();
+		}
+		
+		
+		
+		//----------------------------------------------------------------------
+		
+		/**
 		 * Group each descendant XML file in this <code>characteristicPath</code>
 		 * according to their structures. Final result would look like this:
 		 * <dl>
 		 * <dt>Result:</dt>
 		 * <dd>{<strong>key</strong> -> <strong>sets</strong>};</dd>
 		 * <dt>key:</dt>
-		 * <dd>path of the XML file;</dd>
+		 * <dd>path of the XML file, <code>relativized</code> by the <code>numDir</code></dd>
 		 * <dt>sets:</dt>
 		 * <dd>Looks like {{1}, {2, 3}, {4}}, where numDirs are grouped 
 		 * according to XML equality behavior as defined in {@link XMLStructComparator#isXMLFilesEqual(Path, Path)}</dd>
@@ -445,5 +769,9 @@ public class XMLParamComparatorController {
 //	}
 
 //	static final PrintStream out = System.out;
+	static final String IGNORE_BANK_GROUP = Msg.get(XMLParamComparatorController.class, "path.filter.bankGroup.ignore");
+	static final String DEFAULT_BANK_GROUP = Msg.get(XMLParamComparatorController.class, "path.filter.bankGroup");
+	static final String DEFAULT_COUNTRY_CODE = Msg.get(XMLParamComparatorController.class, "path.filter.countryCode");
+	static final int PATH_NAME_COUNT = 2;
 	MsgLogger logger = MsgLogger.defaultLogger();
 }

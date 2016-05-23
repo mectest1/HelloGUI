@@ -40,10 +40,37 @@ public interface MsgLogger {
 		log(e);
 		log(NEW_LINE);
 	}
+	
+	//-------------------------------------
 	static MsgLogger defaultLogger(){
 		return System.out::println; 
 	}
 	
+	public static class StringLogger implements MsgLogger{
+		StringWriter logger = new StringWriter();
+
+		@Override
+		public void log(String msg) {
+			logger.write(msg);
+		}
+		@Override
+		public String toString() {
+			return logger.toString();
+		}
+	}
+	
+	
+	public static class StringPrefixLogger extends StringLogger{
+		String logPrefix;
+		public StringPrefixLogger(String logPrefix){
+			this.logPrefix = logPrefix;
+		}
+		@Override
+		public void log(String msg) {
+			logger.write(logPrefix);
+			logger.write(msg);
+		}
+	}
 	
 	static String NEW_LINE = Msg.get(MsgLogger.class, "newline");
 }

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -39,6 +40,9 @@ public class XMLStructComparator {
 	private XMLStructComparator(){
 		
 	}
+	private XMLStructComparator(MsgLogger logger){
+		setLogger(logger);
+	}
 	public void setLogger(MsgLogger logger) {
 		this.logger = logger;
 	}
@@ -46,6 +50,9 @@ public class XMLStructComparator {
 		return instance;
 	}
 	
+	public static XMLStructComparator newInst(MsgLogger logger){
+		return new XMLStructComparator(logger);
+	}
 
 
 
@@ -57,14 +64,24 @@ public class XMLStructComparator {
 		requireNonNull(xml1, xml2);
 		if(!Files.exists(xml1) && !Files.exists(xml2)){
 			return true;
-		}else if(Files.exists(xml1) && !Files.exists(xml2)
-				|| !Files.exists(xml1) && Files.exists(xml2)
-				){
-//		if(!(Files.exists(xml1) && Files.exists(xml2))){
-//			logger.ln("One of the files doesn't esit: %s, %s", xml1, xml2);
-			logger.ln(Msg.get(this, "info.fileNotExist"), xml1, xml2);
+		}
+//		else if(Files.exists(xml1) && !Files.exists(xml2)
+//				|| !Files.exists(xml1) && Files.exists(xml2)
+//				){
+////		if(!(Files.exists(xml1) && Files.exists(xml2))){
+////			logger.ln("One of the files doesn't esit: %s, %s", xml1, xml2);
+//			
+//			
+//			logger.ln(Msg.get(this, "info.fileNotExist"), xml1, xml2);
+//			return false;
+//		}
+		Optional<Path> fileNotExisted = Stream.of(xml1, xml2).filter(f -> !Files.exists(f)).findFirst();
+		if(fileNotExisted.isPresent()){
+			logger.ln(Msg.get(this, "info.fileNotExist.single"), fileNotExisted.get());
 			return false;
 		}
+		
+		
 		//else Files.exists(xml1) && Files.exists(xml2);
 		boolean retval = true;
 		Document dom1 = XMLTools.inst().fileToDom(xml1);
@@ -100,7 +117,8 @@ public class XMLStructComparator {
 			}
 		}else{
 //			logger.ln("One of the documents is null", XMLTools.inst().nodeToStr(dom1), XMLTools.inst().nodeToStr(dom2));
-			logger.ln(Msg.get(this, "info.nullDocument"), XMLTools.inst().nodeToStr(dom1), XMLTools.inst().nodeToStr(dom2));
+//			logger.ln(Msg.get(this, "info.nullDocument"), XMLTools.inst().nodeToStr(dom1), XMLTools.inst().nodeToStr(dom2));
+			logger.ln(Msg.get(this, "info.nullDocument"), XMLTools.stripWS(xt.nodeToStr(dom1)), XMLTools.stripWS(xt.nodeToStr(dom2)));
 			return false;
 		}
 		
@@ -129,7 +147,8 @@ public class XMLStructComparator {
 		
 		if(node1.getNodeType() != node2.getNodeType()){
 //			logger.ln("Different node types, %s, %s", XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
-			logger.ln(Msg.get(this, "info.differentNodeTypes"), XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+//			logger.ln(Msg.get(this, "info.differentNodeTypes"), XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+			logger.ln(Msg.get(this, "info.differentNodeTypes"), XMLTools.stripWS(xt.nodeToStr(node1)), XMLTools.stripWS(xt.nodeToStr(node2)));
 			return false;
 		}
 		
@@ -174,7 +193,8 @@ public class XMLStructComparator {
 		Set<String> attrs2Name = extractNames(attrs2);
 		if(!attrs1Name.equals(attrs2Name)){
 //			logger.ln("Node attributes not equal: \n%s,\n%s", XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
-			logger.ln(Msg.get(this, "info.attributeNotEqual"), XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+//			logger.ln(Msg.get(this, "info.attributeNotEqual"), XMLTools.inst().nodeToStr(node1), XMLTools.inst().nodeToStr(node2));
+			logger.ln(Msg.get(this, "info.attributeNotEqual"), XMLTools.stripWS(xt.nodeToStr(node1)), XMLTools.stripWS(xt.nodeToStr(node2)));
 			return false;
 		}
 		
@@ -210,7 +230,8 @@ public class XMLStructComparator {
 		while(null != node1Next){
 			if(null == node2Next){
 //				logger.ln("One of the nodes is null: %s, %s", XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
-				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+//				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.stripWS(xt.nodeToStr(node1Next)), XMLTools.stripWS(xt.nodeToStr(node2Next)));
 				return false;
 			}
 			
@@ -225,7 +246,8 @@ public class XMLStructComparator {
 		//null == node1Next
 		if(null != node2Next){
 //			logger.ln("One of the nodes is null: %s, %s", XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
-			logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+//			logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Next), XMLTools.inst().nodeToStr(node2Next));
+			logger.ln(Msg.get(this, "info.nullNode"), XMLTools.stripWS(xt.nodeToStr(node1Next)), XMLTools.stripWS(xt.nodeToStr(node2Next)));
 			return false;
 		}
 		
@@ -263,7 +285,8 @@ public class XMLStructComparator {
 			if(Node.ELEMENT_NODE == nonEmptyChild.getNodeType()){
 				
 //				logger.ln("One of the node is null: %s, %s", XMLTools.inst().nodeToStr(node1Child), XMLTools.inst().nodeToStr(node2Child));
-				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Child), XMLTools.inst().nodeToStr(node2Child));
+//				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.inst().nodeToStr(node1Child), XMLTools.inst().nodeToStr(node2Child));
+				logger.ln(Msg.get(this, "info.nullNode"), XMLTools.stripWS(xt.nodeToStr(node1Child)), XMLTools.stripWS(xt.nodeToStr(node2Child)));
 				return false;
 			}
 		}
@@ -277,4 +300,5 @@ public class XMLStructComparator {
 	
 //	static final PrintStream out = System.out;
 	private MsgLogger logger = MsgLogger.defaultLogger();
+	XMLTools xt = XMLTools.inst();
 }

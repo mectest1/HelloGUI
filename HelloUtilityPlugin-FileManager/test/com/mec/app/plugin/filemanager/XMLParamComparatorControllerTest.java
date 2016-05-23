@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,8 @@ import org.junit.Test;
 
 import com.mec.app.plugin.filemanager.XMLParamComparatorController.ParamDirectoryExtractor;
 import com.mec.app.plugin.filemanager.resources.MsgLogger;
+import com.mec.app.plugin.filemanager.resources.MsgLogger.StringLogger;
+import com.mec.app.plugin.filemanager.resources.MsgLogger.StringPrefixLogger;
 
 public class XMLParamComparatorControllerTest {
 
@@ -157,11 +160,12 @@ public class XMLParamComparatorControllerTest {
 //							.map(p -> p.getFileName().toString())
 //							.collect(Collectors.joining(",", "{", "}"))
 //					).collect(Collectors.joining(",", "[", "]"));
-			String groupedNumDirsStr = pe.groupedNumDirsToStr(groupedNumDirs);
+			String groupedNumDirsStr = pe.listOfSetsToStr(groupedNumDirs);
 			logger.log(groupedNumDirsStr);
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testGroupingXmlParamFilesInAllCharacteristicPaths() throws IOException{
 		Path rootDir = Paths.get("//10.39.100.2/dev2/Utility Doc/Web Utility Test Information/Original Utility 测试点分析/XML Structure");
@@ -178,7 +182,7 @@ public class XMLParamComparatorControllerTest {
 			for(Path paramFile : groupedNumDirsByXMLStruct.keySet()){
 				List<Set<Path>> groupedNumDirs = groupedNumDirsByXMLStruct.get(paramFile);
 				if(1 < groupedNumDirs.size()){
-					String groupedNumDirsStr = pe.groupedNumDirsToStr(groupedNumDirs);
+					String groupedNumDirsStr = pe.listOfSetsToStr(groupedNumDirs);
 //					logger.log("%s: %s", paramFile.toString(), groupedNumDirsStr);
 					logAndWrite(outputWriter, "%s: %s", paramFile.toString(), groupedNumDirsStr);
 				}
@@ -186,6 +190,65 @@ public class XMLParamComparatorControllerTest {
 		}
 		outputWriter.close();
 	}
+	@Ignore
+	@Test
+	public void testGroupingXmlParamFilesInAllCharacteristicPaths2() throws IOException{
+		Path rootDir = Paths.get("//10.39.100.2/dev2/Utility Doc/Web Utility Test Information/Original Utility 测试点分析/XML Structure");
+//		ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(logger, rootDir);
+		ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(logger);
+		
+		Path outputLogFile = Paths.get("data/difference_report.log");
+		BufferedWriter outputWriter = Files.newBufferedWriter(outputLogFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+		List<Path> cps = pe.getCharacteristicPath(rootDir);
+		for(Path cp : cps){
+//			logger.log("\n\n==========================\n==%s\n==========================", rootDir.relativize(cp).toString());
+			logAndWrite(outputWriter, "\n\n==========================\n==%s\n==========================\n", rootDir.relativize(cp).toString());
+			Map<Path, List<Set<Path>>> groupedNumDirsByXMLStruct = pe.groupNumDirContents(cp);
+			for(Path paramFile : groupedNumDirsByXMLStruct.keySet()){
+				List<Set<Path>> groupedNumDirs = groupedNumDirsByXMLStruct.get(paramFile);
+				if(1 < groupedNumDirs.size()){
+					String groupedNumDirsStr = pe.listOfSetsToStr(groupedNumDirs);
+//					logger.log("%s: %s", paramFile.toString(), groupedNumDirsStr);
+					logAndWrite(outputWriter, "%s: %s", paramFile.toString(), groupedNumDirsStr);
+				}
+			}
+		}
+		outputWriter.close();
+	}
+	
+	@Ignore
+	@Test
+	public void testStringLogger(){
+		StringLogger sl = new StringLogger();
+		sl.log("Hello, World");
+		logger.log(sl.toString());
+		
+		sl.log("\nHello, again");
+		logger.log(sl.toString());
+	}
+	@Ignore
+	@Test
+	public void testStringPrefixLogger(){
+		StringPrefixLogger sl = new StringPrefixLogger("------");
+		sl.ln("Hello, World");
+		logger.log(sl.toString());
+		
+		sl.ln("Hello, again");
+		logger.log(sl.toString());
+	}
+	
+	
+	@Test
+	public void testOutputDifferenceLog(){
+		XMLParamComparatorController xpc = new XMLParamComparatorController();
+		
+		Path rootDir = Paths.get("//10.39.100.2/dev2/Utility Doc/Web Utility Test Information/Original Utility 测试点分析/XML Structure");
+		Path outputLogFile = Paths.get("data/difference_report_v2.log");
+		
+		xpc.parseParamXmlStruct(rootDir);
+		xpc.outputDifferenceLog(outputLogFile);
+	}
+	
 	
 	void logAndWrite(Writer writer, String format, Object ... args) throws IOException{
 		String content = String.format(format, args);

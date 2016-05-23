@@ -3,6 +3,8 @@ package com.mec.app.plugin.filemanager.resources;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,14 +42,15 @@ public class XMLTools {
 		return instance;
 	}
 	
-	
-	public String nodeToStr(Node doc){
+	private String nodeToStr(Node doc, IndentType indentType){
 		try {
 			TransformerFactory tf = TransformerFactory.newInstance();
 			Transformer t = tf.newTransformer();
 			
 			t.setOutputProperty(OutputKeys.METHOD, "xml");
-			t.setOutputProperty(OutputKeys.INDENT, "yes");
+//			t.setOutputProperty(OutputKeys.INDENT, "yes");
+			t.setOutputProperty(OutputKeys.INDENT, indentType.name().toLowerCase());
+			t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 			t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			t.setOutputProperty(OutputKeys.STANDALONE, "yes");
 			
@@ -61,6 +64,15 @@ public class XMLTools {
 			logger.log(e);
 			return e.getMessage();
 		}
+	}
+	
+	public String nodeToStr(Node doc){
+//		public String nodeToStr(Node doc){
+		return nodeToStr(doc, IndentType.NO);
+	}
+	
+	public String nodeToStrIndented(Node doc){
+		return nodeToStr(doc, IndentType.YES);
 	}
 	
 	public Document fileToDom(Path xmlFile){
@@ -78,6 +90,22 @@ public class XMLTools {
 	}
 
 
+	public static enum IndentType{
+		YES
+		,NO
+		;
+	}
 
+	/**
+	 * Strip all whitespaces
+	 * @param content
+	 * @return
+	 */
+	public static String stripWS(String content){
+		Matcher m =  PATTERN_WHITESPACE.matcher(content);
+		return m.replaceAll("");
+	}
+	
+	private static final Pattern PATTERN_WHITESPACE = Pattern.compile(Msg.get(XMLStructComparator.class, "pattern.whitespace"));
 	private MsgLogger logger = MsgLogger.defaultLogger(); 
 }

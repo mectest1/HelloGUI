@@ -1,0 +1,2631 @@
+
+
+==========================
+==EE Component Manage
+==========================
+
+EESYS\BUSIFILE\BARRYBusiness File.xml: [{1}]
+
+==========================
+==EE GAPI Setting\Inquire
+==========================
+
+HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml: [{98},{76},{88},{75},{80},{89},{90},{96}]
+		
+		Compare paramFile from num dirs 98 and 76
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 98 and 88
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 98 and 75
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 98 and 80
+		Different node names: socket-config, other-system-id		
+		
+		Compare paramFile from num dirs 98 and 89
+		Different node names: socket-config, ftp-config		
+		
+		Compare paramFile from num dirs 98 and 90
+		Different node names: socket-config, ftp-config		
+		
+		Compare paramFile from num dirs 98 and 96
+		Different node names: socket-config, ws-config		
+		
+		Compare paramFile from num dirs 76 and 88
+		Node attributes not equal: <gapi-mode conditional="false" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 76 and 75
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 76 and 80
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 76 and 89
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 76 and 90
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 76 and 96
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 88 and 75
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 88 and 80
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 88 and 89
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 88 and 90
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 88 and 96
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 75 and 80
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 75 and 89
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 75 and 90
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 75 and 96
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapi_WOLF_WOLF_ASYNC_IQ.xml		
+		
+		Compare paramFile from num dirs 80 and 89
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 80 and 90
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 80 and 96
+		Different node names: other-system-id, ws-config		
+		
+		Compare paramFile from num dirs 89 and 90
+		Node attributes not equal: <gapi-mode gapiMode="" mode="ATCH"/>, <gapi-mode conditional="false" gapiMode="" mode="SYNC"/>		
+		
+		Compare paramFile from num dirs 89 and 96
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 90 and 96
+		Different node names: ftp-config, ws-config		
+
+HSBC\US\AP\GAPI\gapirule_root.xml: [{87},{75}]
+		
+		Compare paramFile from num dirs 87 and 75
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Inquire\75\HSBC\US\AP\GAPI\gapirule_root.xml		
+
+
+==========================
+==EE Form\System
+==========================
+
+HSBC\US\AP\FORM\form_SSSS_systest.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		Different node names: JSPFILE, BATCH		
+
+HSBC\US\AP\FORM\formjsp_SYS_index.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Form\System\5\HSBC\US\AP\FORM\formjsp_SYS_index.xml		
+
+HSBC\US\AP\FORM\form_to_othersystem.xml: [{5},{10}]
+		
+		Compare paramFile from num dirs 5 and 10
+		One of the nodes is null: [], [<form name="systest">        <sendto name="EE_CE"/>    </form>]		
+
+EE_SYS\WaterMark\watermark_config.xml: [{5}]
+
+==========================
+==EE Get CUBK\Module
+==========================
+
+HSBC\US\WEB\GETCUBK\cubk_PMAT_PMAT_FUNDINGRPT.xml: [{2},{9},{3}]
+		
+		Compare paramFile from num dirs 2 and 9
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\9\HSBC\US\WEB\GETCUBK\cubk_PMAT_PMAT_FUNDINGRPT.xml		
+		
+		Compare paramFile from num dirs 2 and 3
+		Different node names: key-mapping, tables		
+		
+		Compare paramFile from num dirs 9 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\9\HSBC\US\WEB\GETCUBK\cubk_PMAT_PMAT_FUNDINGRPT.xml		
+
+HSBC\US\AP\GETCUBK\cubk_STAN_C_CUST_ID.xml: [{3},{9},{13}]
+		
+		Compare paramFile from num dirs 3 and 9
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\3\HSBC\US\AP\GETCUBK\cubk_STAN_C_CUST_ID.xml		
+		
+		Compare paramFile from num dirs 3 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\3\HSBC\US\AP\GETCUBK\cubk_STAN_C_CUST_ID.xml		
+		
+		Compare paramFile from num dirs 9 and 13
+		Different node names: key-mapping, tables		
+
+HSBC\US\WEB\GETCUBK\cubk_STAN_C_CUST_ID.xml: [{3},{9},{13}]
+		
+		Compare paramFile from num dirs 3 and 9
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\3\HSBC\US\WEB\GETCUBK\cubk_STAN_C_CUST_ID.xml		
+		
+		Compare paramFile from num dirs 3 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\3\HSBC\US\WEB\GETCUBK\cubk_STAN_C_CUST_ID.xml		
+		
+		Compare paramFile from num dirs 9 and 13
+		Different node names: key-mapping, tables		
+
+HSBC\US\AP\GETCUBK\cubk_PMAT_PMAT_FUNDINGRPT.xml: [{2},{9},{3}]
+		
+		Compare paramFile from num dirs 2 and 9
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\9\HSBC\US\AP\GETCUBK\cubk_PMAT_PMAT_FUNDINGRPT.xml		
+		
+		Compare paramFile from num dirs 2 and 3
+		Different node names: key-mapping, tables		
+		
+		Compare paramFile from num dirs 9 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\Module\9\HSBC\US\AP\GETCUBK\cubk_PMAT_PMAT_FUNDINGRPT.xml		
+
+
+==========================
+==EE Calculation
+==========================
+
+
+==========================
+==EE Catalog\Module\Single
+==========================
+
+HSBC\US\WEB\CATA\cata_R00000002452.xml: [{1},{2},{4}]
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [<FIELD DATATYPE="12" DESC="ank collection account" EEType="Varchar_35" HIDDEN="">ACC_COLL_K</FIELD>], []		
+		
+		Compare paramFile from num dirs 1 and 4
+		One of the nodes is null: [<FIELD DATATYPE="12" DESC="Rebate Settlement Account" EEType="Varchar_35" HIDDEN="">ACC_UYER_RET</FIELD>], []		
+		
+		Compare paramFile from num dirs 2 and 4
+		One of the nodes is null: [<FIELD DATATYPE="4" DESC="Diary Event Times" EEType="INTEGER" HIDDEN="">DIARY_I_EVENT_TIMES</FIELD>], []		
+
+
+==========================
+==EE Form\Module
+==========================
+
+HSBC\US\AP\FORM\formjsp_start_here.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Form\Module\7\HSBC\US\AP\FORM\formjsp_start_here.xml		
+
+HSBC\US\AP\FORM\form_WEUT_Loosen_test.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		Different node names: JSPFILE, BATCH		
+
+HSBC\US\AP\FORM\form_to_othersystem.xml: [{7}]
+EE_SYS\WaterMark\watermark_config.xml: [{7}]
+
+==========================
+==EE Clause\Module
+==========================
+
+HSBC\US\WEB\CLAUSE\clause_C00000000000.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\Module\5\HSBC\US\WEB\CLAUSE\clause_C00000000000.xml		
+
+HSBC\US\WEB\CLAUSE\clause_field_TEST.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		One of the nodes is null: [<FLD DESC="Account Echange Report No" SIZE="6">ACCT_EXCH_RPTNO</FLD>], []		
+
+HSBC\US\WEB\CLAUSE\TEST_APPL_ADD2.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\Module\1\HSBC\US\WEB\CLAUSE\TEST_APPL_ADD2.xml		
+
+HSBC\US\AP\CLAUSE\TEST_APPL_ADD1.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\Module\3\HSBC\US\AP\CLAUSE\TEST_APPL_ADD1.xml		
+
+HSBC\US\AP\CLAUSE\clause_C00000000000.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\Module\5\HSBC\US\AP\CLAUSE\clause_C00000000000.xml		
+
+HSBC\US\WEB\CLAUSE\TEST_APPL_ADD1.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\Module\3\HSBC\US\WEB\CLAUSE\TEST_APPL_ADD1.xml		
+
+HSBC\US\AP\CLAUSE\TEST_APPL_ADD2.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\Module\1\HSBC\US\AP\CLAUSE\TEST_APPL_ADD2.xml		
+
+HSBC\US\AP\CLAUSE\clause_field_TEST.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		One of the nodes is null: [<FLD DESC="Account Echange Report No" SIZE="6">ACCT_EXCH_RPTNO</FLD>], []		
+
+
+==========================
+==EE Module&Event
+==========================
+
+EE_SYS\SYST\module.xml: [{2},{6}]
+		
+		Compare paramFile from num dirs 2 and 6
+		One of the nodes is null: [], [<module name="TEET">        <bank_county>HSCD_CN</bank_county>        <bank_county>HSC_CN</bank_county>        <bank_county>HSC_G</bank_county>        <bank_county>HSC_HK</bank_county>        <bank_county>HSC_ID</bank_county>        <bank_county>HSC_IN</bank_county>        <bank_county>HSC_US</bank_county>    </module>]		
+
+
+==========================
+==EE System Maintain
+==========================
+
+
+==========================
+==EE System Parameter
+==========================
+
+HSBC\US\AP\SYST\sysparam.xml: [{9}]
+HSBC\US\WEB\SYST\sysparam.xml: [{9}]
+
+==========================
+==EE Attribute\System
+==========================
+
+HSBC\US\WEB\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FUNC\func_F00000000516.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+BGWEBUT\CN\WEB\FUNC\test_ADD_MASTER.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\FUNC\test_ADD_MASTER.xml		
+
+HSBC\US\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002508P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002508P.xml		
+
+BARRY\BAR\WEB\FUNC\stan_ADD_MASTER.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\FUNC\stan_ADD_MASTER.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\AP\FUNC\func_F00000000516.xml		
+
+BGWEBUT\WUT\WEB\FUNC\stan_ADD_MASTER.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\FUNC\stan_ADD_MASTER.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002506P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002506P.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\FUNC\func_F00000000516.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templrf_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\AP\FUNC\func_F00000000516.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002510P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002510P.xml		
+
+BARRY\BAR\WEB\FUNC\test_ADD_MASTER.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\FUNC\test_ADD_MASTER.xml		
+
+HSBC\US\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+BGWEBUT\WUT\AP\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\AP\FUNC\function_root.xml		
+
+HSBC\US\WEB\LOCKINF\lock_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\LOCKINF\lock_F00000000516.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\AP\FUNC\func_F00000000155.xml		
+
+BGWEBUT\WUT\WEB\FUNC\test_ADD_MASTER.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\FUNC\test_ADD_MASTER.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\FUNC\func_F00000000516.xml		
+
+BGWEBUT\CN\WEB\FUNC\stan_ADD_MASTER.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\FUNC\stan_ADD_MASTER.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002507P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002507P.xml		
+
+HSBC\US\AP\LOCKINF\lock_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\AP\LOCKINF\lock_F00000000516.xml		
+
+HSBC\US\WEB\FORM\form_F00000001894.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FORM\form_F00000001894.xml		
+
+BARRY\BAR\WEB\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\FUNC\function_root.xml		
+
+HSBC\US\WEB\FORM\form_F00000001886.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FORM\form_F00000001886.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\FUNC\func_F00000000155.xml		
+
+HSBC\US\WEB\TEMPRULE\templrf_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\AP\FUNC\func_F00000000155.xml		
+
+HSBC\US\WEB\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FUNC\function_root.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+BGWEBUT\CN\AP\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\AP\FUNC\function_root.xml		
+
+HSBC\US\AP\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\AP\FUNC\func_F00000000155.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002509P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002509P.xml		
+
+BGWEBUT\WUT\WEB\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\FUNC\function_root.xml		
+
+BGWEBUT\CN\WEB\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\FUNC\function_root.xml		
+
+HSBC\US\WEB\FUNC\stan_ADD_MASTER.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FUNC\stan_ADD_MASTER.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002505P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002505P.xml		
+
+HSBC\US\WEB\LOCKINF\lock_F00000000155.xml: [{1},{12}]
+		
+		Compare paramFile from num dirs 1 and 12
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\LOCKINF\lock_F00000000155.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+HSBC\US\WEB\TEMPRULE\templrf_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+HSBC\US\AP\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\AP\FUNC\func_F00000000516.xml		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\AP\FUNC\func_F00000000155.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\AP\FUNC\func_F00000000516.xml		
+
+HSBC\US\AP\LOCKINF\lock_F00000000155.xml: [{1},{12}]
+		
+		Compare paramFile from num dirs 1 and 12
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\AP\LOCKINF\lock_F00000000155.xml		
+
+HSBC\US\WEB\FUNC\test_ADD_MASTER.xml: [{1},{3},{5}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FUNC\test_ADD_MASTER.xml		
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FUNC\test_ADD_MASTER.xml		
+		
+		Compare paramFile from num dirs 3 and 5
+		One of the nodes is null: [], [<F516>aaaaa</F516>]		
+
+BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\CN\WEB\FUNC\func_F00000000155.xml		
+
+HSBC\US\WEB\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\WEB\FUNC\func_F00000000155.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\FUNC\func_F00000000155.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002504P.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\3\HSBC\US\AP\FUNCATTR\fattr_R00000002504P.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000516.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BGWEBUT\WUT\WEB\FUNC\func_F00000000516.xml		
+
+BARRY\BAR\AP\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\AP\FUNC\function_root.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+HSBC\US\AP\FUNC\function_root.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\HSBC\US\AP\FUNC\function_root.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templrf_F00000000155.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\System\1\BARRY\BAR\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+
+==========================
+==EE GAPI Setting\Authorize
+==========================
+
+HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml: [{109},{105},{113},{117},{118},{119},{125},{129}]
+		
+		Compare paramFile from num dirs 109 and 105
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 109 and 113
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 109 and 117
+		Node attributes not equal: <gapi-mode conditional="false" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 109 and 118
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 109 and 119
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 109 and 125
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 109 and 129
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 105 and 113
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 105 and 117
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 105 and 118
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 105 and 119
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 105 and 125
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 105 and 129
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapi_TEST_aaaa_AU.xml		
+		
+		Compare paramFile from num dirs 113 and 117
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 113 and 118
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 113 and 119
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 113 and 125
+		Different node names: other-system-id, ws-config		
+		
+		Compare paramFile from num dirs 113 and 129
+		Different node names: other-system-id, socket-config		
+		
+		Compare paramFile from num dirs 117 and 118
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 117 and 119
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 117 and 125
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 117 and 129
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 118 and 119
+		Node attributes not equal: <gapi-mode conditional="true" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 118 and 125
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 118 and 129
+		Different node names: ftp-config, socket-config		
+		
+		Compare paramFile from num dirs 119 and 125
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 119 and 129
+		Different node names: ftp-config, socket-config		
+		
+		Compare paramFile from num dirs 125 and 129
+		Different node names: ws-config, socket-config		
+
+HSBC\US\AP\GAPI\gapirule_root.xml: [{119},{105}]
+		
+		Compare paramFile from num dirs 119 and 105
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Authorize\105\HSBC\US\AP\GAPI\gapirule_root.xml		
+
+
+==========================
+==EE GAPI Setting\Release
+==========================
+
+HSBC\US\AP\GAPI\gapi_TEST_MMMBOS_RE.xml: [{42},{52},{53},{55},{62},{60},{64},{70}]
+		
+		Compare paramFile from num dirs 42 and 52
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 42 and 53
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 42 and 55
+		Node attributes not equal: <gapi-mode conditional="false" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 42 and 62
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 42 and 60
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 42 and 64
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 42 and 70
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 52 and 53
+		Node attributes not equal: <gapi-mode conditional="true" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 52 and 55
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 52 and 62
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 52 and 60
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 52 and 64
+		Different node names: other-system-id, ws-config		
+		
+		Compare paramFile from num dirs 52 and 70
+		Different node names: other-system-id, socket-config		
+		
+		Compare paramFile from num dirs 53 and 55
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 53 and 62
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 53 and 60
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 53 and 64
+		Different node names: other-system-id, ws-config		
+		
+		Compare paramFile from num dirs 53 and 70
+		Different node names: other-system-id, socket-config		
+		
+		Compare paramFile from num dirs 55 and 62
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 55 and 60
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 55 and 64
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 55 and 70
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 62 and 60
+		Node attributes not equal: <gapi-mode gapiMode="" mode="ATCH"/>, <gapi-mode conditional="true" gapiMode="" mode="SYNC"/>		
+		
+		Compare paramFile from num dirs 62 and 64
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 62 and 70
+		Different node names: ftp-config, socket-config		
+		
+		Compare paramFile from num dirs 60 and 64
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 60 and 70
+		Different node names: ftp-config, socket-config		
+		
+		Compare paramFile from num dirs 64 and 70
+		Different node names: ws-config, socket-config		
+
+HSBC\US\AP\GAPI\gapirule_root.xml: [{53}]
+
+==========================
+==EE Catalog\System\Single
+==========================
+
+HSBC\US\WEB\CATA\cata_R00000002455.xml: [{1},{4},{3}]
+		
+		Compare paramFile from num dirs 1 and 4
+		One of the nodes is null: [], [<FIELD DATATYPE="12" DESC="Diary Create/Modify User" EEType="Varchar_2" HIDDEN="H">DIARY_C_USER</FIELD>]		
+		
+		Compare paramFile from num dirs 1 and 3
+		One of the nodes is null: [], [<FIELD DATATYPE="12" DESC="Date Format" EEType="INTERPRETER" HIDDEN="">INST_DT_FORMAT</FIELD>]		
+		
+		Compare paramFile from num dirs 4 and 3
+		One of the nodes is null: [], [<FIELD DATATYPE="12" DESC="Language Code" EEType="INTERPRETER" HIDDEN="">INST_LANG_CD</FIELD>]		
+
+
+==========================
+==EE HandWriting
+==========================
+
+AccessDataCheckModule.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE HandWriting\2\AccessDataCheckModule.xml		
+
+HSBC_CSConfig.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE HandWriting\3\HSBC_CSConfig.xml		
+
+ABC_BARRY_TEST.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE HandWriting\1\ABC_BARRY_TEST.xml		
+
+
+==========================
+==EE STD Setting
+==========================
+
+HSBC\US\AP\STP\INSWT\InSwiftPrinter.xml: [{4}]
+BGWEBUT\WUT\AP\STP\INSWT\InSwiftPrinter.xml: [{4}]
+BGWEBUT\CN\AP\STP\INSWT\InSwiftPrinter.xml: [{4}]
+BARRY\BAR\AP\STP\INSWT\InSwiftPrinter.xml: [{4}]
+
+==========================
+==EE Security Parameters
+==========================
+
+EE_SYS\SYST\sys_para.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		Different node names: USER_LICENSE, TEST_BARRY		
+
+EE_SYS\SYST\sec.report.xml: [{5}]
+
+==========================
+==EE Attribute\Module
+==========================
+
+BARRY\BAR\WEB\FUNC\secu_ADD_MASTER.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\FUNC\secu_ADD_MASTER.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000516.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+HSBC\US\WEB\FUNC\func_F00000000516.xml: [{20},{8},{16}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\func_F00000000516.xml		
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\func_F00000000516.xml		
+		
+		Compare paramFile from num dirs 8 and 16
+		Different node names: FUNCTION, FORM		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\AP\FUNC\func_F00000000509.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002491P.xml: [{20},{6}]
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002491P.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002493P.xml: [{20},{6}]
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002493P.xml		
+
+HSBC\US\WEB\LOCKINF\lock_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\LOCKINF\lock_F00000000441.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\AP\FUNC\func_F00000000509.xml		
+
+BGWEBUT\CN\WEB\FUNC\test_ADD_MASTER.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\FUNC\test_ADD_MASTER.xml		
+
+HSBC\US\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\FUNC\func_F00000000509.xml		
+
+BGWEBUT\WUT\WEB\FUNC\secu_ADD_MASTER.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\FUNC\secu_ADD_MASTER.xml		
+
+HSBC\US\AP\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNC\func_F00000000509.xml		
+
+HSBC\US\AP\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNC\func_F00000000441.xml		
+
+HSBC\US\AP\LOCKINF\lock_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\LOCKINF\lock_F00000000000.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002503P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002503P.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\FUNC\func_F00000000509.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\FUNC\func_F00000000000.xml		
+
+BARRY\BAR\WEB\FUNC\stan_ADD_MASTER.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\WEB\FUNC\stan_ADD_MASTER.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\AP\FUNC\func_F00000000516.xml		
+
+BGWEBUT\WUT\WEB\FUNC\stan_ADD_MASTER.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\WEB\FUNC\stan_ADD_MASTER.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\AP\FUNC\func_F00000000441.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\FUNC\func_F00000000516.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templrf_F00000000516.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002496P.xml: [{20},{6}]
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002496P.xml		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\AP\FUNC\func_F00000000516.xml		
+
+HSBC\US\WEB\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\func_F00000000509.xml		
+
+HSBC\US\WEB\LOCKINF\lock_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\LOCKINF\lock_F00000000000.xml		
+
+BARRY\BAR\WEB\FUNC\test_ADD_MASTER.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\FUNC\test_ADD_MASTER.xml		
+
+HSBC\US\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+BGWEBUT\WUT\AP\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\AP\FUNC\function_root.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\AP\FUNC\func_F00000000155.xml		
+
+HSBC\US\WEB\LOCKINF\lock_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\LOCKINF\lock_F00000000516.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002495P.xml: [{20},{6}]
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002495P.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\FUNC\func_F00000000441.xml		
+
+BGWEBUT\WUT\WEB\FUNC\test_ADD_MASTER.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\FUNC\test_ADD_MASTER.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\FUNC\func_F00000000516.xml		
+
+BGWEBUT\CN\WEB\FUNC\stan_ADD_MASTER.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\WEB\FUNC\stan_ADD_MASTER.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002501P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002501P.xml		
+
+HSBC\US\AP\LOCKINF\lock_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\LOCKINF\lock_F00000000516.xml		
+
+HSBC\US\WEB\FORM\form_F00000001894.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\FORM\form_F00000001894.xml		
+
+BARRY\BAR\WEB\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\WEB\FUNC\function_root.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\AP\FUNC\func_F00000000000.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\FUNC\func_F00000000441.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002492P.xml: [{20},{6}]
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002492P.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002500P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002500P.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000001734P.xml: [{1},{20},{3}]
+		
+		Compare paramFile from num dirs 1 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000001734P.xml		
+		
+		Compare paramFile from num dirs 1 and 3
+		One of the nodes is null: [<COMPONENT TRANSACTION="N">        <NAME>TrGenerateGAPI</NAME>        <IMM_EDIT_FLAG>N</IMM_EDIT_FLAG>        <PREREQUISITE>N</PREREQUISITE>        <IS_ALLOWED_PRINT>N</IS_ALLOWED_PRINT>        <MODULE>TEST</MODULE>        <EVENT/>        <TALE_NAME schema="%EXIMSYS%">%EXIMSYS%.</TALE_NAME>        <TALE_DESC/>        <MAINREF>C_MAIN_REF</MAINREF>        <TRXREF/>        <POST>YES</POST>        <CTYPE>GAPIs</CTYPE>    </COMPONENT>], []		
+		
+		Compare paramFile from num dirs 20 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000001734P.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\AP\FUNC\func_F00000000000.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002490P.xml: [{20},{5},{6}]
+		
+		Compare paramFile from num dirs 20 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002490P.xml		
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002490P.xml		
+		
+		Compare paramFile from num dirs 5 and 6
+		One of the nodes is null: [<COMPONENT TRANSACTION="N">        <NAME>TrEventEditRec</NAME>        <IMM_EDIT_FLAG>N</IMM_EDIT_FLAG>        <PREREQUISITE>N</PREREQUISITE>        <IS_ALLOWED_PRINT>N</IS_ALLOWED_PRINT>        <MODULE>TEST</MODULE>        <EVENT/>        <TALE_NAME schema="%EXIMSYS%">%EXIMSYS%.STD_RATE_TALE</TALE_NAME>        <TALE_DESC>STD_RATE_TALE</TALE_DESC>        <MAINREF>C_MAIN_REF</MAINREF>        <TRXREF/>        <POST>YES</POST>        <CTYPE>Edit Event</CTYPE>    </COMPONENT>], []		
+
+HSBC\US\WEB\FORM\form_F00000001886.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FORM\form_F00000001886.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\WEB\FUNC\func_F00000000155.xml		
+
+HSBC\US\WEB\TEMPRULE\templrf_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\AP\FUNC\func_F00000000155.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002502P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002502P.xml		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\AP\FUNC\func_F00000000000.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000001734I.xml: [{20},{3}]
+		
+		Compare paramFile from num dirs 20 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000001734I.xml		
+
+HSBC\US\WEB\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\FUNC\function_root.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002494P.xml: [{20},{6}]
+		
+		Compare paramFile from num dirs 20 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002494P.xml		
+
+BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000516.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\FUNC\func_F00000000509.xml		
+
+BGWEBUT\CN\AP\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\AP\FUNC\function_root.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\FUNC\func_F00000000000.xml		
+
+HSBC\US\AP\FUNC\func_F00000000155.xml: [{5},{17},{18}]
+		
+		Compare paramFile from num dirs 5 and 17
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\AP\FUNC\func_F00000000155.xml		
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\AP\FUNC\func_F00000000155.xml		
+		
+		Compare paramFile from num dirs 17 and 18
+		Different node names: FUNCTION, FORM		
+
+HSBC\US\WEB\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\func_F00000000000.xml		
+
+BGWEBUT\WUT\WEB\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\WUT\WEB\FUNC\function_root.xml		
+
+BGWEBUT\CN\WEB\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\WEB\FUNC\function_root.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\FUNC\func_F00000000000.xml		
+
+HSBC\US\WEB\FUNC\stan_ADD_MASTER.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\FUNC\stan_ADD_MASTER.xml		
+
+HSBC\US\WEB\LOCKINF\lock_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\LOCKINF\lock_F00000000155.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\WEB\TEMPRULE\templr_F00000000155_dsfwe.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002497P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002497P.xml		
+
+HSBC\US\WEB\FUNC\secu_ADD_MASTER.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\secu_ADD_MASTER.xml		
+
+HSBC\US\WEB\TEMPRULE\templrf_F00000000516.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+HSBC\US\AP\FUNC\func_F00000000516.xml: [{20},{8},{16}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNC\func_F00000000516.xml		
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNC\func_F00000000516.xml		
+		
+		Compare paramFile from num dirs 8 and 16
+		Different node names: FUNCTION, FORM		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\AP\FUNC\func_F00000000155.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002498P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002498P.xml		
+
+HSBC\US\AP\FUNCATTR\fattr_R00000002499P.xml: [{20},{25}]
+		
+		Compare paramFile from num dirs 20 and 25
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNCATTR\fattr_R00000002499P.xml		
+
+BARRY\BAR\AP\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\AP\FUNC\func_F00000000441.xml		
+
+HSBC\US\AP\LOCKINF\lock_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\AP\LOCKINF\lock_F00000000155.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\AP\FUNC\func_F00000000516.xml		
+
+HSBC\US\WEB\FUNC\test_ADD_MASTER.xml: [{20},{13},{8}]
+		
+		Compare paramFile from num dirs 20 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\test_ADD_MASTER.xml		
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\test_ADD_MASTER.xml		
+		
+		Compare paramFile from num dirs 13 and 8
+		One of the nodes is null: [], [<F516>aaaaa</F516>]		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\AP\FUNC\func_F00000000441.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BGWEBUT\CN\WEB\FUNC\func_F00000000155.xml		
+
+HSBC\US\AP\FUNC\func_F00000000000.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\FUNC\func_F00000000000.xml		
+
+HSBC\US\WEB\FUNC\func_F00000000155.xml: [{5},{17},{18}]
+		
+		Compare paramFile from num dirs 5 and 17
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\FUNC\func_F00000000155.xml		
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\WEB\FUNC\func_F00000000155.xml		
+		
+		Compare paramFile from num dirs 17 and 18
+		Different node names: FUNCTION, FORM		
+
+HSBC\US\AP\LOCKINF\lock_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\AP\LOCKINF\lock_F00000000441.xml		
+
+BARRY\BAR\WEB\FUNC\func_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\WEB\FUNC\func_F00000000155.xml		
+
+BGWEBUT\WUT\AP\FUNC\func_F00000000509.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\AP\FUNC\func_F00000000509.xml		
+
+HSBC\US\WEB\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\HSBC\US\WEB\FUNC\func_F00000000441.xml		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000516.xml: [{20},{8}]
+		
+		Compare paramFile from num dirs 20 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\WUT\WEB\FUNC\func_F00000000516.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000441.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\FUNC\func_F00000000441.xml		
+
+BARRY\BAR\AP\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\AP\FUNC\function_root.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templr_F00000000516_sad.xml: [{20},{16}]
+		
+		Compare paramFile from num dirs 20 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BARRY\BAR\WEB\TEMPRULE\templr_F00000000516_sad.xml		
+
+HSBC\US\AP\FUNC\function_root.xml: [{5},{20}]
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\HSBC\US\AP\FUNC\function_root.xml		
+
+BGWEBUT\CN\WEB\FUNC\secu_ADD_MASTER.xml: [{20},{15}]
+		
+		Compare paramFile from num dirs 20 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\20\BGWEBUT\CN\WEB\FUNC\secu_ADD_MASTER.xml		
+
+BARRY\BAR\WEB\TEMPRULE\templrf_F00000000155.xml: [{5},{18}]
+		
+		Compare paramFile from num dirs 5 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Attribute\Module\5\BARRY\BAR\WEB\TEMPRULE\templrf_F00000000155.xml		
+
+
+==========================
+==EE Message Broker Setting
+==========================
+
+BGWEBUT\WUT\AP\MSGBKR\mb_InTSUFTPForm.xml: [{7},{3}]
+		
+		Compare paramFile from num dirs 7 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\7\BGWEBUT\WUT\AP\MSGBKR\mb_InTSUFTPForm.xml		
+
+HSBC\US\AP\MSGBKR\mt_root.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		One of the nodes is null: [], [<msg-type>InXMLForm</msg-type>]		
+
+BGWEBUT\WUT\AP\MSGBKR\mb_InCLForm.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\3\BGWEBUT\WUT\AP\MSGBKR\mb_InCLForm.xml		
+
+HSBC\US\AP\MSGBKR\mb_InCLForm.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\3\HSBC\US\AP\MSGBKR\mb_InCLForm.xml		
+
+HSBC\US\AP\MSGBKR\mb_InTSUFTPForm.xml: [{7},{3}]
+		
+		Compare paramFile from num dirs 7 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\7\HSBC\US\AP\MSGBKR\mb_InTSUFTPForm.xml		
+
+HSBC\US\AP\MSGBKR\mb_InDMSForm.xml: [{1},{7}]
+		
+		Compare paramFile from num dirs 1 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\7\HSBC\US\AP\MSGBKR\mb_InDMSForm.xml		
+
+BGWEBUT\WUT\AP\MSGBKR\mb_InDMSForm.xml: [{1},{7}]
+		
+		Compare paramFile from num dirs 1 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\7\BGWEBUT\WUT\AP\MSGBKR\mb_InDMSForm.xml		
+
+BGWEBUT\CN\AP\MSGBKR\mb_InTSUFTPForm.xml: [{7},{3}]
+		
+		Compare paramFile from num dirs 7 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\7\BGWEBUT\CN\AP\MSGBKR\mb_InTSUFTPForm.xml		
+
+BGWEBUT\WUT\AP\MSGBKR\mt_root.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		One of the nodes is null: [], [<msg-type>InXMLForm</msg-type>]		
+
+BGWEBUT\CN\AP\MSGBKR\mb_InDMSForm.xml: [{1},{7}]
+		
+		Compare paramFile from num dirs 1 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\7\BGWEBUT\CN\AP\MSGBKR\mb_InDMSForm.xml		
+
+BGWEBUT\CN\AP\MSGBKR\mb_InCLForm.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Broker Setting\3\BGWEBUT\CN\AP\MSGBKR\mb_InCLForm.xml		
+
+BGWEBUT\CN\AP\MSGBKR\mt_root.xml: [{3},{7}]
+		
+		Compare paramFile from num dirs 3 and 7
+		One of the nodes is null: [], [<msg-type>InXMLForm</msg-type>]		
+
+
+==========================
+==EE Amount&Rate Format\System
+==========================
+
+HSBC\US\AP\AMTFMT\AF_D00000000112.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: RET_AMT, SUPLR_LMT_INC_AMT		
+
+HSBC\US\WEB\AMTFMT\AF_D00000000112.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: RET_AMT, SUPLR_LMT_INC_AMT		
+
+
+==========================
+==EE Catalog\Module\Multi
+==========================
+
+HSBC\US\WEB\CATA\cata_R00000002452.xml: [{5}]
+
+==========================
+==EE Get DO DATA\System
+==========================
+
+HSBC\US\AP\GETDATA\SSSS_Get_SupplierACNo.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		Node attributes not equal: <FIELD DO_FIELD="C_DO_NAME" FIELD="C_ADD_FLAG" TL_ALIAS="COM_REFERENCE_DATA">COM_REFERENCE_DATA.C_ADD_FLAG</FIELD>, <FIELD DISTINCT="T" DO_FIELD="C_DO_NAME" FIELD="C_ADD_FLAG" TL_ALIAS="COM_REFERENCE_DATA">COM_REFERENCE_DATA.C_ADD_FLAG</FIELD>		
+
+HSBC\US\AP\GETDATA\SSSS_Get_SupplierACNo_Other.xml: [{3}]
+HSBC\US\WEB\GETDATA\SSSS_Get_SupplierACNo_Other.xml: [{3}]
+HSBC\US\WEB\GETDATA\SSSS_Get_SupplierACNo.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		Node attributes not equal: <FIELD DO_FIELD="C_DO_NAME" FIELD="C_ADD_FLAG" TL_ALIAS="COM_REFERENCE_DATA">COM_REFERENCE_DATA.C_ADD_FLAG</FIELD>, <FIELD DISTINCT="T" DO_FIELD="C_DO_NAME" FIELD="C_ADD_FLAG" TL_ALIAS="COM_REFERENCE_DATA">COM_REFERENCE_DATA.C_ADD_FLAG</FIELD>		
+
+
+==========================
+==EE Transfer To\Module
+==========================
+
+HSBC\US\AP\TRFT\TEST_test_M.xml: [{3},{4}]
+		
+		Compare paramFile from num dirs 3 and 4
+		Different node names: table-name, DO		
+
+HSBC\US\AP\TRFT\TEST_test_R.xml: [{9},{13},{18}]
+		
+		Compare paramFile from num dirs 9 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\Module\9\HSBC\US\AP\TRFT\TEST_test_R.xml		
+		
+		Compare paramFile from num dirs 9 and 18
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\Module\9\HSBC\US\AP\TRFT\TEST_test_R.xml		
+		
+		Compare paramFile from num dirs 13 and 18
+		Different node names: table-name, DO		
+
+HSBC\US\AP\TRFT\TEST_test_P.xml: [{5},{13},{7}]
+		
+		Compare paramFile from num dirs 5 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\Module\5\HSBC\US\AP\TRFT\TEST_test_P.xml		
+		
+		Compare paramFile from num dirs 5 and 7
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\Module\5\HSBC\US\AP\TRFT\TEST_test_P.xml		
+		
+		Compare paramFile from num dirs 13 and 7
+		Different node names: DO, table-name		
+
+
+==========================
+==EE Amount&Rate Format\Module
+==========================
+
+HSBC\US\AP\AMTFMT\AF_TEST.xml: [{1},{2},{3}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: LC_AMT2, LC_BAL		
+		
+		Compare paramFile from num dirs 1 and 3
+		One of the nodes is null: [], [<LC_AL3 FIELD_TYPE="AMT">LC_CCY2</LC_AL3>]		
+		
+		Compare paramFile from num dirs 2 and 3
+		Different node names: LC_BAL, LC_AMT2		
+
+HSBC\US\WEB\AMTFMT\AF_TEST.xml: [{1},{2},{3}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: LC_AMT2, LC_BAL		
+		
+		Compare paramFile from num dirs 1 and 3
+		One of the nodes is null: [], [<LC_AL3 FIELD_TYPE="AMT">LC_CCY2</LC_AL3>]		
+		
+		Compare paramFile from num dirs 2 and 3
+		Different node names: LC_BAL, LC_AMT2		
+
+
+==========================
+==EE SWIFT
+==========================
+
+BGWEBUT\CN\AP\SWIFT\root_SSSS_OUT.xml: [{19},{24}]
+		
+		Compare paramFile from num dirs 19 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\CN\AP\SWIFT\root_SSSS_OUT.xml		
+
+HSBC\US\AP\SWIFT\swt_SSSS_systemtestswift.xml: [{19},{31}]
+		
+		Compare paramFile from num dirs 19 and 31
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\swt_SSSS_systemtestswift.xml		
+
+BGWEBUT\WUT\AP\SWIFT\swt_Template_MT103.xml: [{1},{19},{2}]
+		
+		Compare paramFile from num dirs 1 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\WUT\AP\SWIFT\swt_Template_MT103.xml		
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [], [<segment-2 cols="1" illegal-char="1212" rows="1"/>]		
+		
+		Compare paramFile from num dirs 19 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\WUT\AP\SWIFT\swt_Template_MT103.xml		
+
+HSBC\US\AP\SWIFT\root_SSSS_OUT.xml: [{19},{24}]
+		
+		Compare paramFile from num dirs 19 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\root_SSSS_OUT.xml		
+
+HSBC\US\AP\SWIFT\swt_PMAT_PMATReceiveMT910.xml: [{1},{20}]
+		
+		Compare paramFile from num dirs 1 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\1\HSBC\US\AP\SWIFT\swt_PMAT_PMATReceiveMT910.xml		
+
+HSBC\US\AP\SWIFT\swift_to_othersystem.xml: [{1},{19}]
+		
+		Compare paramFile from num dirs 1 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\1\HSBC\US\AP\SWIFT\swift_to_othersystem.xml		
+
+HSBC\US\AP\SWIFT\ext_T00000000051.xml: [{19},{31}]
+		
+		Compare paramFile from num dirs 19 and 31
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\ext_T00000000051.xml		
+
+BGWEBUT\CN\AP\SWIFT\swt_Template_MT103.xml: [{1},{19},{2}]
+		
+		Compare paramFile from num dirs 1 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\CN\AP\SWIFT\swt_Template_MT103.xml		
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [], [<segment-2 cols="1" illegal-char="1212" rows="1"/>]		
+		
+		Compare paramFile from num dirs 19 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\CN\AP\SWIFT\swt_Template_MT103.xml		
+
+BGWEBUT\CN\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml: [{19},{8},{13}]
+		
+		Compare paramFile from num dirs 19 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\CN\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml		
+		
+		Compare paramFile from num dirs 19 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\CN\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml		
+		
+		Compare paramFile from num dirs 8 and 13
+		Node attributes not equal: <root>    <merva-alias>M</merva-alias>    <vs-queue-id/>    <vr-queue-id timeout="3"/>    <rs-queue-id/>    <rr-queue-id timeout="3"/>    <swift-format>RJE</swift-format>    <jndi-flag>Y</jndi-flag></root>, <root type="SFTP">    <ftp-id>DMS-SFTP</ftp-id>    <merva-alias>F</merva-alias>    <swift-format>DOS PCC</swift-format>    <jndi-flag>Y</jndi-flag></root>		
+
+BGWEBUT\WUT\AP\SWIFT\root_SSSS_OUT.xml: [{19},{24}]
+		
+		Compare paramFile from num dirs 19 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\WUT\AP\SWIFT\root_SSSS_OUT.xml		
+
+HSBC\US\AP\SWIFT\ext_T00000000048.xml: [{19},{21}]
+		
+		Compare paramFile from num dirs 19 and 21
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\ext_T00000000048.xml		
+
+EE_SYS\N98SwiftIndex\N98IndexConfig.xml: [{19},{15}]
+		
+		Compare paramFile from num dirs 19 and 15
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\EE_SYS\N98SwiftIndex\N98IndexConfig.xml		
+
+HSBC\US\AP\SWIFT\swt_Template_MT103.xml: [{1},{19},{2}]
+		
+		Compare paramFile from num dirs 1 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\swt_Template_MT103.xml		
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [], [<segment-2 cols="1" illegal-char="1212" rows="1"/>]		
+		
+		Compare paramFile from num dirs 19 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\swt_Template_MT103.xml		
+
+HSBC\US\AP\SWIFT\tagv_T00000000051.xml: [{19},{31}]
+		
+		Compare paramFile from num dirs 19 and 31
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\tagv_T00000000051.xml		
+
+HSBC\US\AP\SWIFT\tagv_T00000000048.xml: [{1},{20}]
+		
+		Compare paramFile from num dirs 1 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\1\HSBC\US\AP\SWIFT\tagv_T00000000048.xml		
+
+HSBC\US\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml: [{19},{8},{13}]
+		
+		Compare paramFile from num dirs 19 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml		
+		
+		Compare paramFile from num dirs 19 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\HSBC\US\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml		
+		
+		Compare paramFile from num dirs 8 and 13
+		Node attributes not equal: <root>    <merva-alias>M</merva-alias>    <vs-queue-id/>    <vr-queue-id timeout="3"/>    <rs-queue-id/>    <rr-queue-id timeout="3"/>    <swift-format>RJE</swift-format>    <jndi-flag>Y</jndi-flag></root>, <root type="SFTP">    <ftp-id>DMS-SFTP</ftp-id>    <merva-alias>F</merva-alias>    <swift-format>DOS PCC</swift-format>    <jndi-flag>Y</jndi-flag></root>		
+
+BGWEBUT\WUT\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml: [{19},{8},{13}]
+		
+		Compare paramFile from num dirs 19 and 8
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\WUT\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml		
+		
+		Compare paramFile from num dirs 19 and 13
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE SWIFT\19\BGWEBUT\WUT\AP\SWIFT\swtos_OUTWARD_SETTINGS_I.xml		
+		
+		Compare paramFile from num dirs 8 and 13
+		Node attributes not equal: <root>    <merva-alias>M</merva-alias>    <vs-queue-id/>    <vr-queue-id timeout="3"/>    <rs-queue-id/>    <rr-queue-id timeout="3"/>    <swift-format>RJE</swift-format>    <jndi-flag>Y</jndi-flag></root>, <root type="SFTP">    <ftp-id>DMS-SFTP</ftp-id>    <merva-alias>F</merva-alias>    <swift-format>DOS PCC</swift-format>    <jndi-flag>Y</jndi-flag></root>		
+
+
+==========================
+==EE DB Dictionary
+==========================
+
+EE_SYS\UPLOAD\TYPE_D00000000143.xml: [{1}]
+EE_SYS\DO\DO_D00000000143.xml: [{1}]
+
+==========================
+==EE Transfer To\System
+==========================
+
+HSBC\US\AP\TRFT\SSSS_Systemtest_M.xml: [{3},{16}]
+		
+		Compare paramFile from num dirs 3 and 16
+		Different node names: table-name, DO		
+
+HSBC\US\AP\TRFT\SSSS_Systemtest_P.xml: [{5},{9},{16}]
+		
+		Compare paramFile from num dirs 5 and 9
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\System\5\HSBC\US\AP\TRFT\SSSS_Systemtest_P.xml		
+		
+		Compare paramFile from num dirs 5 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\System\5\HSBC\US\AP\TRFT\SSSS_Systemtest_P.xml		
+		
+		Compare paramFile from num dirs 9 and 16
+		Different node names: table-name, DO		
+
+HSBC\US\AP\TRFT\SSSS_Systemtest_R.xml: [{5},{16},{20}]
+		
+		Compare paramFile from num dirs 5 and 16
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\System\5\HSBC\US\AP\TRFT\SSSS_Systemtest_R.xml		
+		
+		Compare paramFile from num dirs 5 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transfer To\System\5\HSBC\US\AP\TRFT\SSSS_Systemtest_R.xml		
+		
+		Compare paramFile from num dirs 16 and 20
+		Different node names: table-name, DO		
+
+
+==========================
+==EE Protocol Manager
+==========================
+
+BARRY\BAR\WEB\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\BARRY\BAR\WEB\QMGR\mq_BarryJNDI.xml		
+
+BARRY\BAR\AP\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\BARRY\BAR\AP\QMGR\mq_barry.xml		
+
+BARRY\BAR\AP\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\BARRY\BAR\AP\QMGR\mq_BarryJNDI.xml		
+
+BGWEBUT\WUT\WEB\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\BGWEBUT\WUT\WEB\QMGR\mq_barry.xml		
+
+BGWEBUT\CN\WEB\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\BGWEBUT\CN\WEB\QMGR\mq_BarryJNDI.xml		
+
+HSBC\US\WEB\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\HSBC\US\WEB\QMGR\mq_barry.xml		
+
+BGWEBUT\WUT\AP\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\BGWEBUT\WUT\AP\QMGR\mq_BarryJNDI.xml		
+
+BGWEBUT\CN\AP\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\BGWEBUT\CN\AP\QMGR\mq_barry.xml		
+
+HSBC\US\AP\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\HSBC\US\AP\QMGR\mq_barry.xml		
+
+BARRY\BAR\WEB\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\BARRY\BAR\WEB\QMGR\mq_barry.xml		
+
+BGWEBUT\CN\AP\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\BGWEBUT\CN\AP\QMGR\mq_BarryJNDI.xml		
+
+BGWEBUT\WUT\AP\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\BGWEBUT\WUT\AP\QMGR\mq_barry.xml		
+
+BGWEBUT\CN\WEB\QMGR\mq_barry.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\19\BGWEBUT\CN\WEB\QMGR\mq_barry.xml		
+
+HSBC\US\WEB\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\HSBC\US\WEB\QMGR\mq_BarryJNDI.xml		
+
+HSBC\US\AP\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\HSBC\US\AP\QMGR\mq_BarryJNDI.xml		
+
+BGWEBUT\WUT\WEB\QMGR\mq_BarryJNDI.xml: [{10},{19}]
+		
+		Compare paramFile from num dirs 10 and 19
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Protocol Manager\10\BGWEBUT\WUT\WEB\QMGR\mq_BarryJNDI.xml		
+
+
+==========================
+==EE Accounting Rules\System
+==========================
+
+HSBC\US\AP\VCH\vch_SSSS_systemtest.xml: [{6}]
+HSBC\US\WEB\VCH\vch_SSSS_systemtest.xml: [{6}]
+
+==========================
+==EE Function Group
+==========================
+
+EE_SYS\FUNCGRP\grp_G00000000044.xml: [{2},{10},{5}]
+		
+		Compare paramFile from num dirs 2 and 10
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Function Group\10\EE_SYS\FUNCGRP\grp_G00000000044.xml		
+		
+		Compare paramFile from num dirs 2 and 5
+		One of the nodes is null: [], [<FUNCTION FUNCTYPE="GE" forGPC="Y">        <MODULE DESC="Security Manager">SECU</MODULE>        <ID>F59</ID>        <NAME>SecurityManagerUnlock</NAME>        <DESC>Security Unlock Transaction</DESC>    </FUNCTION>]		
+		
+		Compare paramFile from num dirs 10 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Function Group\10\EE_SYS\FUNCGRP\grp_G00000000044.xml		
+
+EE_SYS\FUNCGRP\grp_root.xml: [{2}]
+EE_SYS\FUNCGRP\module_root.xml: [{2}]
+EE_SYS\FUNCGRP\grp_G00000000251.xml: [{2},{10},{6}]
+		
+		Compare paramFile from num dirs 2 and 10
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Function Group\2\EE_SYS\FUNCGRP\grp_G00000000251.xml		
+		
+		Compare paramFile from num dirs 2 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Function Group\2\EE_SYS\FUNCGRP\grp_G00000000251.xml		
+		
+		Compare paramFile from num dirs 10 and 6
+		One of the nodes is null: [<FUNCTION FUNCTYPE="GE" forGPC="Y">        <MODULE DESC="Standing Data">STAN</MODULE>        <ID>F</ID>        <NAME>AddAccountNumber</NAME>        <DESC>Add Account Number</DESC>    </FUNCTION>], []		
+
+
+==========================
+==EE Field Conversion\System
+==========================
+
+HSBC\US\WEB\FLDC\SSSS_AAAA.xml: [{1},{2},{4},{5}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 1 and 4
+		Different node names: set, value_field		
+		
+		Compare paramFile from num dirs 1 and 5
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 2 and 4
+		Different node names: multiple, fld_name		
+		
+		Compare paramFile from num dirs 2 and 5
+		Different node names: set, value_field		
+		
+		Compare paramFile from num dirs 4 and 5
+		Different node names: fld_name, multiple		
+
+HSBC\US\AP\FLDC\SSSS_AAAA.xml: [{1},{2},{4},{5}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 1 and 4
+		Different node names: set, value_field		
+		
+		Compare paramFile from num dirs 1 and 5
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 2 and 4
+		Different node names: multiple, fld_name		
+		
+		Compare paramFile from num dirs 2 and 5
+		Different node names: set, value_field		
+		
+		Compare paramFile from num dirs 4 and 5
+		Different node names: fld_name, multiple		
+
+
+==========================
+==EE Transaction Function
+==========================
+
+BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000516.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+HSBC\US\WEB\FUNC\func_F00000000516.xml: [{60},{65}]
+		
+		Compare paramFile from num dirs 60 and 65
+		Different node names: FORM, FUNCTION		
+
+HSBC\US\WEB\TEMPRULE\templrf_F00000000388.xml: [{1},{60}]
+		
+		Compare paramFile from num dirs 1 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\HSBC\US\WEB\TEMPRULE\templrf_F00000000388.xml		
+
+HSBC\US\WEB\TEMPRULE\templrf_F00000000516.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\HSBC\US\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+BGWEBUT\CN\WEB\FUNC\func_F00000000516.xml: [{60}]
+HSBC\US\AP\FUNC\func_F00000000516.xml: [{60},{65}]
+		
+		Compare paramFile from num dirs 60 and 65
+		Different node names: FORM, FUNCTION		
+
+BGWEBUT\CN\AP\FUNC\func_F00000000516.xml: [{60}]
+BGWEBUT\WUT\AP\FUNC\func_F00000000516.xml: [{60}]
+HSBC\US\WEB\FORM\form_F00000001871.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\HSBC\US\WEB\FORM\form_F00000001871.xml		
+
+BGWEBUT\CN\WEB\FUNC\test_ADD_MASTER.xml: [{60}]
+HSBC\US\WEB\FORM\form_F00000001886.xml: [{60},{65}]
+		
+		Compare paramFile from num dirs 60 and 65
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\HSBC\US\WEB\FORM\form_F00000001886.xml		
+
+BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000516_sdfsdf.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\BGWEBUT\CN\WEB\TEMPRULE\templr_F00000000516_sdfsdf.xml		
+
+HSBC\US\WEB\TEMPRULE\templr_F00000000516_sdfsdf.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\HSBC\US\WEB\TEMPRULE\templr_F00000000516_sdfsdf.xml		
+
+HSBC\US\WEB\FUNC\test_ADD_MASTER.xml: [{60}]
+BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000516_sdfsdf.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\BGWEBUT\WUT\WEB\TEMPRULE\templr_F00000000516_sdfsdf.xml		
+
+BGWEBUT\WUT\AP\FUNC\function_root.xml: [{60}]
+BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000388.xml: [{1},{60}]
+		
+		Compare paramFile from num dirs 1 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000388.xml		
+
+HSBC\US\WEB\FUNC\function_root.xml: [{60}]
+HSBC\US\WEB\LOCKINF\lock_F00000000516.xml: [{60}]
+BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000516.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\27\BGWEBUT\WUT\WEB\TEMPRULE\templrf_F00000000516.xml		
+
+BGWEBUT\CN\AP\FUNC\function_root.xml: [{60}]
+BGWEBUT\WUT\WEB\FUNC\test_ADD_MASTER.xml: [{60}]
+HSBC\US\WEB\FUNC\FUNCS_HAS_INSWIFT.xml: [{60},{65}]
+		
+		Compare paramFile from num dirs 60 and 65
+		One of the nodes is null: [<func funcType="MM" id="F516" module="TEST"/>], []		
+
+BGWEBUT\WUT\WEB\FUNC\func_F00000000516.xml: [{60}]
+BGWEBUT\WUT\WEB\FUNC\function_root.xml: [{60}]
+BGWEBUT\CN\WEB\FUNC\function_root.xml: [{60}]
+EE_SYS\DO\Ignore_DO_Fields.xml: [{60},{40}]
+		
+		Compare paramFile from num dirs 60 and 40
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\EE_SYS\DO\Ignore_DO_Fields.xml		
+
+HSBC\US\AP\LOCKINF\lock_F00000000516.xml: [{60}]
+HSBC\US\WEB\FORM\form_F00000000787.xml: [{1},{60}]
+		
+		Compare paramFile from num dirs 1 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\HSBC\US\WEB\FORM\form_F00000000787.xml		
+
+HSBC\US\WEB\BIRTDSN\F00000000516.xml: [{27},{60}]
+		
+		Compare paramFile from num dirs 27 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\HSBC\US\WEB\BIRTDSN\F00000000516.xml		
+
+HSBC\US\AP\FUNC\function_root.xml: [{60}]
+BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000388.xml: [{1},{60}]
+		
+		Compare paramFile from num dirs 1 and 60
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Transaction Function\60\BGWEBUT\CN\WEB\TEMPRULE\templrf_F00000000388.xml		
+
+
+==========================
+==EE Message Mapping
+==========================
+
+HSBC\US\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml: [{2},{20},{5}]
+		
+		Compare paramFile from num dirs 2 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\20\HSBC\US\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml		
+		
+		Compare paramFile from num dirs 2 and 5
+		One of the nodes is null: [], [<mapping ID="X1" SENDTYPE="O" TYPE="TSU">bb</mapping>]		
+		
+		Compare paramFile from num dirs 20 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\20\HSBC\US\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml		
+
+HSBC\US\AP\SCHEMAMAPPING\EESCHEMA\aa.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\2\HSBC\US\AP\SCHEMAMAPPING\EESCHEMA\aa.xml		
+
+BGWEBUT\CN\AP\SCHEMAMAPPING\EESCHEMA\aa.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\2\BGWEBUT\CN\AP\SCHEMAMAPPING\EESCHEMA\aa.xml		
+
+BGWEBUT\CN\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml: [{2},{20},{5}]
+		
+		Compare paramFile from num dirs 2 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\20\BGWEBUT\CN\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml		
+		
+		Compare paramFile from num dirs 2 and 5
+		One of the nodes is null: [], [<mapping ID="X1" SENDTYPE="O" TYPE="TSU">bb</mapping>]		
+		
+		Compare paramFile from num dirs 20 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\20\BGWEBUT\CN\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml		
+
+BGWEBUT\WUT\AP\SCHEMAMAPPING\EESCHEMA\aa.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\2\BGWEBUT\WUT\AP\SCHEMAMAPPING\EESCHEMA\aa.xml		
+
+BGWEBUT\WUT\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml: [{2},{20},{5}]
+		
+		Compare paramFile from num dirs 2 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\20\BGWEBUT\WUT\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml		
+		
+		Compare paramFile from num dirs 2 and 5
+		One of the nodes is null: [], [<mapping ID="X1" SENDTYPE="O" TYPE="TSU">bb</mapping>]		
+		
+		Compare paramFile from num dirs 20 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Message Mapping\20\BGWEBUT\WUT\AP\SCHEMAMAPPING\MAPPING\mapping_root.xml		
+
+
+==========================
+==EE Screen\Module
+==========================
+
+HSBC\US\WEB\SCRN\TestMoveMoney.xml: [{1}]
+HSBC\US\AP\FORM\form_multi_schema_TestMoveMoney.xml: [{1}]
+HSBC\US\AP\SCRN\TestMoveMoney.xml: [{1}]
+HSBC\US\AP\FORM\form_schema_TestMoveMoney.xml: [{1}]
+
+==========================
+==EE Batch Manage
+==========================
+
+BGWEBUT\CN\AP\BATCHTASK\task_AutoProcessTaskMgr.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\CN\AP\BATCHTASK\task_AutoProcessTaskMgr.xml		
+
+HSBC\US\WEB\BATCHTASK\taskmgr_root.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\HSBC\US\WEB\BATCHTASK\taskmgr_root.xml		
+
+EE_SYS\TASK\T00000000061.xml: [{1},{6}]
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\6\EE_SYS\TASK\T00000000061.xml		
+
+HSBC\US\AP\BATCHTASK\taskmgr_root.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\HSBC\US\AP\BATCHTASK\taskmgr_root.xml		
+
+BGWEBUT\CN\AP\BATCHTASK\taskmgr_root.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\CN\AP\BATCHTASK\taskmgr_root.xml		
+
+BATCH\J00000000009.xml: [{1},{6}]
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BATCH\J00000000009.xml		
+
+EE_SYS\BATCH\root.xml: [{1},{2},{6}]
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [<job id="J9">ApprovedSettlement</job>], []		
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\6\EE_SYS\BATCH\root.xml		
+		
+		Compare paramFile from num dirs 2 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\6\EE_SYS\BATCH\root.xml		
+
+BATCH\root.xml: [{1},{6}]
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BATCH\root.xml		
+
+BGWEBUT\WUT\AP\BATCHTASK\task_AutoProcessTaskMgr.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\WUT\AP\BATCHTASK\task_AutoProcessTaskMgr.xml		
+
+BGWEBUT\WUT\AP\BATCHTASK\taskmgr_root.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\WUT\AP\BATCHTASK\taskmgr_root.xml		
+
+BGWEBUT\CN\WEB\BATCHTASK\taskmgr_root.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\CN\WEB\BATCHTASK\taskmgr_root.xml		
+
+EE_SYS\BATCH\J00000000014.xml: [{1},{2},{4},{6}]
+		
+		Compare paramFile from num dirs 1 and 2
+		Different node names: manual_execute_in_auto, job_start_nofail		
+		
+		Compare paramFile from num dirs 1 and 4
+		One of the nodes is null: [], [<bankgroup id="GWEUT">                <countrycode code="CN">                    <bu subcountry=" ">R2-PC2CD</bu>                </countrycode>            </bankgroup>]		
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\6\EE_SYS\BATCH\J00000000014.xml		
+		
+		Compare paramFile from num dirs 2 and 4
+		Different node names: job_start_nofail, manual_execute_in_auto		
+		
+		Compare paramFile from num dirs 2 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\6\EE_SYS\BATCH\J00000000014.xml		
+		
+		Compare paramFile from num dirs 4 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\6\EE_SYS\BATCH\J00000000014.xml		
+
+TASK\T00000000063.xml: [{1},{6}]
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\TASK\T00000000063.xml		
+
+BGWEBUT\WUT\WEB\BATCHTASK\task_AutoProcessTaskMgr.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\WUT\WEB\BATCHTASK\task_AutoProcessTaskMgr.xml		
+
+HSBC\US\AP\BATCHTASK\task_AutoProcessTaskMgr.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\HSBC\US\AP\BATCHTASK\task_AutoProcessTaskMgr.xml		
+
+HSBC\US\WEB\BATCHTASK\task_AutoProcessTaskMgr.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\HSBC\US\WEB\BATCHTASK\task_AutoProcessTaskMgr.xml		
+
+BGWEBUT\CN\WEB\BATCHTASK\task_AutoProcessTaskMgr.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\CN\WEB\BATCHTASK\task_AutoProcessTaskMgr.xml		
+
+TASK\T00000000045.xml: [{1},{6}]
+		
+		Compare paramFile from num dirs 1 and 6
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\TASK\T00000000045.xml		
+
+BGWEBUT\WUT\WEB\BATCHTASK\taskmgr_root.xml: [{1},{5}]
+		
+		Compare paramFile from num dirs 1 and 5
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Batch Manage\1\BGWEBUT\WUT\WEB\BATCHTASK\taskmgr_root.xml		
+
+
+==========================
+==EE Catalog\System\Multi
+==========================
+
+HSBC\US\WEB\CATA\cata_R00000002455.xml: [{5}]
+
+==========================
+==EE GAPI Setting\Transaction
+==========================
+
+HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml: [{1},{18},{19},{24},{3},{30},{32},{36},{39}]
+		
+		Compare paramFile from num dirs 1 and 18
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 1 and 19
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 1 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 1 and 3
+		Node attributes not equal: <gapi-mode conditional="false" gapiMode="" mode="ASYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 1 and 30
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 1 and 32
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 1 and 36
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 1 and 39
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 18 and 19
+		Node attributes not equal: <gapi-mode conditional="true" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 18 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 18 and 3
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 18 and 30
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 18 and 32
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 18 and 36
+		Different node names: other-system-id, ws-config		
+		
+		Compare paramFile from num dirs 18 and 39
+		Different node names: other-system-id, socket-config		
+		
+		Compare paramFile from num dirs 19 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 19 and 3
+		Different node names: recv-time-out, send-queue-id		
+		
+		Compare paramFile from num dirs 19 and 30
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 19 and 32
+		Different node names: other-system-id, ftp-config		
+		
+		Compare paramFile from num dirs 19 and 36
+		Different node names: other-system-id, ws-config		
+		
+		Compare paramFile from num dirs 19 and 39
+		Different node names: other-system-id, socket-config		
+		
+		Compare paramFile from num dirs 24 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 24 and 30
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 24 and 32
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 24 and 36
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 24 and 39
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapi_TEST_Compliance_TX.xml		
+		
+		Compare paramFile from num dirs 3 and 30
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 3 and 32
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 3 and 36
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 3 and 39
+		Different node names: send-queue-id, recv-time-out		
+		
+		Compare paramFile from num dirs 30 and 32
+		Node attributes not equal: <gapi-mode conditional="true" gapiMode="" mode="SYNC"/>, <gapi-mode gapiMode="" mode="ATCH"/>		
+		
+		Compare paramFile from num dirs 30 and 36
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 30 and 39
+		Different node names: ftp-config, socket-config		
+		
+		Compare paramFile from num dirs 32 and 36
+		Different node names: ftp-config, ws-config		
+		
+		Compare paramFile from num dirs 32 and 39
+		Different node names: ftp-config, socket-config		
+		
+		Compare paramFile from num dirs 36 and 39
+		Different node names: ws-config, socket-config		
+
+HSBC\US\AP\GAPI\gapirule_root.xml: [{1},{24}]
+		
+		Compare paramFile from num dirs 1 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\24\HSBC\US\AP\GAPI\gapirule_root.xml		
+
+HSBC\US\AP\GAPI\gapi_TEST_qqqq_TX.xml: [{1},{9}]
+		
+		Compare paramFile from num dirs 1 and 9
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE GAPI Setting\Transaction\1\HSBC\US\AP\GAPI\gapi_TEST_qqqq_TX.xml		
+
+
+==========================
+==EE Clause\System
+==========================
+
+HSBC\US\WEB\CLAUSE\clause_C00000000000.xml: [{1}]
+HSBC\US\AP\CLAUSE\clause_field_SSSS.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\System\1\HSBC\US\AP\CLAUSE\clause_field_SSSS.xml		
+
+HSBC\US\AP\CLAUSE\SSSS_ACC_CHG_COLL.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\System\1\HSBC\US\AP\CLAUSE\SSSS_ACC_CHG_COLL.xml		
+
+HSBC\US\AP\CLAUSE\clause_C00000000000.xml: [{1}]
+HSBC\US\WEB\CLAUSE\SSSS_ACC_CHG_COLL.xml: [{1},{2}]
+		
+		Compare paramFile from num dirs 1 and 2
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\System\1\HSBC\US\WEB\CLAUSE\SSSS_ACC_CHG_COLL.xml		
+
+HSBC\US\WEB\CLAUSE\clause_field_SSSS.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Clause\System\1\HSBC\US\WEB\CLAUSE\clause_field_SSSS.xml		
+
+
+==========================
+==EE Event Driven
+==========================
+
+EVENTDRIVEN\MDBConfig.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Event Driven\11\EVENTDRIVEN\MDBConfig.xml		
+
+EVENTDRIVEN\ASYNC_GAPI.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Event Driven\11\EVENTDRIVEN\ASYNC_GAPI.xml		
+
+EE_SYS\EVENTDRIVEN\ASYNC_GAPI.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Event Driven\1\EE_SYS\EVENTDRIVEN\ASYNC_GAPI.xml		
+
+EE_SYS\EVENTDRIVEN\MDBConfig.xml: [{1},{11}]
+		
+		Compare paramFile from num dirs 1 and 11
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Event Driven\1\EE_SYS\EVENTDRIVEN\MDBConfig.xml		
+
+
+==========================
+==EE Screen\System
+==========================
+
+HSBC\US\WEB\SCRN\PMAT_ConfirmInv.xml: [{1}]
+HSBC\US\AP\FORM\form_schema_PMAT_ConfirmInv.xml: [{1}]
+HSBC\US\AP\FORM\form_multi_schema_PMAT_ConfirmInv.xml: [{1}]
+HSBC\US\AP\SCRN\PMAT_ConfirmInv.xml: [{1}]
+
+==========================
+==EE DataSource Manage
+==========================
+
+EE_SYS\SYST\ee_dsmgr.xml: [{3}]
+EE_SYS\SYST\sec_dsmgr.xml: [{3}]
+EE_SYS\SYST\schemaType.xml: [{3}]
+
+==========================
+==EE Screen
+==========================
+
+HSBC\US\AP\SCRN\TestMoveMoneyPIS.xml: [{1}]
+HSBC\US\WEB\SCRN\TestMoveMoneyPIS.xml: [{1}]
+
+==========================
+==EE Server Side JS
+==========================
+
+
+==========================
+==EE Accounting Rules\Module
+==========================
+
+HSBC\US\AP\VCH\vch_TEST_TestMoveMoney.xml: [{8}]
+HSBC\US\WEB\VCH\vch_TEST_TestMoveMoney.xml: [{8}]
+
+==========================
+==EE Field Conversion\Module
+==========================
+
+HSBC\US\AP\FLDC\TEST_BENE_NM.xml: [{3},{4},{5},{6}]
+		
+		Compare paramFile from num dirs 3 and 4
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 3 and 5
+		Different node names: value_field, set		
+		
+		Compare paramFile from num dirs 3 and 6
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 4 and 5
+		Different node names: multiple, fld_name		
+		
+		Compare paramFile from num dirs 4 and 6
+		Different node names: value_field, set		
+		
+		Compare paramFile from num dirs 5 and 6
+		Different node names: fld_name, multiple		
+
+HSBC\US\WEB\FLDC\TEST_BENE_NM.xml: [{3},{4},{5},{6}]
+		
+		Compare paramFile from num dirs 3 and 4
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 3 and 5
+		Different node names: value_field, set		
+		
+		Compare paramFile from num dirs 3 and 6
+		Different node names: fld_name, multiple		
+		
+		Compare paramFile from num dirs 4 and 5
+		Different node names: multiple, fld_name		
+		
+		Compare paramFile from num dirs 4 and 6
+		Different node names: value_field, set		
+		
+		Compare paramFile from num dirs 5 and 6
+		Different node names: fld_name, multiple		
+
+
+==========================
+==EE Business Unit Config
+==========================
+
+EE_SYS\UnitCode\uc_BARRYBIC.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Business Unit Config\1\EE_SYS\UnitCode\uc_BARRYBIC.xml		
+
+EE_SYS\UnitCode\uc_ASDASD.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Business Unit Config\3\EE_SYS\UnitCode\uc_ASDASD.xml		
+
+EE_SYS\UnitCode\uc_MIDLGB20XXX.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Business Unit Config\3\EE_SYS\UnitCode\uc_MIDLGB20XXX.xml		
+
+EE_SYS\UnitCode\uc_test.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Business Unit Config\3\EE_SYS\UnitCode\uc_test.xml		
+
+EE_SYS\UnitCode\uc_MRMDUS30XXX.xml: [{1},{3}]
+		
+		Compare paramFile from num dirs 1 and 3
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Business Unit Config\3\EE_SYS\UnitCode\uc_MRMDUS30XXX.xml		
+
+
+==========================
+==EE Get DO DATA\Module
+==========================
+
+HSBC\US\AP\GETDATA\COMM_CheckEPPSupplierPP_Existed_Other.xml: [{4}]
+HSBC\US\WEB\GETDATA\COMM_CheckEPPSupplierPP_Existed.xml: [{1},{2},{4}]
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [], [<TALE ALIAS="CDRY_LEDGER" schema="%EXIMTRX%">CDRY_LEDGER</TALE>]		
+		
+		Compare paramFile from num dirs 1 and 4
+		One of the nodes is null: [], [<TALE ALIAS="CDRY_LEDGER" schema="%EXIMTRX%">CDRY_LEDGER</TALE>]		
+		
+		Compare paramFile from num dirs 2 and 4
+		Node attributes not equal: <FIELD DO_FIELD="C_MAIN_REF" FIELD="C_MAIN_REF" TL_ALIAS="UYR_RPTLOG">UYR_RPTLOG.C_MAIN_REF</FIELD>, <FIELD DISTINCT="T" DO_FIELD="C_MAIN_REF" FIELD="C_MAIN_REF" TL_ALIAS="UYR_RPTLOG">UYR_RPTLOG.C_MAIN_REF</FIELD>		
+
+HSBC\US\AP\GETDATA\COMM_CheckEPPSupplierPP_Existed.xml: [{1},{2},{4}]
+		
+		Compare paramFile from num dirs 1 and 2
+		One of the nodes is null: [], [<TALE ALIAS="CDRY_LEDGER" schema="%EXIMTRX%">CDRY_LEDGER</TALE>]		
+		
+		Compare paramFile from num dirs 1 and 4
+		One of the nodes is null: [], [<TALE ALIAS="CDRY_LEDGER" schema="%EXIMTRX%">CDRY_LEDGER</TALE>]		
+		
+		Compare paramFile from num dirs 2 and 4
+		Node attributes not equal: <FIELD DO_FIELD="C_MAIN_REF" FIELD="C_MAIN_REF" TL_ALIAS="UYR_RPTLOG">UYR_RPTLOG.C_MAIN_REF</FIELD>, <FIELD DISTINCT="T" DO_FIELD="C_MAIN_REF" FIELD="C_MAIN_REF" TL_ALIAS="UYR_RPTLOG">UYR_RPTLOG.C_MAIN_REF</FIELD>		
+
+HSBC\US\WEB\GETDATA\COMM_CheckEPPSupplierPP_Existed_Other.xml: [{4}]
+
+==========================
+==EE Get CUBK\System
+==========================
+
+HSBC\US\AP\GETCUBK\cubk_SSSS_system2.xml: [{17},{20},{21},{22},{24}]
+		
+		Compare paramFile from num dirs 17 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\AP\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 17 and 21
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\AP\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 17 and 22
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\AP\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 17 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\AP\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 20 and 21
+		One of the nodes is null: [], [<C_K_GROUP_ID ALIAS="T2" DFUNC="" DESC="ANK GROUP ID" DT="1" HIDDEN="T" TYPE="F">ENE_TP_CD</C_K_GROUP_ID>]		
+		
+		Compare paramFile from num dirs 20 and 22
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 20 and 24
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 21 and 22
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 21 and 24
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 22 and 24
+		One of the nodes is null: [], [<CCY ALIAS="T" DESC="Currency" DT="1" TYPE="F">ASE_CD</CCY>]		
+
+HSBC\US\WEB\GETCUBK\cubk_SSSS_system.xml: [{14},{15},{16},{17},{20}]
+		
+		Compare paramFile from num dirs 14 and 15
+		One of the nodes is null: [], [<table-name ALIAS="T1" SCHEMA="IDE1_EXIMUSER" TYPE="U">SEC_USINESS_UNIT</table-name>]		
+		
+		Compare paramFile from num dirs 14 and 16
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 14 and 17
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 14 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\WEB\GETCUBK\cubk_SSSS_system.xml		
+		
+		Compare paramFile from num dirs 15 and 16
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 15 and 17
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 15 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\WEB\GETCUBK\cubk_SSSS_system.xml		
+		
+		Compare paramFile from num dirs 16 and 17
+		One of the nodes is null: [], [<CCY ALIAS="T" DESC="Currency" DT="1" TYPE="F">C_UNIT_CODE</CCY>]		
+		
+		Compare paramFile from num dirs 16 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\WEB\GETCUBK\cubk_SSSS_system.xml		
+		
+		Compare paramFile from num dirs 17 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\WEB\GETCUBK\cubk_SSSS_system.xml		
+
+HSBC\US\AP\GETCUBK\cubk_SSSS_system.xml: [{14},{15},{16},{17},{20}]
+		
+		Compare paramFile from num dirs 14 and 15
+		One of the nodes is null: [], [<table-name ALIAS="T1" SCHEMA="IDE1_EXIMUSER" TYPE="U">SEC_USINESS_UNIT</table-name>]		
+		
+		Compare paramFile from num dirs 14 and 16
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 14 and 17
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 14 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\AP\GETCUBK\cubk_SSSS_system.xml		
+		
+		Compare paramFile from num dirs 15 and 16
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 15 and 17
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 15 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\AP\GETCUBK\cubk_SSSS_system.xml		
+		
+		Compare paramFile from num dirs 16 and 17
+		One of the nodes is null: [], [<CCY ALIAS="T" DESC="Currency" DT="1" TYPE="F">C_UNIT_CODE</CCY>]		
+		
+		Compare paramFile from num dirs 16 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\AP\GETCUBK\cubk_SSSS_system.xml		
+		
+		Compare paramFile from num dirs 17 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\20\HSBC\US\AP\GETCUBK\cubk_SSSS_system.xml		
+
+HSBC\US\WEB\GETCUBK\cubk_SSSS_system2.xml: [{17},{20},{21},{22},{24}]
+		
+		Compare paramFile from num dirs 17 and 20
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\WEB\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 17 and 21
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\WEB\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 17 and 22
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\WEB\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 17 and 24
+		File doesn't exist: \\10.39.100.2\dev2\Utility Doc\Web Utility Test Information\Original Utility 测试点分析\XML Structure\EE Get CUBK\System\17\HSBC\US\WEB\GETCUBK\cubk_SSSS_system2.xml		
+		
+		Compare paramFile from num dirs 20 and 21
+		One of the nodes is null: [], [<C_K_GROUP_ID ALIAS="T2" DFUNC="" DESC="ANK GROUP ID" DT="1" HIDDEN="T" TYPE="F">ENE_TP_CD</C_K_GROUP_ID>]		
+		
+		Compare paramFile from num dirs 20 and 22
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 20 and 24
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 21 and 22
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 21 and 24
+		Different node names: tables, key-mapping		
+		
+		Compare paramFile from num dirs 22 and 24
+		One of the nodes is null: [], [<CCY ALIAS="T" DESC="Currency" DT="1" TYPE="F">ASE_CD</CCY>]		
