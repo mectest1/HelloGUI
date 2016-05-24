@@ -15,7 +15,12 @@ import javafx.stage.Stage;
  * An XML structure comparator according to July's requirements;
  * <h4>Requirements:</h4>
  * <p>
- * Now we have this folder: 
+ * Now we have this folder: /*  /characteristic_path/{number}/*  /
+ * </p>
+ * <h4>Result: this Plugin has failed</h4>
+ * <p>
+ * <strong>Reason: </strong> heavy-load tasks take too much time to run, and they failed to be 
+ * switched into background and keep running.
  * </p>
  * @author MEC
  *

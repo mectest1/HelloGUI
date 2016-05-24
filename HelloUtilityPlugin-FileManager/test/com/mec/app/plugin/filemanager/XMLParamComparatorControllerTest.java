@@ -17,10 +17,14 @@ import java.util.regex.Matcher;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mec.app.plugin.filemanager.XMLParamComparatorController.OperationInProgress;
 import com.mec.app.plugin.filemanager.XMLParamComparatorController.ParamDirectoryExtractor;
 import com.mec.app.plugin.filemanager.resources.MsgLogger;
 import com.mec.app.plugin.filemanager.resources.MsgLogger.StringLogger;
 import com.mec.app.plugin.filemanager.resources.MsgLogger.StringPrefixLogger;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 public class XMLParamComparatorControllerTest {
 
@@ -250,6 +254,7 @@ public class XMLParamComparatorControllerTest {
 		xpc.outputDifferenceLog(outputLogFile);
 	}
 	
+	@Ignore
 	@Test
 	public void testSystemProperty(){
 //		logger.log(System.getProperty("user.dir"));
@@ -257,8 +262,27 @@ public class XMLParamComparatorControllerTest {
 		Properties props = System.getProperties();
 		props.keySet().stream().forEach(key -> logger.log(String.format("%s: %s", key, props.get(key))));
 	}
-	
-	
+//	
+//	@Test
+//	public void testOperationInProgress(){
+////		OperationInProgress oip = new OperationInProgress();
+////		oip.show();
+////		OperationInProgressApplication app = new OperationInProgressApplication();
+////		app.st
+////			
+//		Application.launch(OperationInProgressApplication.class);
+//	}
+//	
+//	
+//	static class OperationInProgressApplication extends Application{
+//
+//		@Override
+//		public void start(Stage primaryStage) throws Exception {
+//			OperationInProgress oip = new OperationInProgress();
+//			oip.show();
+//		}
+//		
+//	}
 	void logAndWrite(Writer writer, String format, Object ... args) throws IOException{
 		String content = String.format(format, args);
 		logger.log(content);

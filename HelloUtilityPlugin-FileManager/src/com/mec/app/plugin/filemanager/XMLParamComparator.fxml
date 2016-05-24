@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -17,13 +18,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.app.plugin.filemanager.XMLParamComparatorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.app.plugin.filemanager.XMLParamComparatorController">
 	<top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="%menu.file">
             <items>
-              <MenuItem mnemonicParsing="false" text="%menu.file.generateReport" onAction="#onSaveDiffReport"/>
+              <MenuItem mnemonicParsing="false" onAction="#onSaveDiffReport" text="%menu.file.generateReport" fx:id="menuItemSaveDiffReport"/>
             </items>
           </Menu>
           <Menu disable="true" mnemonicParsing="false" text="%menu.edit">
@@ -41,11 +42,27 @@
    <center>
       <BorderPane>
          <top>
-            <HBox prefHeight="28.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onChooseParamRootDir" text="%btn.dirChooser" />
-                  <TextField fx:id="paramRootDirField" promptText="%text.rootParamDir.prompt" HBox.hgrow="ALWAYS" />
-               </children>
+<!--             <HBox prefHeight="28.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER" fx:id="topBannerGroup"> -->
+<!--                <children> -->
+<!--                   <HBox fx:id="operationInProgressGroup" alignment="CENTER_LEFT" spacing="5.0"> -->
+<!--                      <children> -->
+<!--                         <ProgressIndicator prefHeight="20.0" prefWidth="20.0" /> -->
+<!--                         <Label text="%label.operationInProgress" /> -->
+<!--                      </children> -->
+<!--                   </HBox> -->
+<!--                   <HBox fx:id="rootDirGroup" spacing="5.0" HBox.hgrow="SOMETIMES"> -->
+<!--                      <children> -->
+<!--                         <Button mnemonicParsing="false" onAction="#onChooseParamRootDir" text="%btn.dirChooser" /> -->
+<!--                         <TextField fx:id="paramRootDirField" promptText="%text.rootParamDir.prompt" HBox.hgrow="ALWAYS" /> -->
+<!--                      </children> -->
+<!--                   </HBox> -->
+<!--                </children> -->
+<!--             </HBox> -->
+            <HBox spacing="5.0" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onChooseParamRootDir" text="%btn.dirChooser" />
+                        <TextField fx:id="paramRootDirField" promptText="%text.rootParamDir.prompt" HBox.hgrow="ALWAYS" />
+                     </children>
             </HBox>
          </top>
          <left>
