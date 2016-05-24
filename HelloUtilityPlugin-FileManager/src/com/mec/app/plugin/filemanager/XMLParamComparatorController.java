@@ -1,6 +1,7 @@
 package com.mec.app.plugin.filemanager;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
@@ -26,9 +27,49 @@ import com.mec.app.plugin.filemanager.resources.Msg;
 import com.mec.app.plugin.filemanager.resources.MsgLogger;
 import com.mec.app.plugin.filemanager.resources.XMLStructComparator;
 
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Window;
 
 public class XMLParamComparatorController implements MsgLogger{
+	
+	
+	
+	@FXML
+	private TextArea logMsg;
+	@FXML
+	private TextField paramRootDirField;
+	@FXML
+	private ListView<Path> characteristicPathsView;
+	@FXML
+	private TableView<Map.Entry<Path, List<Set<Path>>>> xmlParamFilesGroupedBySetView;
+	@FXML
+	private TableColumn<Map.Entry<Path, List<Set<Path>>>, Path> xmlParamFileCol;
+	@FXML
+	private TableColumn<Map.Entry<Path, List<Set<Path>>>, List<Set<Path>>> groupedNumDirSetCol;
+	@FXML
+//	private TreeView<Map.Entry<Path, List<Set<Path>>>> numDirsGroupView;
+	private TreeView<List<Set<Path>>> numDirsGroupView;
+	
+	
+	private FileChooser fileChooser = new FileChooser();
+	private DirectoryChooser dirChooser = new DirectoryChooser();
+	
+	
 	
 	ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(this);
 //	XMLStructComparator diff = XMLStructComparator.inst();
@@ -50,19 +91,196 @@ public class XMLParamComparatorController implements MsgLogger{
 	 * </pre>
 	 */
 	Map<Path, Map<Path, List<Set<Path>>>> cpsWithNumDirParams;
+	
+	/**
+	 * Functions same as {@link #cpsWithNumDirParams}. This one is used for the GUI appilcation only.
+	 */
+	Map<Path, Map<Path, List<Set<Path>>>> cpsWithNumDirParamsTmp;
 	Path paramRootDir;
 	
 	@FXML
 	private void initialize(){
-		Path currentPath = Paths.get(".");
-		try {
+//		Path currentPath = Paths.get(".");
+//		try {
 			//Result: E:\Git\github.com\mectest1\HelloGUI\HelloUtility
 
-			logger.log(currentPath.toRealPath().toString());
-		} catch (IOException e) {
-			logger.log(e);
+//			logger.log(currentPath.toRealPath().toString());
+//			log(currentPath.toRealPath().toString());
+//		} catch (IOException e) {
+//			logger.log(e);
+//		}
+		fileChooser.getExtensionFilters().add(new ExtensionFilter(
+				Msg.get(this, "report.file.desc"), Msg.getList(this, "report.file.ext")));
+		fileChooser.setTitle(Msg.get(this, "report.file.chooser.title"));
+		fileChooser.setInitialDirectory(Paths.get(System.getProperty(Msg.get(this, "report.file.initial.dir.prop"))).toFile());
+		fileChooser.setInitialFileName(Msg.get(this, "report.file.initial.fileName"));
+		
+		
+//		String initialDir = paramRootDirField.getText().trim();
+//		if(initialDir.isEmpty()){
+		String initialDir = Msg.get(this, "dir.param.root.initial");
+//		}
+//		dirChooser.setInitialDirectory(Paths.get(Msg.get(this, initialDir)).toFile());
+//		dirChooser.setInitialDirectory(new File(Paths.get(Msg.get(this, initialDir)).toString()));
+		dirChooser.setTitle(Msg.get(this, "dir.chooser.title"));
+		
+//		Platform.runLater(()->{
+		paramRootDirField.textProperty().addListener(this::onParamRootDirFieldChanged);
+//		});
+		
+		characteristicPathsView.setCellFactory(lv -> new RelativePathListCell(paramRootDir));
+//		ChangeListener<Path> cl = this::onCharacteristicPathViewSelectedItemChanged;
+		characteristicPathsView.getSelectionModel().selectedItemProperty().addListener(this::onCharacteristicPathViewSelectedItemChanged);
+		xmlParamFilesGroupedBySetView.getSelectionModel().selectedItemProperty().addListener(this::onXmlParamFilesGroupedBySetViewSelectedItemChanged);
+		xmlParamFileCol.setCellValueFactory(cdf -> new SimpleObjectProperty<Path>(cdf.getValue().getKey()));
+		
+		groupedNumDirSetCol.setCellValueFactory(cdf -> new SimpleObjectProperty<List<Set<Path>>>(cdf.getValue().getValue()));
+		groupedNumDirSetCol.setCellFactory(cdf -> new ListOfSetsColumnCell());
+		
+		numDirsGroupView.setCellFactory(tv -> new NumDirGroupsTreeCell());
+		numDirsGroupView.getSelectionModel().selectedItemProperty().addListener(this::onNumDirsGroupViewSelectedItemChanged);
+		
+		
+//		numDirsGroupView.setShowRoot(true);
+	}
+	
+	
+	
+	@FXML
+	private void onChooseParamRootDir(){
+//		File
+		File paramRootDir = dirChooser.showDialog(getOwnerWindow());
+		if(null != paramRootDir){
+			paramRootDirField.setText(paramRootDir.toPath().toAbsolutePath().toString());
 		}
 	}
+	
+	private void onParamRootDirFieldChanged(Observable ob, String oldVal, String newVal){
+		String rootDirStr = paramRootDirField.getText().replaceAll(BACK_SLASH, SLASH).trim();
+		Path newPath = Paths.get(rootDirStr);
+		if(!(Files.isDirectory(newPath) && Files.exists(newPath))){
+			log(Msg.get(this, "error.paramRotoDir.invalid"), newVal);
+			return;
+		}
+		
+		cpsWithNumDirParamsTmp = new HashMap<>();
+		this.paramRootDir = newPath;
+		populateCharacteristicPathsList();
+	}
+	
+	private void populateCharacteristicPathsList(){
+		List<Path> charPaths = pe.getCharacteristicPath(paramRootDir);
+		
+		characteristicPathsView.getItems().clear();
+		characteristicPathsView.getItems().addAll(charPaths);
+	}
+	
+//	@FXML
+	private void onCharacteristicPathViewSelectedItemChanged(Observable ob, Path oldVal, Path newVal){
+//	private void onParseParamGroups(){
+//		Path newVal = characteristicPathsView.getSelectionModel().getSelectedItem();
+		
+		//
+//		if(null == newVal){
+//			return;
+//		}
+		Path characteristicPath = newVal;
+//		Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = pe.groupNumDirContents(characteristicPath);
+		Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = 
+				cpsWithNumDirParamsTmp.computeIfAbsent(characteristicPath, pe::groupNumDirContents);
+//				cpsWithNumDirParamsTmp.computeIfAbsent(characteristicPath, p -> 
+//						pe.groupNumDirContents(p, pe::isStartsWithBankGroundAndCountryCode));
+		
+		//Get only paramFiles that start with "HSBC/US", or not start with "HSBC" at all
+//		List<Path> filteredParamFiles = groupedNumDirsByXmlStruct.keySet().stream()
+//				.filter(pe::isStartsWithBankGroundAndCountryCode).collect(Collectors.toList());
+//		Map<Path, List<Set<Path>>> filteredGroups = groupedNumDirsByXmlStruct.entrySet()
+//				.stream().filter(entry -> filteredParamFiles.contains(entry.getKey())).collect(Collectors.groupingBy())
+		Map<Path, List<Set<Path>>> filteredGroups = groupedNumDirsByXmlStruct.entrySet()
+				.stream().filter(entry -> pe.isStartsWithBankGroundAndCountryCode(entry.getKey()))
+				//ref: http://www.mkyong.com/java8/java-8-filter-a-map-examples/
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//		groupedNumDirsByXmlStruct.
+//				.collect(Collectors.groupingBy(entry -> entry.getKey()));
+		
+		xmlParamFilesGroupedBySetView.getItems().clear();
+//		xmlParamFilesGroupedBySetView.getItems().addAll(groupedNumDirsByXmlStruct.entrySet());
+		xmlParamFilesGroupedBySetView.getItems().addAll(filteredGroups.entrySet());
+		
+		clearLog();
+	}
+	
+	
+	private void onXmlParamFilesGroupedBySetViewSelectedItemChanged(Observable ob, 
+			Map.Entry<Path, List<Set<Path>>> oldVal, Map.Entry<Path, List<Set<Path>>> newVal){
+		if(null == newVal){
+			return;
+		}
+		List<Set<Path>> groupedNumDirs = newVal.getValue();
+		
+//		NumDirGroupsTreeItem numDirGroupsRootNode = new NumDirGroupsTreeItem(this.paramRootDir, newVal);
+		NumDirGroupsTreeItem numDirGroupsRootNode = new NumDirGroupsTreeItem(this.paramRootDir, newVal.getKey(), newVal.getValue());
+		numDirGroupsRootNode.populateChildNodes();
+		numDirGroupsRootNode.setExpanded(true);
+		
+		numDirsGroupView.setRoot(numDirGroupsRootNode);
+		numDirsGroupView.refresh();
+		
+		Path paramFile = newVal.getKey();
+		String groupedNumDirsStr = ParamDirectoryExtractor.listOfSetsToStr(groupedNumDirs);
+		clearLog();
+		log(Msg.get(this, "info.paramFileToNumDirsGroup"), paramFile.toString(), groupedNumDirsStr);
+	}
+	
+	private void onNumDirsGroupViewSelectedItemChanged(Observable ob, 
+			TreeItem<List<Set<Path>>> oldVal, TreeItem<List<Set<Path>>> newVal){
+		if(null == newVal){
+			return;
+		}
+		
+		NumDirGroupsTreeItem binaryGroups = (NumDirGroupsTreeItem) newVal;
+		
+//		StringPrefixLogger sl = new StringPrefixLogger(Msg.get(this, "info.xmlStructDiffPattern"));
+		StringLogger sl = new StringLogger();
+		Path paramFile = binaryGroups.getXmlParmFileRelativePath();
+		Path paramRootDir = binaryGroups.getRootDir();
+		List<Set<Path>> groupedNumDirs = binaryGroups.getGroupedDirs();
+		String diffReport = pe.getDiffReport(paramRootDir, groupedNumDirs, paramFile, sl);
+		
+		clearLog();
+		log(diffReport);
+	}
+	
+	
+	@FXML
+	private void onSaveDiffReport(){
+		File outputFile = fileChooser.showSaveDialog(getOwnerWindow());
+		if(null == outputFile){
+			return;
+		}
+		if(null == cpsWithNumDirParams){
+			parseParamXmlStruct(this.paramRootDir);
+		}
+		Path outputPath = outputFile.toPath();
+		clearLog();
+		ln(Msg.get(this, "info.save.diffReport.start"), outputPath.toString());
+		
+		outputDifferenceLog(outputPath);
+		
+		ln(Msg.get(this, "info.save.diffReport.end"), outputPath.toString());
+	}
+	
+	
+	private Window getOwnerWindow(){
+		return logMsg.getScene().getWindow();
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Parse XML Param Files stored in descendant NumDirs of this <code>paraRootDir</code>, 
@@ -111,6 +329,8 @@ public class XMLParamComparatorController implements MsgLogger{
 //				}).collect(Collectors.toSet());
 				
 			}
+			
+		cpsWithNumDirParamsTmp = cpsWithNumDirParams;
 	}
 	
 	/**
@@ -163,20 +383,160 @@ public class XMLParamComparatorController implements MsgLogger{
 	
 	void logAndWrite(Writer writer, String format, Object ... args) throws IOException{
 		String content = String.format(format, args);
-		logger.log(content);
+//		logger.log(content);
+		log(content);
 		writer.append(content);
 	}
 	
 	void logAndWrite(Writer writer, String content) throws IOException{
-		logger.log(content);
+//		logger.log(content);
+		log(content);
 		writer.append(content);
 	}
 	
+	private void clearLog(){
+		logMsg.clear();
+//		log(msg);
+	}
 	@Override
 	public void log(String msg) {
-		logger.log(msg);
+//		logger.log(msg);
+		logMsg.appendText(msg);
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//========================================================================================
+//	static class NumDirGroupsTreeItem extends TreeItem<Map.Entry<Path, List<Set<Path>>>>{
+	static class NumDirGroupsTreeItem extends TreeItem<List<Set<Path>>>{
+		Path rootDir;
+//		Map.Entry<Path, List<Set<Path>>> groupedDirs;
+		Path xmlParmFileRelativePath;
+		List<Set<Path>> numDirGroups;
+		public NumDirGroupsTreeItem(Path rootDir, Path xmlParmFileRelativePath, List<Set<Path>> numDirGroups){
+			this.rootDir = rootDir;
+//			this.groupedDirs = groupedDirs;
+			this.xmlParmFileRelativePath = xmlParmFileRelativePath;
+			this.numDirGroups = numDirGroups;
+		}
+		public Path getRootDir() {
+			return rootDir;
+		}
+		public List<Set<Path>> getGroupedDirs() {
+			return numDirGroups;
+		}
+		public Path getXmlParmFileRelativePath() {
+			return xmlParmFileRelativePath;
+		}
+		public void populateChildNodes(){
+			List<Set<Path>> representativeNumDirGroups = ParamDirectoryExtractor.getFirstElementOfEachSet(numDirGroups);
+			for(int i = 0; i < representativeNumDirGroups.size(); ++i){
+				for(int j = i + 1; j < representativeNumDirGroups.size(); ++j){
+					List<Set<Path>> subBinaryGroups = Stream.of(representativeNumDirGroups.get(i), representativeNumDirGroups.get(j))
+							.collect(Collectors.toList());
+					getChildren().add(new NumDirGroupsTreeItem(rootDir, xmlParmFileRelativePath, subBinaryGroups));
+				}
+			}
+		}
+		
+	}
+	static class NumDirGroupsTreeCell extends TreeCell<List<Set<Path>>>{
+
+		@Override
+		protected void updateItem(List<Set<Path>> item, boolean empty) {
+			super.updateItem(item, empty);
+//			if(empty || null == item){
+//				this.setText("");
+//				this.setGraphic(null);
+//			}else{
+////				NumDirGroupsTreeItem treeItem = ;
+//				String binaryGroupsStr = ParamDirectoryExtractor.listOfSetsToStr(item);
+//				this.setText(binaryGroupsStr);
+//			}
+			if(empty){
+				this.setText("");
+				this.setGraphic(null);
+			}else{
+//				NumDirGroupsTreeItem treeItem = ;
+				NumDirGroupsTreeItem treeItem = (NumDirGroupsTreeItem)getTreeItem();
+				if(null != treeItem){
+					item = treeItem.getGroupedDirs();
+					String binaryGroupsStr = ParamDirectoryExtractor.listOfSetsToStr(item);
+					this.setText(binaryGroupsStr);
+				}
+			}
+		}
+	}
+	//========================================================================================
+	static class ListOfSetsColumnCell extends TableCell<Map.Entry<Path, List<Set<Path>>>, List<Set<Path>>>{
+
+		@Override
+		protected void updateItem(List<Set<Path>> item, boolean empty) {
+			super.updateItem(item, empty);
+			if(empty || null == item){
+				setText("");
+				setGraphic(null);
+			}else{
+//				String groupedSetsStr = ParamDirectoryExtractor.listOfSetsToStr(getItem());
+				String groupedSetsStr = ParamDirectoryExtractor.listOfSetsToStrWithOnlyRepresentativeElement(getItem());
+				setText(groupedSetsStr);
+			}
+		}
+		
+	}
+	//========================================================================================
+	static class RelativePathListCell extends ListCell<Path>{
+		private Path rootDir;
+		public RelativePathListCell(Path rootDir){
+			this.rootDir = rootDir;
+		}
+		@Override
+		protected void updateItem(Path item, boolean empty) {
+			super.updateItem(item, empty);
+			if(empty || null == item){
+				this.setText("");
+				this.setGraphic(null);
+			}else{
+				this.setText(getRelativePath(item).toString());
+			}
+		}
+		private Path getRelativePath(Path p){
+			if(null == rootDir){
+				return p;
+			}else{
+				return rootDir.relativize(p);
+			}
+		}
+		
+	}
+	//========================================================================================
 
 	/**
 	 * <h3>Consider the structure in XML Param parent directory</h3>
@@ -226,6 +586,7 @@ public class XMLParamComparatorController implements MsgLogger{
 		private Path rootDir;
 		private ParamDirectoryExtractor(MsgLogger logger){
 			this.logger = logger;
+			xsc.setLogger(logger);
 		}
 		private ParamDirectoryExtractor(Path root){
 			Objects.requireNonNull(root);
@@ -402,7 +763,7 @@ public class XMLParamComparatorController implements MsgLogger{
 		 * @param groupedNumDirs
 		 * @return
 		 */
-		public String listOfSetsToStrWithOnlyRepresentativeElement(List<Set<Path>> groupedNumDirs){
+		public static String listOfSetsToStrWithOnlyRepresentativeElement(List<Set<Path>> groupedNumDirs){
 			
 //		public String groupedNumDirsToStrWithOnlyRepresentativeElement(List<Set<Path>> groupedNumDirs){
 //			String groupedNumDirsStr = groupedNumDirs.stream()
@@ -428,8 +789,9 @@ public class XMLParamComparatorController implements MsgLogger{
 ////			logger.log(groupedNumDirsStr);
 //			return groupedNumDirsStr;
 //		}
-			List<Set<Path>> listOfSetsWithOnlyRepresentativeElement = groupedNumDirs.stream()
-					.map(s -> getFirst(s)).collect(Collectors.toList());
+//			List<Set<Path>> listOfSetsWithOnlyRepresentativeElement = groupedNumDirs.stream()
+//					.map(s -> getFirst(s)).collect(Collectors.toList());
+			List<Set<Path>> listOfSetsWithOnlyRepresentativeElement = getFirstElementOfEachSet(groupedNumDirs);
 			return listOfSetsToStr(listOfSetsWithOnlyRepresentativeElement);
 		}
 		
@@ -515,6 +877,7 @@ public class XMLParamComparatorController implements MsgLogger{
 //					Path xml2 = rootDir.resolve(numDir2).resolve(xmlFileRelativePath);
 					Path xml1 = numDir1.resolve(xmlFileRelativePath);
 					Path xml2 = numDir2.resolve(xmlFileRelativePath);
+					sl.log(NEW_LINE);
 					sl.log(Msg.get(XMLParamComparatorController.class, "info.compareFiles"), 
 //							rootDir.relativize(numDir1).toString(), 
 //							rootDir.relativize(numDir2).toString());
@@ -551,6 +914,10 @@ public class XMLParamComparatorController implements MsgLogger{
 		 */
 //		Map<Path, Set<Set<Path>>> groupNumDirContents(Path characteristicPath){
 		Map<Path, List<Set<Path>>> groupNumDirContents(Path characteristicPath){
+//			return groupNumDirContents(characteristicPath, null);
+//		}
+//		
+//		Map<Path, List<Set<Path>>> groupNumDirContents(Path characteristicPath, Predicate<Path> xmlParamFileFilter){
 //			Map<Path, Set<Set<Path>>> retval = new HashMap<>();
 			Map<Path, List<Set<Path>>> retval = new HashMap<>();
 			Objects.requireNonNull(characteristicPath);
@@ -571,6 +938,11 @@ public class XMLParamComparatorController implements MsgLogger{
 				for(Path numDir : numDirs){
 //					walkXmlFilesInNumDir(numDir, numDirs);
 					List<Path> xmlParamFiles = listXmlParamFiles(numDir);
+					
+//					if(null != xmlParamFileFilter){
+//						xmlParamFiles = xmlParamFiles.stream().filter(xmlParamFileFilter).collect(Collectors.toList());
+//					}
+					
 					for(Path xmlPathRelativeToNumDir : xmlParamFiles){
 //						List<Set<Path>> xmlStructSets = groupXmlFiles(xmlPathRelativeToNumDir, numDirs);
 //						retval.computeIfAbsent(xmlPathRelativeToNumDir, key -> xmlStructSets);
@@ -685,7 +1057,8 @@ public class XMLParamComparatorController implements MsgLogger{
 			retval = numDirWithSameStruct.stream().anyMatch(numDirOld -> {
 				Path xml1 = numDirNew.resolve(xmlPathRelativeToNumDir);
 				Path xml2 = numDirOld.resolve(xmlPathRelativeToNumDir);
-				return XMLStructComparator.inst().isXMLFilesEqual(xml1, xml2);
+//				return XMLStructComparator.inst().isXMLFilesEqual(xml1, xml2);
+				return xsc.isXMLFilesEqual(xml1, xml2);
 			});
 			return retval;
 		}
@@ -704,8 +1077,8 @@ public class XMLParamComparatorController implements MsgLogger{
 		}
 		
 
-		
 		private MsgLogger logger = MsgLogger.defaultLogger();
+		private XMLStructComparator xsc = XMLStructComparator.newInst(logger); 
 		static final Pattern NUM_SUB_DIR_PATTERN = Pattern.compile(Msg.get(XMLParamComparatorController.class, "pattern.numSubDir"));
 		static final String XML_SUFFIX = Msg.get(XMLParamComparatorController.class, "suffix.xml");
 		static final String CHAR_SET_START= Msg.get(XMLParamComparatorController.class, "char.set.start");
@@ -773,5 +1146,7 @@ public class XMLParamComparatorController implements MsgLogger{
 	static final String DEFAULT_BANK_GROUP = Msg.get(XMLParamComparatorController.class, "path.filter.bankGroup");
 	static final String DEFAULT_COUNTRY_CODE = Msg.get(XMLParamComparatorController.class, "path.filter.countryCode");
 	static final int PATH_NAME_COUNT = 2;
-	MsgLogger logger = MsgLogger.defaultLogger();
+	static final String SLASH = Msg.get(XMLParamComparatorController.class, "path.slash");
+	static final String BACK_SLASH = Msg.get(XMLParamComparatorController.class, "path.backSlash");
+//	MsgLogger logger = MsgLogger.defaultLogger();
 }

@@ -172,11 +172,13 @@ public class PatchReleaseController implements MsgLogger{
 //			writeReadMeAction.proceed(ppContext);
 			
 			List<PatchProcessAction> actions = PatchProcessAction.getPatchProcessActions(this);
+			String actionsTriggerd = actions.stream().map(action -> action.getName())
+					.collect(Collectors.joining(Msg.get(this, "info.patchProcessAction.delimiter")));
+			log(Msg.get(this, "info.patchProcessAction.list"), actionsTriggerd);
+			
 			for(PatchProcessAction action : actions){
 				action.proceed(ppContext);
 			}
-			
-			
 			
 			log(Msg.get(this, "info.patchEnd"), LocalDateTime.now());
 			

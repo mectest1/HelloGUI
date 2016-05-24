@@ -10,6 +10,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 
@@ -237,7 +238,7 @@ public class XMLParamComparatorControllerTest {
 		logger.log(sl.toString());
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testOutputDifferenceLog(){
 		XMLParamComparatorController xpc = new XMLParamComparatorController();
@@ -247,6 +248,14 @@ public class XMLParamComparatorControllerTest {
 		
 		xpc.parseParamXmlStruct(rootDir);
 		xpc.outputDifferenceLog(outputLogFile);
+	}
+	
+	@Test
+	public void testSystemProperty(){
+//		logger.log(System.getProperty("user.dir"));
+		logger.log(System.getProperty("user.home"));
+		Properties props = System.getProperties();
+		props.keySet().stream().forEach(key -> logger.log(String.format("%s: %s", key, props.get(key))));
 	}
 	
 	
