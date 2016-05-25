@@ -1,5 +1,7 @@
 /*@CHARSET "UTF-8"; */
 
 .unpopulated-characteristic-path{
-	-fx-background-color: lightgrey;
+	/*-fx-background-color: lightgrey;*/
+	-fx-text-fill: white;
+	-fx-background-color: darkgray;	
 }

@@ -13,14 +13,18 @@ import javafx.stage.Stage;
 
 /**
  * An XML structure comparator according to July's requirements;
- * <h4>Requirements:</h4>
+ * <h3>Application of this plugin: </h3>
  * <p>
- * Now we have this folder: /*  /characteristic_path/{number}/*  /
+ * Parse descendants XMLs in these kind of directories: /*  /characteristic_path/{number}/*  /
  * </p>
- * <h4>Result: this Plugin has failed</h4>
+ * <h4>Current status: unresponsive UI </h4>
  * <p>
  * <strong>Reason: </strong> heavy-load tasks take too much time to run, and they failed to be 
  * switched into background and keep running.
+ * </p>
+ * <h3>Next: resolve the lacking of responsiveness problem</h3>
+ * <p>
+ * <strong>Work to be done:</strong> a progress indicator is needed for long running tasks.
  * </p>
  * @author MEC
  *

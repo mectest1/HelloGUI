@@ -18,7 +18,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,6 +30,7 @@ import com.mec.app.plugin.filemanager.resources.Msg;
 import com.mec.app.plugin.filemanager.resources.MsgLogger;
 import com.mec.app.plugin.filemanager.resources.XMLStructComparator;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -44,6 +47,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -74,6 +78,8 @@ public class XMLParamComparatorController implements MsgLogger{
 	
 	@FXML
 	private MenuItem menuItemSaveDiffReport;
+	@FXML
+	private Pane mainPane;
 	
 //	@FXML
 //	private HBox topBannerGroup;
@@ -90,7 +96,8 @@ public class XMLParamComparatorController implements MsgLogger{
 	
 	
 	
-	ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(this);
+	ParamDirectoryExtractor pe;
+//	ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(this);
 //	OperationInProgress oip;
 //	XMLStructComparator diff = XMLStructComparator.inst();
 	/**
@@ -129,6 +136,10 @@ public class XMLParamComparatorController implements MsgLogger{
 //		} catch (IOException e) {
 //			logger.log(e);
 //		}
+//		pe = ParamDirectoryExtractor.newInst(this);
+//		mainPane.setDisable(true);
+		pe = ParamDirectoryExtractor.newInst(MsgLogger.defaultLogger());
+		
 		fileChooser.getExtensionFilters().add(new ExtensionFilter(
 				//Note: *.<extension>
 				Msg.get(this, "report.file.desc"), Msg.getList(this, "report.file.ext")));
@@ -210,6 +221,12 @@ public class XMLParamComparatorController implements MsgLogger{
 		Path characteristicPath = newVal.getCharacteristicPath();
 		Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = 
 				cpsWithNumDirParamsTmp.computeIfAbsent(characteristicPath, pe::groupNumDirContents);
+//				cpsWithNumDirParamsTmp.computeIfAbsent(characteristicPath, p -> {
+//					this.disableMainPane();
+//					Map<Path, List<Set<Path>>> retval = pe.groupNumDirContents(p);
+//					this.enableMainPane();
+//					return retval;
+//				});
 //		Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = 
 //				cpsWithNumDirParamsTmp.computeIfAbsent(characteristicPath, p -> {
 ////					D
@@ -245,6 +262,7 @@ public class XMLParamComparatorController implements MsgLogger{
 		
 		//To update the ListCell style
 		newVal.setPopulated(true);
+		//NoSuchMethod in 1.8.0_20, got implemented in 1.8.0_65
 		characteristicPathsView.refresh();
 		
 //		Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = cpsWithNumDirParamsTmp.get(characteristicPath);
@@ -292,6 +310,7 @@ public class XMLParamComparatorController implements MsgLogger{
 		numDirGroupsRootNode.setExpanded(true);
 		
 		numDirsGroupView.setRoot(numDirGroupsRootNode);
+		//NoSuchMethodException in 1.8.20, got implemented in 1.8.65.
 		numDirsGroupView.refresh();
 		
 		Path paramFile = newVal.getKey();
@@ -323,33 +342,62 @@ public class XMLParamComparatorController implements MsgLogger{
 	@FXML
 	private void onSaveDiffReport(){
 		File outputFile = fileChooser.showSaveDialog(getOwnerWindow());
+		
 		if(null == outputFile){
 			return;
 		}
-		if(null == cpsWithNumDirParams){
-			parseParamXmlStruct(this.paramRootDir);
-		}
-		Path outputPath = outputFile.toPath();
-		clearLog();
-		ln(Msg.get(this, "info.save.diffReport.start"), outputPath.toString());
-		
-		outputDifferenceLog(outputPath);
-		
-		ln(Msg.get(this, "info.save.diffReport.end"), outputPath.toString());
-//		menuItemSaveDiffReport.setDisable(true);
-//		CompletableFuture.runAsync(() -> {
-//			if(null == cpsWithNumDirParams){
-//				parseParamXmlStruct(this.paramRootDir);
-//			}
-//			Path outputPath = outputFile.toPath();
+//		if(null == cpsWithNumDirParams){
+//			parseParamXmlStruct(this.paramRootDir);
+//		}
+//		Path outputPath = outputFile.toPath();
+//		clearLog();
+//		ln(Msg.get(this, "info.save.diffReport.start"), outputPath.toString());
+//		
+//		outputDifferenceLog(outputPath);
+//		
+//		ln(Msg.get(this, "info.save.diffReport.end"), outputPath.toString());
+//		CompletableFuture<Void> saveDiffReportTask = 
+		CompletableFuture.runAsync(() -> {
+//			mainPane.setDisable(true);
+//			menuItemSaveDiffReport.setDisable(true);
+			Platform.runLater(this::disableMainPane);
+			
+			if(null == cpsWithNumDirParams){
+				parseParamXmlStruct(this.paramRootDir);
+			}
+			Path outputPath = outputFile.toPath();
 //			clearLog();
 //			ln(Msg.get(this, "info.save.diffReport.start"), outputPath.toString());
 //			
 //			outputDifferenceLog(outputPath);
 //			
 //			ln(Msg.get(this, "info.save.diffReport.end"), outputPath.toString());
+			
+			
+			//May result into exception in FXApplication Thread
 //			menuItemSaveDiffReport.setDisable(false);
-//		});
+//			mainPane.setDisable(false);
+			Platform.runLater(() -> {
+				clearLog();
+				ln(Msg.get(this, "info.save.diffReport.start"), outputPath.toString());
+				
+				outputDifferenceLog(outputPath);
+				
+				ln(Msg.get(this, "info.save.diffReport.end"), outputPath.toString());
+				this.enableMainPane();
+			});
+		}).whenComplete((v, t) -> {
+			MsgLogger.defaultLogger().log((Exception)t);
+//			menuItemSaveDiffReport.setDisable(false);
+//			mainPane.setDisable(false);
+			Platform.runLater(this::enableMainPane);
+		});
+//		try {
+//			saveDiffReportTask.join();
+//		} catch (CancellationException | CompletionException e) {
+//			log(e);
+//			mainPane.setDisable(false);
+//		}
 	}
 	
 	
@@ -357,8 +405,8 @@ public class XMLParamComparatorController implements MsgLogger{
 	
 	
 	
-	private Window getOwnerWindow(){
-		return logMsg.getScene().getWindow();
+	private Stage getOwnerWindow(){
+		return (Stage) logMsg.getScene().getWindow();
 	}
 //	private void showRootDirGroup(){
 //		ObservableList<Node> groups = topBannerGroup.getChildren();
@@ -416,7 +464,8 @@ public class XMLParamComparatorController implements MsgLogger{
 			for(Path cp : cps){
 //				logAndWrite(outputWriter, Msg.get(this, "info.funcGroup"), paraRootDir.relativize(cp).toString());
 				Map<Path, List<Set<Path>>> groupedNumDirsByXmlStruct = pe.groupNumDirContents(cp);
-				cpsWithNumDirParams.put(cp, groupedNumDirsByXmlStruct);
+//				cpsWithNumDirParams.put(cp, groupedNumDirsByXmlStruct);
+				retval.put(cp, groupedNumDirsByXmlStruct);
 				//Reserver only paramFiles from HSBC/US when multiple bankGroups and countryCodes are involved 
 //				Set<Path> filteredParamFiles = groupedNumDirsByXmlStruct.keySet().stream().filter(paramFile -> {
 //					if(PATH_NAME_COUNT > paramFile.getNameCount()){
@@ -496,6 +545,18 @@ public class XMLParamComparatorController implements MsgLogger{
 		
 	}
 	
+	
+	void disableMainPane(){
+		mainPane.setDisable(true);
+		menuItemSaveDiffReport.setDisable(true);
+		getOwnerWindow().setTitle(Msg.get(XMLParamComparator.class, "title.operationInProgress"));
+	}
+	void enableMainPane(){
+		mainPane.setDisable(false);
+		menuItemSaveDiffReport.setDisable(false);
+		getOwnerWindow().setTitle(Msg.get(XMLParamComparator.class, "title"));
+	}
+	
 	void logAndWrite(Writer writer, String format, Object ... args) throws IOException{
 		String content = String.format(format, args);
 //		logger.log(content);
@@ -550,6 +611,7 @@ public class XMLParamComparatorController implements MsgLogger{
 	
 	
 	//========================================================================================
+//	static 
 //	static class GroupNumDirsTask extends Task<Map<Path, List<Set<Path>>>>{
 //		ParamDirectoryExtractor pe = ParamDirectoryExtractor.newInst(MsgLogger.defaultLogger());
 //		

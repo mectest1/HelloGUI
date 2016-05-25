@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -18,13 +17,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.app.plugin.filemanager.XMLParamComparatorController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mec.app.plugin.filemanager.XMLParamComparatorController">
 	<top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="%menu.file">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#onSaveDiffReport" text="%menu.file.generateReport" fx:id="menuItemSaveDiffReport"/>
+              <MenuItem fx:id="menuItemSaveDiffReport" mnemonicParsing="false" onAction="#onSaveDiffReport" text="%menu.file.generateReport" />
             </items>
           </Menu>
           <Menu disable="true" mnemonicParsing="false" text="%menu.edit">
@@ -63,6 +62,9 @@
                         <Button mnemonicParsing="false" onAction="#onChooseParamRootDir" text="%btn.dirChooser" />
                         <TextField fx:id="paramRootDirField" promptText="%text.rootParamDir.prompt" HBox.hgrow="ALWAYS" />
                      </children>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" />
+               </BorderPane.margin>
             </HBox>
          </top>
          <left>
