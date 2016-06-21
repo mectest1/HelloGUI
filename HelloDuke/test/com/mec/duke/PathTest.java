@@ -150,10 +150,26 @@ public class PathTest {
 		out.printf("p1.root = %s\n", p1.getRoot());
 	}
 	
+	@Ignore
 	@Test
 	public void testCurrentPath3(){
 		Path p = Paths.get("derp");
 		out.printf("path: %s\n", p.toAbsolutePath());
+	}
+	
+	@Test
+	public void testOutputSourceCode() throws Exception{
+		String javaFile = "/" + getClass().getName().replaceAll("\\.", "/") + ".java";
+//		URL sourceURL = getClass().getClassLoader().getResource(javaFile);
+//
+//		
+//		out.println(javaFile);
+//		out.println(sourceURL);
+		String dir = "test";
+		Path sourcePath = Paths.get(dir, javaFile);
+		Files.readAllLines(sourcePath).forEach(out::println);
+		out.println(sourcePath);
+		
 	}
 	
 	private static final String TAB = "\t";

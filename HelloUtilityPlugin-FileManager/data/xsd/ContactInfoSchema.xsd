@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.example.org/ContactInfoSchema" 
+	xmlns:tns="http://www.example.org/ContactInfoSchema" 
+	elementFormDefault="qualified">
+	<element name="name">
+		<complexType>
+			<sequence>
+				<element name="first" type="string" />
+				<element name="middle" type="string" />
+				<element name="last" type="string" />
+			</sequence>
+			<attribute name="title" type="string" />
+		</complexType>
+	</element>
+</schema>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.example.org/ContactInfoSchema2" 
+	xmlns:tns="http://www.example.org/ContactInfoSchema2" 
+	elementFormDefault="qualified">
+	<attributeGroup name="ContactAttributes">
+		<attribute name="version" type="decimal" fixed="1.0"/>
+		<attribute name="source" type="string" />
+	</attributeGroup>
+	
+	<element name="contacts">
+		<complexType>
+			<sequence>
+				<element name="contact" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="name" type="tns:NameType"/>
+							<element name="location" type="tns:LocationType"/>
+							<element name="phone" type="tns:PhoneType"/>
+							<element name="knows" type="tns:KnowsType"/>
+							<element name="description" type="tns:DescriptionType"/>
+						</sequence>
+						<attribute name="tags" type="token" />
+						<attribute name="person" type="ID" />
+					</complexType>
+				</element>
+			</sequence>
+			<attributeGroup ref="tns:ContactAttributes" />
+		</complexType>
+	</element>
+	
+	
+	<complexType name="NameType">
+		<group ref="tns:NameGroup" />
+		<attribute name="title" type="string" />
+	</complexType>
+	
+	<group name="NameGroup">
+		<sequence>
+			<element name="first" type="string" minOccurs="1" maxOccurs="unbounded" />
+			<element name="middle" type="string" minOccurs="0" maxOccurs="1" />
+			<element name="last" type="string" />
+		</sequence>
+	</group>
+	
+	
+	<complexType name="LocationType">
+		<choice minOccurs="1" maxOccurs="unbounded">
+			<element name="address" type="string" />
+			<sequence>
+				<element name="latitude" type="float" />
+				<element name="longitude" type="float" />
+			</sequence>
+		</choice>
+	</complexType>
+	
+	
+	<complexType name="PhoneType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="kind" type="string" default="Home" />
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="KnowsType">
+		<attribute name="contacts" type="IDREFS" />
+	</complexType>
+	
+	<complexType name="DescriptionType">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element name="em" type="string" />
+			<element name="strong" type="string" />
+			<element name="br" type="string" />
+		</choice>
+	</complexType>
+	
+	
+	<element name="derp" type="string">
+	</element>
+	<simpleType name="DirectionType">
+		<restriction base="string">
+			<enumeration value="North" />
+			<enumeration value="South" />
+			<enumeration value="East" />
+			<enumeration value="West" />
+		</restriction>
+	</simpleType>
+</schema>
