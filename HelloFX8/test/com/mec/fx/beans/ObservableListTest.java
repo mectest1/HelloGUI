@@ -95,8 +95,8 @@ public class ObservableListTest {
 		
 		
 		//Add a change listener to the list;
-		list1.addListener(ChangeListeners::onElementChanged);
-		list2.addListener(ChangeListeners::onElementChanged);
+		//list1.addListener(ChangeListeners::onElementChanged);
+		//list2.addListener(ChangeListeners::onElementChanged);
 		
 		
 		//

@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+//import com.mec.fx.PickOnBoundsApp;
 
 public class MouseTransparencyApp extends Application {
 
@@ -53,7 +54,7 @@ public class MouseTransparencyApp extends Application {
 	private static void handleMouseClickec(MouseEvent e){
 		String target = e.getTarget().getClass().getSimpleName();
 		String type = e.getEventType().getName();
-		out.printf(Msg.get(PickOnBoundsApp.class, "info"), type, target);
+//		out.printf(Msg.get(PickOnBoundsApp.class, "info"), type, target);
 	}
 	
 	private static final PrintStream out = System.out;
